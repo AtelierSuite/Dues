@@ -9,7 +9,8 @@ struct SearchView: View {
     @Query var people: [Person]
 
     @AppStorage(wrappedValue: [], "SearchHistory", store: defaults) var searchHistory: [String]
-    @State var searchTerm: String = ""
+    @State var searchTerm: String = ScreenshotScreen.current?.searchTerm ?? ""
+    @State var isSearchPresented: Bool = !(ScreenshotScreen.current?.searchTerm.isEmpty ?? true)
 
     var body: some View {
         NavigationStack(path: $navigationManager.searchTabPath) {
@@ -129,7 +130,7 @@ struct SearchView: View {
                     ContentUnavailableView.search
                 }
             }
-            .searchable(text: $searchTerm)
+            .searchable(text: $searchTerm, isPresented: $isSearchPresented)
             .onSubmit(of: .search, {
                 saveSearchTermToHistory()
             })

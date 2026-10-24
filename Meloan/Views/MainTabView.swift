@@ -39,6 +39,13 @@ struct MainTabView: View {
         }
         .undoToast()
         .task {
+            if let screen = ScreenshotScreen.current {
+                Tips.hideAllTipsForTesting()
+                try? Tips.configure()
+                await screen.stage(modelContext: modelContext, tabManager: tabManager,
+                                   navigationManager: navigationManager)
+                return
+            }
             createMePerson()
             DuesApp.reloadWidget()
             try? Tips.configure([

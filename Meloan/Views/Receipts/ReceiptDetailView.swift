@@ -16,6 +16,13 @@ struct ReceiptDetailView: View {
         .task(id: shareSignature) {
             shareImage = createImageToShare()
         }
+        .task {
+            if ScreenshotScreen.current == .pdf {
+                // Presented once the push has finished animating in.
+                try? await Task.sleep(for: .seconds(1))
+                isSharing = true
+            }
+        }
         .confettiCannon(counter: $confettiCounter, num: Int(receipt.sum()), rainHeight: 1000.0, radius: 500.0)
         .sheet(isPresented: $isSharing, content: {
             PDFExporterView(receipt: receipt)

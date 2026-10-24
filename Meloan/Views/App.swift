@@ -9,6 +9,13 @@ struct DuesApp: App {
     @StateObject var navigationManager = NavigationManager()
     @StateObject var toastManager = ToastManager()
 
+    init() {
+        // The store on disk is seeded for the widgets, so it is kept off iCloud.
+        if ScreenshotScreen.current == .widgets {
+            defaults.set(false, forKey: "EnableCloudSync")
+        }
+    }
+
     var body: some Scene {
         WindowGroup {
             MainTabView()
@@ -16,7 +23,7 @@ struct DuesApp: App {
                 .environmentObject(navigationManager)
                 .environmentObject(toastManager)
         }
-        .modelContainer(sharedModelContainer)
+        .modelContainer(ScreenshotScreen.current?.modelContainer ?? sharedModelContainer)
     }
 
     static func reloadWidget() {
