@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!--
+    The dashed rule between the items and the total. Filled solid white in dark mode.
+  -->
+  <g fill="#FFFFFF">
+    <rect x="348" y="604" width="28" height="12" rx="6" opacity="0.6"/><rect x="396" y="604" width="28" height="12" rx="6" opacity="0.6"/><rect x="444" y="604" width="28" height="12" rx="6" opacity="0.6"/><rect x="492" y="604" width="28" height="12" rx="6" opacity="0.6"/><rect x="540" y="604" width="28" height="12" rx="6" opacity="0.6"/><rect x="588" y="604" width="28" height="12" rx="6" opacity="0.6"/><rect x="636" y="604" width="28" height="12" rx="6" opacity="0.6"/>
+  </g>
+</svg>

@@ -1,103 +1,221 @@
 {
+  "features" : [
+    "specular-location"
+  ],
   "fill" : {
-    "linear-gradient" : [
-      "display-p3:0.97371,0.93266,0.87839,1.00000",
-      "display-p3:0.96156,0.79900,0.38665,1.00000"
-    ],
-    "orientation" : {
-      "start" : {
-        "x" : 0.5,
-        "y" : 0
-      },
-      "stop" : {
-        "x" : 0.5,
-        "y" : 0.7
-      }
-    }
+    "automatic-gradient" : "display-p3:0.62353,0.69020,0.25098,1.00000"
   },
   "groups" : [
     {
+      "blend-mode" : "normal",
       "blur-material" : 1,
       "layers" : [
         {
-          "image-name" : "Meloan.020.png",
-          "name" : "Seeds"
-        },
-        {
-          "image-name" : "Meloan.019.png",
-          "name" : "Juicy Part"
-        },
-        {
-          "image-name" : "Meloan.018.png",
-          "name" : "Peel"
+          "fill" : {
+            "automatic-gradient" : "srgb:0.98400,0.89000,0.69000,1.00000"
+          },
+          "glass" : true,
+          "hidden" : false,
+          "image-name" : "Slot.svg",
+          "name" : "Slot",
+          "position-specializations" : [
+            {
+              "value" : {
+                "scale" : 1,
+                "translation-in-points" : [
+                  0,
+                  0
+                ]
+              }
+            },
+            {
+              "idiom" : "square",
+              "value" : {
+                "scale" : 1.15,
+                "translation-in-points" : [
+                  0,
+                  0
+                ]
+              }
+            }
+          ]
         }
       ],
-      "name" : "Melon",
-      "shadow" : {
-        "kind" : "layer-color",
-        "opacity" : 1
-      },
-      "translucency-specializations" : [
-        {
-          "value" : {
-            "enabled" : true,
-            "value" : 0.6
-          }
-        },
-        {
-          "appearance" : "dark",
-          "value" : {
-            "enabled" : true,
-            "value" : 0.3
-          }
-        },
-        {
-          "appearance" : "tinted",
-          "value" : {
-            "enabled" : true,
-            "value" : 0.8
-          }
-        }
-      ]
-    },
-    {
-      "blur-material" : 0.5,
-      "layers" : [
-        {
-          "image-name" : "Meloan.021.png",
-          "name" : "Cash"
-        },
-        {
-          "image-name" : "Meloan.022.png",
-          "name" : "Cash"
-        },
-        {
-          "image-name" : "Meloan.023.png",
-          "name" : "Baby"
-        }
-      ],
-      "lighting" : "individual",
-      "name" : "Bank Notes",
+      "name" : "Printer",
       "shadow" : {
         "kind" : "neutral",
-        "opacity" : 1
+        "opacity" : 0.5
       },
       "specular" : true,
-      "translucency-specializations" : [
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    },
+    {
+      "blend-mode" : "normal",
+      "layers" : [
         {
-          "value" : {
-            "enabled" : true,
-            "value" : 0.5
-          }
+          "fill-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : {
+                "solid" : "srgb:1.00000,1.00000,1.00000,1.00000"
+              }
+            }
+          ],
+          "glass" : true,
+          "hidden" : false,
+          "image-name" : "Total.svg",
+          "name" : "Total",
+          "opacity" : 1,
+          "position-specializations" : [
+            {
+              "value" : {
+                "scale" : 1,
+                "translation-in-points" : [
+                  0,
+                  0
+                ]
+              }
+            },
+            {
+              "idiom" : "square",
+              "value" : {
+                "scale" : 1.15,
+                "translation-in-points" : [
+                  0,
+                  0
+                ]
+              }
+            }
+          ]
         },
         {
-          "appearance" : "tinted",
-          "value" : {
-            "enabled" : true,
-            "value" : 0.65
-          }
+          "fill-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : {
+                "solid" : "srgb:1.00000,1.00000,1.00000,1.00000"
+              }
+            }
+          ],
+          "glass" : true,
+          "hidden" : false,
+          "image-name" : "Divider.svg",
+          "name" : "Divider",
+          "opacity" : 0,
+          "position-specializations" : [
+            {
+              "value" : {
+                "scale" : 1,
+                "translation-in-points" : [
+                  0,
+                  0
+                ]
+              }
+            },
+            {
+              "idiom" : "square",
+              "value" : {
+                "scale" : 1.15,
+                "translation-in-points" : [
+                  0,
+                  -9
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "fill-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : {
+                "solid" : "srgb:1.00000,1.00000,1.00000,1.00000"
+              }
+            }
+          ],
+          "glass" : true,
+          "hidden" : false,
+          "image-name" : "Items.svg",
+          "name" : "Items",
+          "opacity" : 0.5,
+          "position-specializations" : [
+            {
+              "value" : {
+                "scale" : 1,
+                "translation-in-points" : [
+                  0,
+                  0
+                ]
+              }
+            },
+            {
+              "idiom" : "square",
+              "value" : {
+                "scale" : 1.15,
+                "translation-in-points" : [
+                  0,
+                  0
+                ]
+              }
+            }
+          ]
         }
-      ]
+      ],
+      "name" : "Receipt Contents",
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.25
+      },
+      "specular" : "outside",
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    },
+    {
+      "blend-mode" : "normal",
+      "layers" : [
+        {
+          "glass" : true,
+          "hidden" : false,
+          "image-name" : "Receipt.svg",
+          "name" : "Receipt",
+          "position-specializations" : [
+            {
+              "value" : {
+                "scale" : 1,
+                "translation-in-points" : [
+                  0,
+                  0
+                ]
+              }
+            },
+            {
+              "idiom" : "square",
+              "value" : {
+                "scale" : 1.15,
+                "translation-in-points" : [
+                  0,
+                  0
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "name" : "Receipt",
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "specular" : true,
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
     }
   ],
   "supported-platforms" : {

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!--
+    The printer slot the receipt comes out of. Drawn solid white; the layer
+    is filled melon cream in icon.json.
+  -->
+  <g fill="#FFFFFF">
+    <rect x="196" y="236" width="632" height="72" rx="36"/>
+  </g>
+</svg>
