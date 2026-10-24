@@ -7,6 +7,7 @@
 
 import AVFoundation
 import Komponents
+import PhotosUI
 import SwiftData
 import SwiftUI
 import TipKit
@@ -28,6 +29,8 @@ struct ReceiptsView: View {
 
     // Scan (OCR) flow
     @State var isScannerPresented: Bool = false
+    @State var isPhotoPickerPresented: Bool = false
+    @State var selectedPhotoItem: PhotosPickerItem?
     @State var isProcessingScan: Bool = false
     @State var isScanFailedPresented: Bool = false
     @State var isNoItemsFoundPresented: Bool = false
@@ -164,6 +167,12 @@ struct ReceiptsView: View {
                 }
                 .ignoresSafeArea()
             }
+            .photosPicker(isPresented: $isPhotoPickerPresented, selection: $selectedPhotoItem, matching: .images)
+            .onChange(of: selectedPhotoItem) { _, item in
+                guard let item else { return }
+                selectedPhotoItem = nil
+                processPhoto(item)
+            }
             .overlay {
                 if isProcessingScan {
                     scanProcessingOverlay
@@ -287,8 +296,8 @@ struct ReceiptsView: View {
 
     func startScan() {
         guard VNDocumentCameraViewController.isSupported else {
-            // No camera available (e.g. Simulator) — fall back to manual entry.
-            createBlankReceipt()
+            // No document camera (e.g. Simulator, Mac) — scan a photo from the library instead.
+            isPhotoPickerPresented = true
             return
         }
         switch AVCaptureDevice.authorizationStatus(for: .video) {
@@ -299,6 +308,21 @@ struct ReceiptsView: View {
             isCameraDeniedPresented = true
         @unknown default:
             isScannerPresented = true
+        }
+    }
+
+    func processPhoto(_ item: PhotosPickerItem) {
+        isProcessingScan = true
+        Task {
+            let data = try? await item.loadTransferable(type: Data.self)
+            await MainActor.run {
+                isProcessingScan = false
+                if let data, let image = UIImage(data: data) {
+                    processScan([image])
+                } else {
+                    isScanFailedPresented = true
+                }
+            }
         }
     }
 
