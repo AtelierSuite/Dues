@@ -8,7 +8,7 @@
 #
 # The widgets can't be placed on the Home Screen from a script, so `widgets` seeds
 # the demo receipts into the store on disk, opens the simulator, and waits for the
-# widgets to be arranged before capturing 01-widgets.
+# widgets to be arranged before capturing 07-widgets.
 set -e
 
 SCRIPT_DIR=${0:A:h}
@@ -25,13 +25,13 @@ fi
 LANGUAGES=($@)
 (( $# )) || LANGUAGES=(en ja)
 SCREENS=(
-  02-receipts:receipts
-  03-receipt:receipt
-  04-pdf:pdf
-  05-iou:iou
-  06-search-people:search-people
-  06-search-items:search-items
-  07-more:more
+  01-receipts:receipts
+  02-receipt:receipt
+  03-pdf:pdf
+  04-iou:iou
+  05-search-people:search-people
+  05-search-items:search-items
+  06-more:more
 )
 
 # MARK: - Simulator
@@ -97,9 +97,9 @@ for language in $LANGUAGES; do
     open -b com.apple.iphonesimulator --args -CurrentDeviceUDID $UDID 2>/dev/null ||
       echo "Open the \"Dues Screenshots iPhone\" simulator ($UDID)."
     echo "Add the Dues widgets to the Home Screen of the simulator and pick a demo"
-    echo "receipt for each, then press Return to capture 01-widgets ($language)."
+    echo "receipt for each, then press Return to capture 07-widgets ($language)."
     read
-    xcrun simctl io $UDID screenshot "$raw_dir/01-widgets.png" >/dev/null 2>&1
+    xcrun simctl io $UDID screenshot "$raw_dir/07-widgets.png" >/dev/null 2>&1
   else
     for screen in $SCREENS; do
       launch ${screen#*:}

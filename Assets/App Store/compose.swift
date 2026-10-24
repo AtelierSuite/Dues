@@ -89,130 +89,99 @@ let background: NSGradient = {
 
 let screenshots = [
     Screenshot(
-        name: "01-widgets",
-        layout: .single("01-widgets"),
-        isOptional: true,
-        copy: [
-            "en": Copy(header: "Track Quicker", caption: "With Home Screen Widgets"),
-            "ja": Copy(header: "ホーム画面ウィジェット", caption: "いつでも追跡できる")
-        ]
-    ),
-    Screenshot(
-        name: "02-receipts",
-        layout: .single("02-receipts"),
+        name: "01-receipts",
+        layout: .single("01-receipts"),
         copy: [
             "en": Copy(header: "From Receipts to IOUs", caption: "Quickly Create and Manage Receipts"),
             "ja": Copy(header: "レシートからの貸し借り", caption: "より速くレシートを管理する")
         ]
     ),
     Screenshot(
-        name: "03-receipt",
-        layout: .single("03-receipt"),
+        name: "02-receipt",
+        layout: .single("02-receipt"),
         copy: [
             "en": Copy(header: "Keep in Touch", caption: "What’s Paid? What’s Not Paid?"),
             "ja": Copy(header: "情報を簡単にまとめる", caption: "支払ったかという質問にさようなら")
         ]
     ),
     Screenshot(
-        name: "04-pdf",
-        layout: .single("04-pdf"),
+        name: "03-pdf",
+        layout: .single("03-pdf"),
         copy: [
             "en": Copy(header: "Export & Share", caption: "PDF or Image, Your Choice"),
             "ja": Copy(header: "レシートの共有", caption: "PDFと画像に対応するならできる")
         ]
     ),
     Screenshot(
-        name: "05-iou",
-        layout: .single("05-iou"),
+        name: "04-iou",
+        layout: .single("04-iou"),
         copy: [
             "en": Copy(header: "Per Person IOUs", caption: "See How Much Each Person Owes"),
             "ja": Copy(header: "各人の貸し借り情報", caption: "借りたお金を回収しよう")
         ]
     ),
     Screenshot(
-        name: "06-search",
-        layout: .stacked("06-search-people", "06-search-items"),
+        name: "05-search",
+        layout: .stacked("05-search-people", "05-search-items"),
         copy: [
             "en": Copy(header: "Easily Find", caption: "People, Receipts, Items"),
             "ja": Copy(header: "簡単に検索する", caption: "貸し借り先、レシート、商品など")
         ]
     ),
     Screenshot(
-        name: "07-more",
-        layout: .single("07-more"),
+        name: "06-more",
+        layout: .single("06-more"),
         copy: [
             "en": Copy(header: "Customize", caption: "Make Dues Yours"),
             "ja": Copy(header: "カスタマイズ", caption: "自分の好みに")
+        ]
+    ),
+    Screenshot(
+        name: "07-widgets",
+        layout: .single("07-widgets"),
+        isOptional: true,
+        copy: [
+            "en": Copy(header: "Track Quicker", caption: "With Home Screen Widgets"),
+            "ja": Copy(header: "ホーム画面ウィジェット", caption: "いつでも追跡できる")
         ]
     )
 ]
 
 // MARK: - Text
 
-/// One line of text at the largest size up to `size` that fits `maxWidth`, in San Francisco,
-/// which falls back to Hiragino Sans for Japanese.
+/// One line of text in San Francisco, which falls back to Hiragino Sans for Japanese.
 struct Line {
-    let text: String
-    let attributes: [NSAttributedString.Key: Any]
-    let size: NSSize
+    let line: CTLine
+    let width: CGFloat
 
-    init(_ text: String, size: CGFloat, weight: NSFont.Weight, color: NSColor, maxWidth: CGFloat) {
+    init(_ text: String, size: CGFloat, weight: NSFont.Weight, color: NSColor = .white) {
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: NSFont.systemFont(ofSize: size, weight: weight), .foregroundColor: color
+        ]
+        line = CTLineCreateWithAttributedString(NSAttributedString(string: text, attributes: attributes))
+        width = CGFloat(CTLineGetTypographicBounds(line, nil, nil, nil))
+    }
+
+    /// The largest size up to `size` at which every one of `texts` fits `maxWidth`, so that
+    /// all the screenshots in a language share one size.
+    static func fittingSize(for texts: [String], size: CGFloat, weight: NSFont.Weight, maxWidth: CGFloat) -> CGFloat {
         var fontSize = size
-        var attributes: [NSAttributedString.Key: Any] = [:]
-        var lineSize = NSSize.zero
-        while fontSize > 10 {
-            attributes = [.font: NSFont.systemFont(ofSize: fontSize, weight: weight), .foregroundColor: color]
-            lineSize = (text as NSString).size(withAttributes: attributes)
-            if lineSize.width <= maxWidth { break }
+        while fontSize > 10, texts.contains(where: { Line($0, size: fontSize, weight: weight).width > maxWidth }) {
             fontSize -= 2
         }
-        self.text = text
-        self.attributes = attributes
-        self.size = lineSize
-        (inkTop, inkBottom) = Line.inkInsets(of: text, attributes: attributes, size: lineSize)
+        return fontSize
     }
 
-    /// How far below the top of the line box the glyphs actually start and end.
-    let inkTop: CGFloat
-    let inkBottom: CGFloat
-
-    /// Placing by font metrics leaves the text looking off, since the line box carries
-    /// space above the capitals and below the baseline. So the line is rendered once and
-    /// the rows its glyphs cover are measured.
-    private static func inkInsets(
-        of text: String, attributes: [NSAttributedString.Key: Any], size: NSSize
-    ) -> (CGFloat, CGFloat) {
-        let width = Int(size.width.rounded(.up))
-        let height = Int(size.height.rounded(.up))
-        guard width > 0, height > 0, let bitmap = NSBitmapImageRep(
-            bitmapDataPlanes: nil, pixelsWide: width, pixelsHigh: height,
-            bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
-            colorSpaceName: .calibratedRGB, bytesPerRow: 0, bitsPerPixel: 0
-        ) else { return (0, size.height) }
-        bitmap.size = NSSize(width: width, height: height)
-        NSGraphicsContext.saveGraphicsState()
-        NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: bitmap)
-        var opaque = attributes
-        opaque[.foregroundColor] = NSColor.black
-        (text as NSString).draw(at: .zero, withAttributes: opaque)
-        NSGraphicsContext.restoreGraphicsState()
-
-        // Bitmap rows run top to bottom.
-        let inked = (0..<height).filter { row in
-            (0..<width).contains { column in (bitmap.colorAt(x: column, y: row)?.alphaComponent ?? 0) > 0.1 }
-        }
-        guard let first = inked.first, let last = inked.last else { return (0, size.height) }
-        return (CGFloat(first), CGFloat(last + 1))
-    }
-
-    /// Draws the line centered across the canvas, with the top of its ink at `inkY`, measured
-    /// down from the top of the canvas.
-    func draw(inkY: CGFloat) {
-        let top = canvasSize.height - inkY + inkTop
-        (text as NSString).draw(
-            at: NSPoint(x: ((canvasSize.width - size.width) / 2).rounded(), y: (top - size.height).rounded()),
-            withAttributes: attributes
+    /// Draws the line centered across the canvas, sitting on `baseline`, measured down from the
+    /// top of the canvas. Placing every line on a fixed baseline keeps the text in the same
+    /// place on every screenshot, whatever its letters or language.
+    func draw(baseline: CGFloat) {
+        let context = NSGraphicsContext.current!.cgContext
+        context.textPosition = CGPoint(
+            x: ((canvasSize.width - width) / 2).rounded(),
+            y: (canvasSize.height - baseline).rounded()
         )
+        CTLineDraw(line, context)
     }
 }
 
@@ -280,6 +249,16 @@ func drawDevice(raw: NSImage, width: CGFloat, top: CGFloat) {
 
 // MARK: - Composition
 
+/// The header and caption sizes for a language, fitted to its longest lines.
+func textSizes(_ language: String) -> (header: CGFloat, caption: CGFloat) {
+    let copies = screenshots.compactMap { $0.copy[language] }
+    let maxWidth = canvasSize.width - 96
+    return (
+        Line.fittingSize(for: copies.map(\.header), size: 132, weight: .bold, maxWidth: maxWidth),
+        Line.fittingSize(for: copies.map(\.caption), size: 64, weight: .bold, maxWidth: maxWidth)
+    )
+}
+
 enum Result {
     case written
     case skipped
@@ -310,11 +289,11 @@ func compose(_ shot: Screenshot, language: String) -> Result {
     background.draw(in: NSRect(origin: .zero, size: canvasSize), angle: -90)
 
     // Placed as in the Keynote decks, measured down from the top of the canvas.
-    let textWidth = canvasSize.width - 96
-    let header = Line(copy.header, size: 132, weight: .bold, color: .white, maxWidth: textWidth)
-    let caption = Line(copy.caption, size: 64, weight: .bold, color: .white, maxWidth: textWidth)
-    header.draw(inkY: 182)
-    caption.draw(inkY: 182 + (header.inkBottom - header.inkTop) + 24)
+    let sizes = textSizes(language)
+    let header = Line(copy.header, size: sizes.header, weight: .bold)
+    let caption = Line(copy.caption, size: sizes.caption, weight: .bold)
+    header.draw(baseline: 277)
+    caption.draw(baseline: 350)
 
     switch shot.layout {
     case .single:
