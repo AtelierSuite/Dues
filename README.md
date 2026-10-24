@@ -1,5 +1,3 @@
-# Meloan
+# Dues
 
-![Banner image depicting the Meloan app's receipt and IOU features.](github/banner.png?raw=true "Meloan")
-
-A receipt-based IOU tracker for iOS.
+A simple receipt-based IOU tracker with support for tracking multiple receipts across multiple people.
