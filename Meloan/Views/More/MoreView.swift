@@ -1,10 +1,3 @@
-//
-//  MoreView.swift
-//  Meloan
-//
-//  Created by シン・ジャスティン on 2023/09/16.
-//
-
 import SwiftUI
 
 // swiftlint:disable type_body_length

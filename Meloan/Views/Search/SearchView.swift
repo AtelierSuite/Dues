@@ -1,10 +1,3 @@
-//
-//  SearchView.swift
-//  Meloan
-//
-//  Created by シン・ジャスティン on 2023/09/18.
-//
-
 import SwiftData
 import SwiftUI
 

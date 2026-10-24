@@ -1,10 +1,3 @@
-//
-//  Provider.swift
-//  AssistantExtension
-//
-//  Created by シン・ジャスティン on 2023/09/19.
-//
-
 import Foundation
 import SwiftData
 import WidgetKit

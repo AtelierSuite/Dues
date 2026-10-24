@@ -1,10 +1,3 @@
-//
-//  ReceiptIOUWidget.swift
-//  AssistantExtension
-//
-//  Created by シン・ジャスティン on 2023/09/20.
-//
-
 import AppIntents
 import SwiftData
 import SwiftUI

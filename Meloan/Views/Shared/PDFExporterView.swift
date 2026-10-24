@@ -1,10 +1,3 @@
-//
-//  PDFExporterView.swift
-//  Meloan
-//
-//  Created by シン・ジャスティン on 2023/09/24.
-//
-
 import Komponents
 import PDFKit
 import QuickLook

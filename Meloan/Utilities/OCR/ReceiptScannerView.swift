@@ -1,8 +1,3 @@
-//
-//  ReceiptScannerView.swift
-//  Meloan
-//
-
 import SwiftUI
 import VisionKit
 

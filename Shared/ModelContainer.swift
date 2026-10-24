@@ -1,10 +1,3 @@
-//
-//  ModelContainer.swift
-//  Meloan
-//
-//  Created by シン・ジャスティン on 2023/09/21.
-//
-
 import Foundation
 import SwiftData
 

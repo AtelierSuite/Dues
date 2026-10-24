@@ -1,8 +1,3 @@
-//
-//  ReceiptOCRService.swift
-//  Meloan
-//
-
 import Foundation
 import UIKit
 import Vision

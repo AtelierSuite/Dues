@@ -1,8 +1,3 @@
-//
-//  ReceiptSnapshot.swift
-//  Meloan
-//
-
 import Foundation
 import SwiftData
 

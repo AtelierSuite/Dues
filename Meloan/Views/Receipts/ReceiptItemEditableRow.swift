@@ -1,10 +1,3 @@
-//
-//  ReceiptItemEditableRow.swift
-//  Meloan
-//
-//  Created by シン・ジャスティン on 2023/09/16.
-//
-
 import SwiftUI
 
 struct ReceiptItemEditableRow: View {

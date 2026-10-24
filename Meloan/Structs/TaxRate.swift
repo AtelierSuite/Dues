@@ -1,10 +1,3 @@
-//
-//  TaxRate.swift
-//  Meloan
-//
-//  Created by シン・ジャスティン on 2023/09/23.
-//
-
 import Foundation
 
 struct TaxRate: Codable, Hashable {

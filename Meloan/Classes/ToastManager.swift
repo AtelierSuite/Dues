@@ -1,8 +1,3 @@
-//
-//  ToastManager.swift
-//  Meloan
-//
-
 import SwiftUI
 
 final class ToastManager: ObservableObject {

@@ -1,10 +1,3 @@
-//
-//  IOUView.swift
-//  Meloan
-//
-//  Created by シン・ジャスティン on 2023/09/17.
-//
-
 import Komponents
 import SwiftData
 import SwiftUI

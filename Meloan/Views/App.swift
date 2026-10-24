@@ -1,10 +1,3 @@
-//
-//  App.swift
-//  Meloan
-//
-//  Created by シン・ジャスティン on 2023/09/15.
-//
-
 import SwiftUI
 import SwiftData
 import WidgetKit

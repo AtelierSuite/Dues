@@ -1,10 +1,3 @@
-//
-//  PersonRow.swift
-//  Meloan
-//
-//  Created by シン・ジャスティン on 2023/09/16.
-//
-
 import SwiftUI
 
 struct PersonRow: View {

@@ -1,10 +1,3 @@
-//
-//  ReceiptProgressWidget.swift
-//  AssistantExtension
-//
-//  Created by シン・ジャスティン on 2023/09/19.
-//
-
 import AppIntents
 import SwiftData
 import SwiftUI

@@ -1,10 +1,3 @@
-//
-//  ReceiptDetailView.swift
-//  Meloan
-//
-//  Created by シン・ジャスティン on 2023/09/17.
-//
-
 import ConfettiSwiftUI
 import SwiftUI
 

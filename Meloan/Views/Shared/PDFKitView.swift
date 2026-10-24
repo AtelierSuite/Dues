@@ -1,10 +1,3 @@
-//
-//  PDFKitView.swift
-//  Meloan
-//
-//  Created by シン・ジャスティン on 2023/09/24.
-//
-
 import PDFKit
 import SwiftUI
 

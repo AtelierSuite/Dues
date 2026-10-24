@@ -1,8 +1,3 @@
-//
-//  ReceiptParserModels.swift
-//  Meloan
-//
-
 import Foundation
 
 /// A single purchased line item detected on a receipt.

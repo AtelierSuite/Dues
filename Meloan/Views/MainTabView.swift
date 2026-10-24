@@ -1,10 +1,3 @@
-//
-//  MainTabView.swift
-//  Meloan
-//
-//  Created by シン・ジャスティン on 2023/09/16.
-//
-
 import CoreData
 import Komponents
 import StoreKit

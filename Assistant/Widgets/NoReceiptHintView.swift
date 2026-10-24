@@ -1,10 +1,3 @@
-//
-//  NoReceiptHintView.swift
-//  Meloan
-//
-//  Created by シン・ジャスティン on 2023/09/24.
-//
-
 import SwiftUI
 
 struct NoReceiptHintView: View {

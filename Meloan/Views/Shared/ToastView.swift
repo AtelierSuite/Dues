@@ -1,8 +1,3 @@
-//
-//  ToastView.swift
-//  Meloan
-//
-
 import SwiftUI
 
 extension View {

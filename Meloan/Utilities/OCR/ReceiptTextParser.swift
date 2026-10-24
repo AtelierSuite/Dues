@@ -1,8 +1,3 @@
-//
-//  ReceiptTextParser.swift
-//  Meloan
-//
-
 import Foundation
 
 enum ReceiptTextParser {
