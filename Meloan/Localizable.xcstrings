@@ -89,7 +89,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "領収書の保存中に問題が発生しました。もう一度お試しください。"
+            "value": "レシートの保存中に問題が発生しました。もう一度お試しください。"
           }
         }
       }
@@ -776,7 +776,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "領収書"
+            "value": "レシート"
           }
         }
       }
@@ -963,7 +963,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "領収書別"
+            "value": "レシート別"
           }
         }
       }
@@ -1518,7 +1518,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "領収書の自動化"
+            "value": "レシートの自動化"
           }
         }
       }
@@ -1569,7 +1569,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "上記の変更は、領収書の編集画面を閉じる際に適用されます。"
+            "value": "上記の変更は、レシートの編集画面を閉じる際に適用されます。"
           }
         }
       }
@@ -1756,7 +1756,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "貸し借り先を追加すると、その人を領収書の商品に割り当てることができるようになります。"
+            "value": "貸し借り先を追加すると、その人をレシートの商品に割り当てることができるようになります。"
           }
         }
       }
@@ -1858,7 +1858,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "支払った領収書"
+            "value": "支払ったレシート"
           }
         }
       }
@@ -1875,7 +1875,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "参加している領収書"
+            "value": "参加しているレシート"
           }
         }
       }
@@ -1943,7 +1943,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "新規領収書"
+            "value": "新規レシート"
           }
         }
       }
@@ -1960,7 +1960,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "新しい領収書"
+            "value": "新しいレシート"
           }
         }
       }
@@ -1977,7 +1977,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "領収書をスキャン"
+            "value": "レシートをスキャン"
           }
         }
       }
@@ -2198,7 +2198,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "領収書"
+            "value": "レシート"
           }
         }
       }
@@ -2385,7 +2385,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "領収書名"
+            "value": "レシート名"
           }
         }
       }
@@ -2436,7 +2436,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "この領収書の商品を購入または注文した人を選択してください。"
+            "value": "このレシートの商品を購入または注文した人を選択してください。"
           }
         }
       }
@@ -2537,7 +2537,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "スキャンした領収書"
+            "value": "スキャンしたレシート"
           }
         }
       }
@@ -2588,7 +2588,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "この領収書の税額は自動的に計算されます。\n「その他」＞「自動税率」で変更できます。"
+            "value": "このレシートの税額は自動的に計算されます。\n「その他」＞「自動税率」で変更できます。"
           }
         }
       }
@@ -2605,7 +2605,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "この領収書には独自の税項目があるため、自動税率とサービス料の設定はここでは適用されません。"
+            "value": "このレシートには独自の税項目があるため、自動税率とサービス料の設定はここでは適用されません。"
           }
         }
       }
@@ -2774,7 +2774,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "完済した領収書を非表示"
+            "value": "完済したレシートを非表示"
           }
         }
       }
@@ -2790,7 +2790,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "新しい領収書を作成すると、レストランでの割り勘、ネットでの集合注文などの金額を追跡することができます。"
+            "value": "新しいレシートを作成すると、レストランでの割り勘、ネットでの集合注文などの金額を追跡することができます。"
           }
         }
       }
@@ -2806,7 +2806,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "領収書について"
+            "value": "レシートについて"
           }
         }
       }
@@ -3026,7 +3026,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "領収書をスキャンするには、設定でカメラへのアクセスを許可してください。"
+            "value": "レシートをスキャンするには、設定でカメラへのアクセスを許可してください。"
           }
         }
       }
@@ -3128,7 +3128,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "領収書を読み取っています…"
+            "value": "レシートを読み取っています…"
           }
         }
       }
@@ -3230,7 +3230,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "領収書"
+            "value": "レシート"
           }
         }
       }
@@ -5328,7 +5328,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "領収書"
+            "value": "レシート"
           }
         }
       }
@@ -5394,7 +5394,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "領収書を削除しました"
+            "value": "レシートを削除しました"
           }
         }
       }
@@ -5494,7 +5494,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "領収書"
+            "value": "レシート"
           }
         }
       }

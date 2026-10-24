@@ -76,7 +76,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "領収書が選択されていないか発見されませんでした。\n「Dues」アプリを開いてから、このウィジェットを長押しして領収書を選択してみてください。"
+            "value" : "レシートが選択されていないか発見されませんでした。\n「Dues」アプリを開いてから、このウィジェットを長押ししてレシートを選択してみてください。"
           }
         }
       }
@@ -127,7 +127,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ウィジェットに表示される領収書を選択してください。"
+            "value" : "ウィジェットに表示されるレシートを選択してください。"
           }
         }
       }
@@ -144,7 +144,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "領収書"
+            "value" : "レシート"
           }
         }
       }
@@ -161,7 +161,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "領収書"
+            "value" : "レシート"
           }
         }
       }
@@ -178,7 +178,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "領収書の合計を表示します。"
+            "value" : "レシートの合計を表示します。"
           }
         }
       }
@@ -212,7 +212,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "領収書ごとの貸し借りを表示します。"
+            "value" : "レシートごとの貸し借りを表示します。"
           }
         }
       }
@@ -229,7 +229,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "貸し借り（領収書）"
+            "value" : "貸し借り（レシート）"
           }
         }
       }
@@ -246,7 +246,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "領収書の商品リストを表示します。"
+            "value" : "レシートの商品リストを表示します。"
           }
         }
       }
