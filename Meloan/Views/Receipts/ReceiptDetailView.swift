@@ -155,7 +155,7 @@ struct ReceiptDetailView: View {
                     Text("Receipt.Tax.Detail")
                         .font(.body)
                     Spacer()
-                    Text("\(Int(receipt.taxRate() * 100), specifier: "%d")%")
+                    Text(receipt.taxRate(), format: .percent.precision(.fractionLength(0...2)))
                         .font(.system(size: 14.0))
                         .monospaced()
                 }
