@@ -10,7 +10,7 @@ import SwiftData
 import WidgetKit
 
 @main
-struct MeloanApp: App {
+struct DuesApp: App {
 
     @StateObject var tabManager = TabManager()
     @StateObject var navigationManager = NavigationManager()

@@ -7,13 +7,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Meloan"
+            "value" : "Dues"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "メローン"
+            "value" : "Dues"
           }
         }
       }
@@ -24,13 +24,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Meloan"
+            "value" : "Dues"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "メローン"
+            "value" : "Dues"
           }
         }
       }
@@ -42,7 +42,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Meloan can save receipts as images to your Photos library."
+            "value" : "Dues can save receipts as images to your Photos library."
           }
         }
       }
@@ -53,7 +53,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Meloan can save receipts as images to your Photos library."
+            "value" : "Dues can save receipts as images to your Photos library."
           }
         },
         "ja" : {

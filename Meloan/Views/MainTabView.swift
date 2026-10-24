@@ -47,7 +47,7 @@ struct MainTabView: View {
         .undoToast()
         .task {
             createMePerson()
-            MeloanApp.reloadWidget()
+            DuesApp.reloadWidget()
             try? Tips.configure([
                 .displayFrequency(.immediate),
                 .datastoreLocation(.applicationDefault)

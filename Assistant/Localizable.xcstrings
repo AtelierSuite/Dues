@@ -70,13 +70,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No receipt was selected or found.\nEnsure that the Meloan app has been launched at least once, and long press this widget to select a receipt."
+            "value" : "No receipt was selected or found.\nEnsure that the Dues app has been launched at least once, and long press this widget to select a receipt."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "領収書が選択されていないか発見されませんでした。\n「メローン」アプリを開いてから、このウィジェットを長押しして領収書を選択してみてください。"
+            "value" : "領収書が選択されていないか発見されませんでした。\n「Dues」アプリを開いてから、このウィジェットを長押しして領収書を選択してみてください。"
           }
         }
       }

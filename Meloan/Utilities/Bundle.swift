@@ -10,7 +10,7 @@ import Foundation
 extension Bundle {
 
     func appName() -> String {
-        return self.infoDictionary!["CFBundleName"] as? String ?? "Meloan"
+        return self.infoDictionary!["CFBundleName"] as? String ?? "Dues"
     }
 
     func decode<T: Decodable>(_ type: T.Type, from file: String) -> T? {

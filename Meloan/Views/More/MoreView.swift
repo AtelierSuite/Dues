@@ -149,11 +149,11 @@ struct MoreView: View {
                     Text("More.Advanced")
                 }
                 Section {
-                    Link(destination: URL(string: "https://github.com/katagaki/Meloan")!) {
+                    Link(destination: URL(string: "https://github.com/AtelierSuite/Dues")!) {
                         HStack {
                             Text(String(localized: "More.GitHub"))
                             Spacer()
-                            Text("katagaki/Meloan")
+                            Text("AtelierSuite/Dues")
                                 .foregroundStyle(.secondary)
                         }
                     }
@@ -173,10 +173,10 @@ struct MoreView: View {
             }
         }
         .onChange(of: currencySymbol, { _, _ in
-            MeloanApp.reloadWidget()
+            DuesApp.reloadWidget()
         })
         .onChange(of: showDecimals, { _, _ in
-            MeloanApp.reloadWidget()
+            DuesApp.reloadWidget()
         })
     }
 

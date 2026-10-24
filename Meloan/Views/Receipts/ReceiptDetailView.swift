@@ -244,7 +244,7 @@ struct ReceiptDetailView: View {
     }
 
     func afterSettlementChange() {
-        MeloanApp.reloadWidget()
+        DuesApp.reloadWidget()
         if receipt.isPaid() {
             confettiCounter += 1
         }

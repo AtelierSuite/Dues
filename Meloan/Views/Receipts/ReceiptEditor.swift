@@ -401,7 +401,7 @@ struct ReceiptEditor: View {
             return
         }
         isSaveConfirmed = true
-        MeloanApp.reloadWidget()
+        DuesApp.reloadWidget()
         dismiss()
     }
     // swiftlint:enable function_body_length cyclomatic_complexity

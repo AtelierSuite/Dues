@@ -29,7 +29,7 @@ struct MoreTroubleshootingView: View {
                     Text("More.Data.AttemptReloadData")
                 }
                 Button {
-                    MeloanApp.reloadWidget()
+                    DuesApp.reloadWidget()
                 } label: {
                     Text("More.Data.ReloadWidgets")
                 }
@@ -88,7 +88,7 @@ struct MoreTroubleshootingView: View {
         // Return to a clean first-run state.
         defaults.set(false, forKey: "SampleDataCreated")
         defaults.removeObject(forKey: "SearchHistory")
-        MeloanApp.reloadWidget()
+        DuesApp.reloadWidget()
     }
 
     func resetSettings() {

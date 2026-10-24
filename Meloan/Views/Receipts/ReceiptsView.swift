@@ -248,12 +248,12 @@ struct ReceiptsView: View {
             modelContext.delete(receipt)
         }
         try? modelContext.save()
-        MeloanApp.reloadWidget()
+        DuesApp.reloadWidget()
         toastManager.show(message: NSLocalizedString("Toast.ReceiptDeleted", comment: "")) {
             withAnimation(.snappy.speed(2)) {
                 snapshot.restore(into: modelContext, people: restorePeople)
             }
-            MeloanApp.reloadWidget()
+            DuesApp.reloadWidget()
         }
     }
 

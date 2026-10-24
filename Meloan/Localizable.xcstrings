@@ -111,6 +111,7 @@
         }
       }
     },
+    "AtelierSuite/Dues": {},
     "Currency.(currencyCode)": {
       "extractionState": "manual",
       "localizations": {
@@ -1291,13 +1292,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your data is automatically synced to your iCloud account.\nTo turn off iCloud sync, go to Settings > Apple ID > iCloud > Show All, and turn off 'Meloan'."
+            "value": "Your data is automatically synced to your iCloud account.\nTo turn off iCloud sync, go to Settings > Apple ID > iCloud > Show All, and turn off 'Dues'."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "アプリ内のデータは自動的にiCloudに同期されます。\nこの設定を変更することには、「設定」アプリ＞「Apple ID」＞「iCloud」＞「すべてを表示」を開き、「メローン」をオフにしてください。"
+            "value": "アプリ内のデータは自動的にiCloudに同期されます。\nこの設定を変更することには、「設定」アプリ＞「Apple ID」＞「iCloud」＞「すべてを表示」を開き、「Dues」をオフにしてください。"
           }
         }
       }
@@ -5497,8 +5498,7 @@
           }
         }
       }
-    },
-    "katagaki/Meloan": {}
+    }
   },
   "version": "1.0"
 }
