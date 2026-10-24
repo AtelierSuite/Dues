@@ -41,10 +41,10 @@ struct ReceiptQuery: EntityQuery, Sendable {
     func all() -> [ReceiptEntity] {
         // Reuse the shared container instead of opening a second, divergent store.
         do {
-            let receiptFetchDescriptor = FetchDescriptor<Receipt>()
+            var descriptor = FetchDescriptor<Receipt>()
+            descriptor.sortBy = [SortDescriptor(\.name, order: .forward)]
             return try sharedModelContainer
-                .mainContext.fetch(receiptFetchDescriptor)
-                .sorted(by: { $0.name < $1.name })
+                .mainContext.fetch(descriptor)
                 .map { ReceiptEntity(from: $0) }
         } catch {
             debugPrint(error.localizedDescription)

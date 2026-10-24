@@ -67,7 +67,6 @@ struct MainTabView: View {
         .onChange(of: scenePhase) { _, newValue in
             if newValue == .active {
                 checkForWidgetUpdates()
-                tryToReloadData()
             }
         }
         .onReceive(NotificationCenter.default.publisher(
@@ -79,7 +78,7 @@ struct MainTabView: View {
             }
             // swiftlint:enable line_length
             if event.endDate != nil && event.type == .import {
-                tryToReloadData()
+                // @Query views refetch on CloudKit import; nothing to do here.
             }
         }
     }
@@ -97,19 +96,12 @@ struct MainTabView: View {
         }
     }
 
+    /// The widget flips WidgetDidUpdate after an interactive toggle; the app
+    /// only clears the flag — @Query views observe the store directly, so no
+    /// manual fetch is needed.
     func checkForWidgetUpdates() {
         if defaults.bool(forKey: "WidgetDidUpdate") {
             defaults.set(false, forKey: "WidgetDidUpdate")
-            Task { @MainActor in
-                _ = try? modelContext.fetch(FetchDescriptor<ReceiptItem>())
-                _ = try? modelContext.fetch(FetchDescriptor<Receipt>())
-            }
-        }
-    }
-
-    func tryToReloadData() {
-        Task { @MainActor in
-            _ = try? modelContext.fetch(FetchDescriptor<Receipt>())
         }
     }
 }
