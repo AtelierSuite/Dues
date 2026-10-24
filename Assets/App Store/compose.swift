@@ -3,8 +3,8 @@
 import AppKit
 
 // Frames the captures in Raw/iPhone/<lang>/ into App Store screenshots in iPhone/<lang>/,
-// laid out after the original Keynote decks: a two-line header over a gradient, with the
-// device below it running off the bottom of the canvas.
+// styled after the original Keynote decks: a two-line header over a gradient, with the device
+// below it placed as in the other Atelier apps' screenshots.
 
 let scriptDir = URL(fileURLWithPath: CommandLine.arguments[0]).deletingLastPathComponent()
 let languages = ["en", "ja"]
@@ -228,6 +228,9 @@ func maskedScreen(raw: NSImage) -> NSImage {
 }
 
 /// Draws the device `width` wide and centered, with its top `top` down from the top of the canvas.
+/// Where the device starts, down from the top of the canvas, matching Tables.
+let deviceTop: CGFloat = 311
+
 func drawDevice(raw: NSImage, width: CGFloat, top: CGFloat) {
     let height = width / deviceAspect
     let rect = NSRect(
@@ -254,8 +257,8 @@ func textSizes(_ language: String) -> (header: CGFloat, caption: CGFloat) {
     let copies = screenshots.compactMap { $0.copy[language] }
     let maxWidth = canvasSize.width - 96
     return (
-        Line.fittingSize(for: copies.map(\.header), size: 132, weight: .bold, maxWidth: maxWidth),
-        Line.fittingSize(for: copies.map(\.caption), size: 64, weight: .bold, maxWidth: maxWidth)
+        Line.fittingSize(for: copies.map(\.header), size: 100, weight: .bold, maxWidth: maxWidth),
+        Line.fittingSize(for: copies.map(\.caption), size: 48, weight: .bold, maxWidth: maxWidth)
     )
 }
 
@@ -288,19 +291,20 @@ func compose(_ shot: Screenshot, language: String) -> Result {
     // AppKit's origin is bottom-left, so the gradient is drawn downwards to start at the top.
     background.draw(in: NSRect(origin: .zero, size: canvasSize), angle: -90)
 
-    // Placed as in the Keynote decks, measured down from the top of the canvas.
+    // Measured down from the top of the canvas; the text sits centered above the device.
     let sizes = textSizes(language)
     let header = Line(copy.header, size: sizes.header, weight: .bold)
     let caption = Line(copy.caption, size: sizes.caption, weight: .bold)
-    header.draw(baseline: 277)
-    caption.draw(baseline: 368)
+    header.draw(baseline: 167)
+    caption.draw(baseline: 235)
 
     switch shot.layout {
     case .single:
-        drawDevice(raw: raws[0], width: 1166, top: 510)
+        // As in Tables: the whole device, from below the text to a margin at the bottom.
+        drawDevice(raw: raws[0], width: (canvasSize.height - deviceTop - 88) * deviceAspect, top: deviceTop)
     case .stacked:
-        drawDevice(raw: raws[0], width: 1040, top: 550)
-        drawDevice(raw: raws[1], width: 1166, top: 1340)
+        drawDevice(raw: raws[0], width: 980, top: deviceTop + 30)
+        drawDevice(raw: raws[1], width: 1106, top: 1140)
     }
 
     image.unlockFocus()
