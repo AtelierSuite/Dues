@@ -18,7 +18,9 @@ struct MoreView: View {
     @AppStorage(wrappedValue: false, "AddTenPercent", store: defaults) var addTenPercent: Bool
     @AppStorage(wrappedValue: false, "TaxAboveServiceCharge", store: defaults) var taxAboveServiceCharge: Bool
     @AppStorage(wrappedValue: "", "CurrencySymbol", store: defaults) var currencySymbol: String
-    @AppStorage(wrappedValue: true, "ShowDecimals", store: defaults) var showDecimals: Bool
+    @AppStorage(wrappedValue: currencyDecimalPlaces(), "DecimalPlaces", store: defaults) var decimalPlaces: Int
+    @AppStorage(wrappedValue: false, "UseCurrencyGlyph", store: defaults) var useCurrencyGlyph: Bool
+    @State var currencyPreview: String = format(1234.567)
 
     var body: some View {
         NavigationStack(path: $navigationManager.moreTabPath) {
@@ -95,6 +97,14 @@ struct MoreView: View {
                         .font(.subheadline)
                 }
                 Section {
+                    Text(verbatim: currencyPreview)
+                        .font(.largeTitle.bold())
+                        .monospacedDigit()
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.5)
+                        .contentTransition(.numericText())
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.vertical, 8.0)
                     Menu {
                         Button {
                             currencySymbol = ""
@@ -137,7 +147,17 @@ struct MoreView: View {
                         }
                         .tint(.primary)
                     }
-                    Toggle("More.Currency.Decimals", isOn: $showDecimals)
+                    if currencyGlyphs[currencySymbol] != nil {
+                        Toggle("More.Currency.UseSymbol", isOn: $useCurrencyGlyph)
+                    }
+                    Picker("More.Currency.Decimals", selection: $decimalPlaces) {
+                        Text("More.Currency.Decimals.None").tag(0)
+                        ForEach(1...3, id: \.self) { places in
+                            Text(verbatim: String(places)).tag(places)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    .tint(.secondary)
                 } header: {
                     Text("More.Currency")
                 }
@@ -173,11 +193,21 @@ struct MoreView: View {
             }
         }
         .onChange(of: currencySymbol, { _, _ in
-            DuesApp.reloadWidget()
+            currencySettingsDidChange()
         })
-        .onChange(of: showDecimals, { _, _ in
-            DuesApp.reloadWidget()
+        .onChange(of: decimalPlaces, { _, _ in
+            currencySettingsDidChange()
         })
+        .onChange(of: useCurrencyGlyph, { _, _ in
+            currencySettingsDidChange()
+        })
+    }
+
+    func currencySettingsDidChange() {
+        withAnimation(.snappy) {
+            currencyPreview = format(1234.567)
+        }
+        DuesApp.reloadWidget()
     }
 
     @ViewBuilder

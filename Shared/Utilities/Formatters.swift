@@ -7,21 +7,65 @@
 
 import Foundation
 
+struct CurrencyGlyph {
+    let symbol: String
+    let isSuffix: Bool
+}
+
+let currencyGlyphs: [String: CurrencyGlyph] = [
+    "BGN": CurrencyGlyph(symbol: "лв", isSuffix: true),
+    "BND": CurrencyGlyph(symbol: "$", isSuffix: false),
+    "CAD": CurrencyGlyph(symbol: "$", isSuffix: false),
+    "CZK": CurrencyGlyph(symbol: "Kč", isSuffix: true),
+    "DKK": CurrencyGlyph(symbol: "kr", isSuffix: true),
+    "EUR": CurrencyGlyph(symbol: "€", isSuffix: false),
+    "GBP": CurrencyGlyph(symbol: "£", isSuffix: false),
+    "HUF": CurrencyGlyph(symbol: "Ft", isSuffix: true),
+    "IDR": CurrencyGlyph(symbol: "Rp", isSuffix: false),
+    "ISK": CurrencyGlyph(symbol: "kr", isSuffix: true),
+    "JPY": CurrencyGlyph(symbol: "¥", isSuffix: false),
+    "KHR": CurrencyGlyph(symbol: "៛", isSuffix: true),
+    "LAK": CurrencyGlyph(symbol: "₭", isSuffix: false),
+    "MXN": CurrencyGlyph(symbol: "$", isSuffix: false),
+    "MYR": CurrencyGlyph(symbol: "RM", isSuffix: false),
+    "NOK": CurrencyGlyph(symbol: "kr", isSuffix: true),
+    "PHP": CurrencyGlyph(symbol: "₱", isSuffix: false),
+    "PLN": CurrencyGlyph(symbol: "zł", isSuffix: true),
+    "RON": CurrencyGlyph(symbol: "lei", isSuffix: true),
+    "SEK": CurrencyGlyph(symbol: "kr", isSuffix: true),
+    "SGD": CurrencyGlyph(symbol: "$", isSuffix: false),
+    "THB": CurrencyGlyph(symbol: "฿", isSuffix: false),
+    "TRY": CurrencyGlyph(symbol: "₺", isSuffix: false),
+    "UAH": CurrencyGlyph(symbol: "₴", isSuffix: false),
+    "USD": CurrencyGlyph(symbol: "$", isSuffix: false),
+    "VND": CurrencyGlyph(symbol: "₫", isSuffix: true)
+]
+
 func format(_ price: Double) -> String {
     let currencySymbol = defaults.string(forKey: "CurrencySymbol") ?? ""
-    if defaults.value(forKey: "ShowDecimals") == nil || defaults.bool(forKey: "ShowDecimals") {
-        return String(format: "\(currencySymbol == "" ? "" : currencySymbol + " ")%.2f", price)
-    } else {
-        return String(format: "\(currencySymbol == "" ? "" : currencySymbol + " ")%.0f", price)
+    let amount = String(format: "%.\(currencyDecimalPlaces())f", price)
+    if currencySymbol == "" {
+        return amount
     }
+    if defaults.bool(forKey: "UseCurrencyGlyph"), let glyph = currencyGlyphs[currencySymbol] {
+        return glyph.isSuffix ? "\(amount) \(glyph.symbol)" : "\(glyph.symbol) \(amount)"
+    }
+    return "\(currencySymbol) \(amount)"
 }
 
 func priceFormatStyle() -> FloatingPointFormatStyle<Double> {
-    if defaults.value(forKey: "ShowDecimals") == nil || defaults.bool(forKey: "ShowDecimals") {
-        return .number.precision(.fractionLength(0...2))
-    } else {
-        return .number.precision(.fractionLength(0))
+    return .number.precision(.fractionLength(0...currencyDecimalPlaces()))
+}
+
+func currencyDecimalPlaces() -> Int {
+    if defaults.object(forKey: "DecimalPlaces") != nil {
+        return min(max(defaults.integer(forKey: "DecimalPlaces"), 0), 3)
     }
+    // Fall back to the legacy show/hide decimals toggle
+    if defaults.object(forKey: "ShowDecimals") != nil && !defaults.bool(forKey: "ShowDecimals") {
+        return 0
+    }
+    return 2
 }
 
 func hey(_ person: Person, youOweMe price: Double) -> String {

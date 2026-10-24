@@ -11,6 +11,7 @@ struct ReceiptItemCompactRow: View {
 
     // Not read directly, but keeps the row re-rendering when the currency changes.
     @AppStorage(wrappedValue: "", "CurrencySymbol", store: defaults) var currencySymbol: String
+    @AppStorage(wrappedValue: false, "UseCurrencyGlyph", store: defaults) var useCurrencyGlyph: Bool
     var name: String
     var price: Double
     var isPaid: Bool = false

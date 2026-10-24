@@ -1024,13 +1024,30 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Show Decimals"
+            "value": "Decimal Places"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "小数点以下2桁を表示"
+            "value": "小数点以下の桁数"
+          }
+        }
+      }
+    },
+    "More.Currency.Decimals.None": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "None"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "なし"
           }
         }
       }
@@ -1047,7 +1064,24 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "通過シンボル"
+            "value": "通貨シンボル"
+          }
+        }
+      }
+    },
+    "More.Currency.UseSymbol": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show as Symbol"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "記号で表示"
           }
         }
       }
@@ -5255,13 +5289,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "More"
+            "value": "Settings"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "その他"
+            "value": "設定"
           }
         }
       }
@@ -5420,13 +5454,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "More"
+            "value": "Settings"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "その他"
+            "value": "設定"
           }
         }
       }
