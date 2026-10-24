@@ -443,8 +443,8 @@
 				INFOPLIST_FILE = Meloan/Info.plist;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
-				INFOPLIST_KEY_NSCameraUsageDescription = "Meloan uses the camera to scan your receipts and read the items automatically.";
-				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Meloan can save receipts as images to your Photos library.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Dues uses the camera to scan your receipts and read the items automatically.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Dues can save receipts as images to your Photos library.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
@@ -483,8 +483,8 @@
 				INFOPLIST_FILE = Meloan/Info.plist;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
-				INFOPLIST_KEY_NSCameraUsageDescription = "Meloan uses the camera to scan your receipts and read the items automatically.";
-				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Meloan can save receipts as images to your Photos library.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Dues uses the camera to scan your receipts and read the items automatically.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Dues can save receipts as images to your Photos library.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
