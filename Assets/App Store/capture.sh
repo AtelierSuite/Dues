@@ -93,7 +93,9 @@ for language in $LANGUAGES; do
 
   if [[ $MODE == widgets ]]; then
     launch widgets
-    open -a Simulator --args -CurrentDeviceUDID $UDID
+    # Simulator.app may not be installed; the device can be driven from elsewhere too.
+    open -b com.apple.iphonesimulator --args -CurrentDeviceUDID $UDID 2>/dev/null ||
+      echo "Open the \"Dues Screenshots iPhone\" simulator ($UDID)."
     echo "Add the Dues widgets to the Home Screen of the simulator and pick a demo"
     echo "receipt for each, then press Return to capture 01-widgets ($language)."
     read
