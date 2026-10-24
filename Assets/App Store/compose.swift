@@ -293,7 +293,7 @@ func compose(_ shot: Screenshot, language: String) -> Result {
     let header = Line(copy.header, size: sizes.header, weight: .bold)
     let caption = Line(copy.caption, size: sizes.caption, weight: .bold)
     header.draw(baseline: 277)
-    caption.draw(baseline: 350)
+    caption.draw(baseline: 368)
 
     switch shot.layout {
     case .single:
