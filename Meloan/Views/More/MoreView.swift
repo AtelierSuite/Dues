@@ -98,6 +98,7 @@ struct MoreView: View {
                         .contentTransition(.numericText())
                         .frame(maxWidth: .infinity, alignment: .center)
                         .padding(.vertical, 8.0)
+                        .alignmentGuide(.listRowSeparatorLeading) { _ in 0 }
                     Menu {
                         Button {
                             currencySymbol = ""
@@ -197,8 +198,11 @@ struct MoreView: View {
     }
 
     func currencySettingsDidChange() {
-        withAnimation(.snappy) {
-            currencyPreview = format(1234.567)
+        // Menu selections are applied with animations disabled, so update the preview afterwards
+        DispatchQueue.main.async {
+            withAnimation(.snappy) {
+                currencyPreview = format(1234.567)
+            }
         }
         DuesApp.reloadWidget()
     }
