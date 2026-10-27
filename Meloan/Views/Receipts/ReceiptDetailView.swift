@@ -23,7 +23,7 @@ struct ReceiptDetailView: View {
                 isSharing = true
             }
         }
-        .confettiCannon(counter: $confettiCounter, num: Int(receipt.sum()), rainHeight: 1000.0, radius: 500.0)
+        .confettiCannon(counter: $confettiCounter, num: 60, rainHeight: 1000.0, radius: 500.0)
         .sheet(isPresented: $isSharing, content: {
             PDFExporterView(receipt: receipt)
                 .presentationDragIndicator(.visible)
