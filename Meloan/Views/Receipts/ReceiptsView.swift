@@ -65,8 +65,9 @@ struct ReceiptsView: View {
                             }
                         }
                     }
-                    .padding(20.0)
                 }
+                .contentMargins(20.0, for: .scrollContent)
+                .contentMargins(.horizontal, 20.0, for: .scrollIndicators)
                 .scrollClipDisabled()
             }
             .background(Color(uiColor: UIColor.systemGroupedBackground))
