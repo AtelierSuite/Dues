@@ -15,6 +15,13 @@ struct ReceiptColumn: View {
         }
     }
 
+    // Derived from the receipt ID so the stamp texture stays put across redraws.
+    var stampNoiseOffset: CGSize {
+        let seed = receipt.id.unicodeScalars.reduce(UInt64(5381)) { ($0 &* 33) &+ UInt64($1.value) }
+        return CGSize(width: CGFloat(seed % 100) - 50.0,
+                      height: CGFloat((seed / 100) % 100) - 50.0)
+    }
+
     var body: some View {
         VStack(alignment: .center, spacing: 0.0) {
             Text(receipt.name)
@@ -68,8 +75,7 @@ struct ReceiptColumn: View {
                                     .resizable()
                                     .scaledToFill()
                                     .scaleEffect(2.5)
-                                    .offset(x: CGFloat.random(in: -50..<50),
-                                            y: CGFloat.random(in: -50..<50))
+                                    .offset(stampNoiseOffset)
                             }
                             .rotationEffect(Angle(degrees: 320.0))
                         Color.clear
