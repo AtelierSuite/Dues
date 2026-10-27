@@ -188,6 +188,20 @@ final class Receipt: Identifiable {
         }
     }
 
+    func reassign(_ item: ReceiptItem, to person: Person?, markSelfPaid: Bool) {
+        guard item.person?.id != person?.id else { return }
+        item.person = person
+        item.peopleWhoPaid?.removeAll()
+        if let person = person {
+            item.paid = markSelfPaid && person.id == personWhoPaid?.id
+        } else {
+            if markSelfPaid, let personWhoPaid = personWhoPaid {
+                item.addPersonWhoPaid(from: [personWhoPaid])
+            }
+            item.refreshSharedPaidState(participantIDs: Set(participants().map { $0.id }))
+        }
+    }
+
     func toggleSettled(_ item: ReceiptItem) {
         if item.person != nil {
             item.paid.toggle()
