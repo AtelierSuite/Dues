@@ -360,7 +360,7 @@ struct ReceiptEditor: View {
         if taxRateCountry != "" && !hasManualTax {
             let taxBase: Double
             if taxAboveServiceCharge && addTenPercent {
-                taxBase = serviceChargeAmount
+                taxBase = receipt.sumOfItems() + serviceChargeAmount
             } else {
                 taxBase = receipt.sumOfItems()
             }
