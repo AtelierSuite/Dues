@@ -149,7 +149,8 @@ final class Receipt: Identifiable {
     }
 
     func isPaid() -> Bool {
-        return !(receiptItems?.contains(where: { $0.paid == false }) ?? false)
+        let items = receiptItems ?? []
+        return !items.isEmpty && !items.contains(where: { $0.paid == false })
     }
 
     func addReceiptItems(from receiptItems: [ReceiptItem]) {
