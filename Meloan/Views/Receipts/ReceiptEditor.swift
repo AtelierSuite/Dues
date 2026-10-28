@@ -124,8 +124,12 @@ struct ReceiptEditor: View {
                         .foregroundStyle(.secondary)
                         .listRowBackground(Color.clear)
                 } header: {
-                    ListSectionHeader(text: "Receipt.Taxes")
-                        .font(.body)
+                    HStack(alignment: .center, spacing: 4.0) {
+                        ListSectionHeader(text: "Receipt.Taxes")
+                            .font(.body)
+                        Spacer()
+                        tipMenu
+                    }
                 }
             } else {
                 Section {
@@ -141,6 +145,7 @@ struct ReceiptEditor: View {
                         ListSectionHeader(text: "Receipt.Taxes")
                             .font(.body)
                         Spacer()
+                        tipMenu
                         Button {
                             draft.taxItems.append(
                                 ReceiptDraft.Tax(id: UUID().uuidString, name: "", price: 0.0,
@@ -152,6 +157,10 @@ struct ReceiptEditor: View {
                 } footer: {
                     if draftHasManualTax && autoChargesConfigured {
                         Text("Receipt.Tax.ManualOverridesAutoHint")
+                            .font(.subheadline)
+                    } else if taxRateCountry != "" && draft.taxItems.allSatisfy({ Gratuity.isTip(id: $0.id) }) {
+                        // Only a tip so far: the automatic tax is still added on save.
+                        Text("Receipt.Tax.AutomaticallyCalculatedHint")
                             .font(.subheadline)
                     }
                 }
@@ -215,6 +224,26 @@ struct ReceiptEditor: View {
         .onChange(of: draft.taxItems) { oldValue, newValue in
             registerUndo(\.taxItems, from: oldValue, to: newValue)
         }
+    }
+
+    var tipMenu: some View {
+        ReceiptTipMenu(taxItems: $draft.taxItems,
+                       subtotal: draft.sumOfItems() - draft.sumOfDiscounts(),
+                       totalBeforeTip: totalBeforeTip)
+    }
+
+    /// What the receipt will total once saved, before any tip: items less discounts plus
+    /// the user's own tax lines, or else the automatic charges `saveEditing()` will add.
+    var totalBeforeTip: Double {
+        let manualTax = draft.taxItems
+            .filter { isManualTax(id: $0.id) }
+            .reduce(0.0) { $0 + $1.price }
+        var total = draft.sumOfItems() - draft.sumOfDiscounts() + manualTax
+        if !draftHasManualTax {
+            let automaticCharges = automaticCharges(sumOfItems: draft.sumOfItems())
+            total += automaticCharges.serviceCharge + automaticCharges.tax
+        }
+        return total
     }
 
     /// Registers an undo that restores `keyPath` to `oldValue`, unless the change

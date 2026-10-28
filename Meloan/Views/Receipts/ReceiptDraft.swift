@@ -52,6 +52,14 @@ class ReceiptDraft {
         }
     }
 
+    func sumOfItems() -> Double {
+        receiptItems.reduce(0.0) { $0 + $1.price }
+    }
+
+    func sumOfDiscounts() -> Double {
+        discountItems.reduce(0.0) { $0 + $1.price }
+    }
+
     func participants() -> [Person] {
         guard let peopleWhoParticipated = peopleWhoParticipated else { return [] }
         var result: [Person] = []
