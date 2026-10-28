@@ -336,40 +336,31 @@ struct ReceiptEditor: View {
         for item in receipt.receiptItems ?? [] where item.person == nil {
             item.refreshSharedPaidState(participantIDs: participantIDs)
         }
-        // Auto charges are suppressed when the user supplied their own tax (no double tax).
-        let hasManualTax = receipt.taxItems?.contains(where: {
-            !$0.id.hasPrefix("AUTOTAX-") && !$0.id.hasPrefix("AUTOTEN-")
-        }) ?? false
-        // Calculate service charge first (needed for tax-above-service-charge)
-        let serviceChargeAmount: Double
-        if addTenPercent && !hasManualTax {
-            serviceChargeAmount = receipt.sumOfItems() * 0.1
-            if let serviceChargeItem = receipt.taxItems?.first(where: { $0.id == "AUTOTEN-\(receipt.id)" }) {
+        let hasManualTax = receipt.taxItems?.contains(where: { !AutoCharges.isAutomatic(taxItemID: $0.id) }) ?? false
+        let autoCharges = AutoCharges(addServiceCharge: addTenPercent, taxRateCountry: taxRateCountry,
+                                      taxRate: taxRate, taxAboveServiceCharge: taxAboveServiceCharge,
+                                      sumOfItems: receipt.sumOfItems(), hasManualTax: hasManualTax)
+        let serviceChargeID = AutoCharges.serviceChargeID(for: receipt.id)
+        if let serviceChargeAmount = autoCharges.serviceCharge {
+            if let serviceChargeItem = receipt.taxItems?.first(where: { $0.id == serviceChargeID }) {
                 serviceChargeItem.price = serviceChargeAmount
             } else {
                 let automaticServiceCharge = TaxItem(name: NSLocalizedString("Receipt.ServiceCharge", comment: ""),
                                                      price: serviceChargeAmount)
-                automaticServiceCharge.id = "AUTOTEN-\(receipt.id)"
+                automaticServiceCharge.id = serviceChargeID
                 receipt.addTaxItems(from: [automaticServiceCharge])
             }
         } else {
-            serviceChargeAmount = 0.0
             // Service charge off, or the user supplied their own — remove any stale auto item.
-            removeAutoTaxItem(withID: "AUTOTEN-\(receipt.id)")
+            removeAutoTaxItem(withID: serviceChargeID)
         }
-        if taxRateCountry != "" && !hasManualTax {
-            let taxBase: Double
-            if taxAboveServiceCharge && addTenPercent {
-                taxBase = receipt.sumOfItems() + serviceChargeAmount
+        let taxID = AutoCharges.taxID(for: receipt.id)
+        if let taxAmount = autoCharges.tax {
+            if let taxItem = receipt.taxItems?.first(where: { $0.id == taxID }) {
+                taxItem.price = taxAmount
             } else {
-                taxBase = receipt.sumOfItems()
-            }
-            if let taxItem = receipt.taxItems?.first(where: { $0.id == "AUTOTAX-\(receipt.id)" }) {
-                taxItem.price = taxBase * taxRate
-            } else {
-                let automaticTaxItem = TaxItem(name: "",
-                                               price: taxBase * taxRate)
-                automaticTaxItem.id = "AUTOTAX-\(receipt.id)"
+                let automaticTaxItem = TaxItem(name: "", price: taxAmount)
+                automaticTaxItem.id = taxID
                 switch taxRateType {
                 case "gst":
                     automaticTaxItem.name = NSLocalizedString("Receipt.Tax.GST", comment: "")
@@ -382,7 +373,7 @@ struct ReceiptEditor: View {
             }
         } else {
             // Tax region cleared, or the user provided their own tax — drop the auto item.
-            removeAutoTaxItem(withID: "AUTOTAX-\(receipt.id)")
+            removeAutoTaxItem(withID: taxID)
         }
         do {
             try modelContext.save()
@@ -403,7 +394,7 @@ struct ReceiptEditor: View {
     /// When true, `saveEditing()` suppresses the automatic tax and service charge to
     /// avoid double-charging — surfaced to the user via a section footer.
     var draftHasManualTax: Bool {
-        draft.taxItems.contains { !$0.id.hasPrefix("AUTOTAX-") && !$0.id.hasPrefix("AUTOTEN-") }
+        draft.taxItems.contains { !AutoCharges.isAutomatic(taxItemID: $0.id) }
     }
 
     /// Whether the user has any automatic tax/service-charge setting enabled.
