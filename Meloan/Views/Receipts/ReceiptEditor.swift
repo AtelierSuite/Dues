@@ -337,13 +337,11 @@ struct ReceiptEditor: View {
             item.refreshSharedPaidState(participantIDs: participantIDs)
         }
         // Auto charges are suppressed when the user supplied their own tax (no double tax).
-        let hasManualTax = receipt.taxItems?.contains(where: {
-            !$0.id.hasPrefix("AUTOTAX-") && !$0.id.hasPrefix("AUTOTEN-")
-        }) ?? false
-        // Calculate service charge first (needed for tax-above-service-charge)
-        let serviceChargeAmount: Double
+        // A tip is not tax, so it never turns them off.
+        let hasManualTax = receipt.taxItems?.contains(where: { isManualTax(id: $0.id) }) ?? false
+        let automaticCharges = automaticCharges(sumOfItems: receipt.sumOfItems())
         if addTenPercent && !hasManualTax {
-            serviceChargeAmount = receipt.sumOfItems() * 0.1
+            let serviceChargeAmount = automaticCharges.serviceCharge
             if let serviceChargeItem = receipt.taxItems?.first(where: { $0.id == "AUTOTEN-\(receipt.id)" }) {
                 serviceChargeItem.price = serviceChargeAmount
             } else {
@@ -353,22 +351,15 @@ struct ReceiptEditor: View {
                 receipt.addTaxItems(from: [automaticServiceCharge])
             }
         } else {
-            serviceChargeAmount = 0.0
             // Service charge off, or the user supplied their own — remove any stale auto item.
             removeAutoTaxItem(withID: "AUTOTEN-\(receipt.id)")
         }
         if taxRateCountry != "" && !hasManualTax {
-            let taxBase: Double
-            if taxAboveServiceCharge && addTenPercent {
-                taxBase = receipt.sumOfItems() + serviceChargeAmount
-            } else {
-                taxBase = receipt.sumOfItems()
-            }
             if let taxItem = receipt.taxItems?.first(where: { $0.id == "AUTOTAX-\(receipt.id)" }) {
-                taxItem.price = taxBase * taxRate
+                taxItem.price = automaticCharges.tax
             } else {
                 let automaticTaxItem = TaxItem(name: "",
-                                               price: taxBase * taxRate)
+                                               price: automaticCharges.tax)
                 automaticTaxItem.id = "AUTOTAX-\(receipt.id)"
                 switch taxRateType {
                 case "gst":
@@ -399,11 +390,25 @@ struct ReceiptEditor: View {
     }
     // swiftlint:enable function_body_length cyclomatic_complexity
 
-    /// The draft carries at least one user-supplied (non-auto) tax/charge line.
+    /// The draft carries at least one user-supplied (non-auto, non-tip) tax/charge line.
     /// When true, `saveEditing()` suppresses the automatic tax and service charge to
     /// avoid double-charging — surfaced to the user via a section footer.
     var draftHasManualTax: Bool {
-        draft.taxItems.contains { !$0.id.hasPrefix("AUTOTAX-") && !$0.id.hasPrefix("AUTOTEN-") }
+        draft.taxItems.contains { isManualTax(id: $0.id) }
+    }
+
+    func isManualTax(id: String) -> Bool {
+        !id.hasPrefix("AUTOTAX-") && !id.hasPrefix("AUTOTEN-") && !Gratuity.isTip(id: id)
+    }
+
+    /// The automatic service charge and tax for items summing to `sumOfItems`, per the
+    /// user's settings. Each is zero when its setting is off. Shared by `saveEditing()`
+    /// and the tip round-up preview so both agree on the total.
+    func automaticCharges(sumOfItems: Double) -> (serviceCharge: Double, tax: Double) {
+        let serviceCharge = addTenPercent ? sumOfItems * 0.1 : 0.0
+        guard taxRateCountry != "" else { return (serviceCharge, 0.0) }
+        let taxBase = taxAboveServiceCharge ? sumOfItems + serviceCharge : sumOfItems
+        return (serviceCharge, taxBase * taxRate)
     }
 
     /// Whether the user has any automatic tax/service-charge setting enabled.
