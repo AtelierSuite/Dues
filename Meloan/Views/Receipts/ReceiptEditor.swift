@@ -30,6 +30,7 @@ struct ReceiptEditor: View {
     }
 
     var body: some View {
+        let participants = draft.participants()
         List {
             Section {
                 TextField("Receipt.Name", text: $draft.name)
@@ -45,7 +46,7 @@ struct ReceiptEditor: View {
                             .tint(.primary)
                         Spacer()
                         Text(NSLocalizedString("Receipt.Participants.Label", comment: "")
-                            .replacingOccurrences(of: "%1", with: String(draft.participants().count)))
+                            .replacingOccurrences(of: "%1", with: String(participants.count)))
                         .lineLimit(1)
                         .truncationMode(.head)
                     }
@@ -60,7 +61,7 @@ struct ReceiptEditor: View {
                 Picker(selection: $draft.personWhoPaid) {
                     Text("Shared.NoSelection")
                         .tag(nil as Person?)
-                    ForEach(draft.participants()) { person in
+                    ForEach(participants) { person in
                         PersonRow(person: person)
                             .tag(person as Person?)
                     }
@@ -76,7 +77,7 @@ struct ReceiptEditor: View {
             Section {
                 ForEach($draft.receiptItems) { $item in
                     ReceiptItemAssignableRow(item: $item,
-                                             peopleWhoParticipated: draft.participants(),
+                                             peopleWhoParticipated: participants,
                                              placeholderText: "Receipt.ProductName")
                 }
                 .onDelete { indexSet in
