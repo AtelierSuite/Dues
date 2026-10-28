@@ -9,13 +9,21 @@ func isCloudSyncEnabled() -> Bool {
     return defaults.object(forKey: "EnableCloudSync") == nil || defaults.bool(forKey: "EnableCloudSync")
 }
 
+/// Whether this code is running inside an app extension (e.g. the widget extension) rather than the app.
+private var isRunningInExtension: Bool {
+    Bundle.main.bundleURL.pathExtension == "appex"
+}
+
 func newContainer() -> ModelContainer {
     let schema = Schema([
         Receipt.self, Person.self, ReceiptItem.self, DiscountItem.self, TaxItem.self
     ])
+    // Only the app mirrors the store to CloudKit. Extensions open the same app-group store locally,
+    // and the app exports their changes from persistent history the next time it syncs.
+    let syncsToCloud = isCloudSyncEnabled() && !isRunningInExtension
     let cloudConfiguration = ModelConfiguration(schema: schema,
                                                 isStoredInMemoryOnly: false,
-                                                cloudKitDatabase: isCloudSyncEnabled() ? .automatic : .none)
+                                                cloudKitDatabase: syncsToCloud ? .automatic : .none)
     if let container = try? ModelContainer(for: schema, configurations: [cloudConfiguration]) {
         return container
     }
