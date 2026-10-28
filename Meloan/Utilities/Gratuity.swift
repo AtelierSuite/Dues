@@ -41,15 +41,17 @@ enum Gratuity {
 
     /// One option per step that rounds `total` up to a different amount. Steps that the
     /// total is already a multiple of are skipped, since they would add no tip.
+    /// The tip is the exact gap to the target rather than a rounded one, since the automatic
+    /// tax is stored unrounded: a total of 68.526 gets 1.474, so the receipt totals exactly 70.
     static func roundUpOptions(total: Double, currencyCode: String) -> [RoundUpOption] {
-        let total = roundedToCurrency(total)
-        guard total > 0 else { return [] }
+        let displayedTotal = roundedToCurrency(total)
+        guard displayedTotal > 0 else { return [] }
         var options: [RoundUpOption] = []
         for step in roundUpSteps(currencyCode: currencyCode) {
             // The epsilon keeps an exact multiple (stored as 49.999…) from rounding up a whole step.
-            let target = ((total / step) - 1e-9).rounded(.up) * step
-            let tip = roundedToCurrency(target - total)
-            if tip > 0 && !options.contains(where: { $0.target == target }) {
+            let target = ((displayedTotal / step) - 1e-9).rounded(.up) * step
+            let tip = target - total
+            if roundedToCurrency(tip) > 0 && !options.contains(where: { $0.target == target }) {
                 options.append(RoundUpOption(target: target, tip: tip))
             }
         }
