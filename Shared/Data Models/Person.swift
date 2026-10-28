@@ -29,11 +29,12 @@ final class Person {
 
     func sumOwed(to personWhoPaid: Person?) -> Double {
         if let personWhoPaid = personWhoPaid {
-            var sum: Double = .zero
+            let places = currencyDecimalPlaces()
+            var sum: Int64 = .zero
             for receipt in receiptsParticipated ?? [] where receipt.personWhoPaid == personWhoPaid {
-                sum += receipt.sumOwed(to: personWhoPaid, for: self)
+                sum += receipt.minorUnitsOwed(to: personWhoPaid, for: self, places: places)
             }
-            return sum
+            return Money.amount(sum, places: places)
         }
         return .zero
     }
