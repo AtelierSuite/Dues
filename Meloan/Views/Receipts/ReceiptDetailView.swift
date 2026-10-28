@@ -1,3 +1,4 @@
+// swiftlint:disable file_length
 import ConfettiSwiftUI
 import SwiftUI
 
@@ -6,6 +7,8 @@ struct ReceiptDetailView: View {
 
     @Environment(\.modelContext) var modelContext
     @AppStorage(wrappedValue: true, "MarkSelfPaid", store: defaults) var markSelfPaid: Bool
+    // Observed so shares re-render when the rounding setting changes.
+    @AppStorage(wrappedValue: 0, "ShareRounding", store: defaults) var shareRounding: Int
     @State var receipt: Receipt
     @State var confettiCounter: Int = 0
     @State var isSharing: Bool = false
@@ -73,9 +76,17 @@ struct ReceiptDetailView: View {
         Section {
             ForEach(receipt.borrowers()) { person in
                 NavigationLink(value: ViewPath.personDetail(person: person)) {
-                    PersonRow(person: person)
+                    HStack(alignment: .center, spacing: 16.0) {
+                        PersonRow(person: person)
+                        if let owed = receipt.personWhoPaid.map({ receipt.roundedSumOwed(to: $0, for: person) }),
+                           owed > 0 {
+                            Spacer()
+                            Text(format(owed)).font(.system(size: 14.0)).monospaced().foregroundStyle(.secondary)
+                        }
+                    }
                 }
             }
+            RoundingRow(difference: receipt.roundingDifference())
         } header: {
             Text("Receipt.Participants")
         }
@@ -398,3 +409,4 @@ struct ReceiptDetailView: View {
     }
 }
 // swiftlint:enable type_body_length
+// swiftlint:enable file_length
