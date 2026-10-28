@@ -2763,6 +2763,23 @@
         }
       }
     },
+    "Receipt.Tip.CustomPercentage.Title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom Percentage"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "割合を指定"
+          }
+        }
+      }
+    },
     "Receipt.Tip.Percentage": {
       "extractionState": "manual",
       "localizations": {

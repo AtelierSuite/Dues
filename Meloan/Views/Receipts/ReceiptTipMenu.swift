@@ -45,7 +45,7 @@ struct ReceiptTipMenu: View {
         }
         .accessibilityLabel("Receipt.Tip.Add")
         .disabled(subtotal <= 0)
-        .alert("Receipt.Tip.CustomPercentage", isPresented: $isCustomPercentagePresented) {
+        .alert("Receipt.Tip.CustomPercentage.Title", isPresented: $isCustomPercentagePresented) {
             TextField("Receipt.Tip.CustomPercentage.Placeholder", value: $customPercentage, format: .number)
                 .keyboardType(.decimalPad)
             Button("Shared.Cancel", role: .cancel) { }
