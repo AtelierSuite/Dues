@@ -149,7 +149,8 @@ final class Receipt: Identifiable {
     }
 
     func isPaid() -> Bool {
-        return !(receiptItems?.contains(where: { $0.paid == false }) ?? false)
+        let items = receiptItems ?? []
+        return !items.isEmpty && !items.contains(where: { $0.paid == false })
     }
 
     func addReceiptItems(from receiptItems: [ReceiptItem]) {
@@ -184,6 +185,20 @@ final class Receipt: Identifiable {
                 item.addPersonWhoPaid(from: [personWhoPaid])
             }
             item.refreshSharedPaidState(participantIDs: participantIDs)
+        }
+    }
+
+    func reassign(_ item: ReceiptItem, to person: Person?, markSelfPaid: Bool) {
+        guard item.person?.id != person?.id else { return }
+        item.person = person
+        item.peopleWhoPaid?.removeAll()
+        if let person = person {
+            item.paid = markSelfPaid && person.id == personWhoPaid?.id
+        } else {
+            if markSelfPaid, let personWhoPaid = personWhoPaid {
+                item.addPersonWhoPaid(from: [personWhoPaid])
+            }
+            item.refreshSharedPaidState(participantIDs: Set(participants().map { $0.id }))
         }
     }
 

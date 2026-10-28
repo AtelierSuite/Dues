@@ -4,6 +4,8 @@ import SwiftUI
 // swiftlint:disable type_body_length
 struct ReceiptDetailView: View {
 
+    @Environment(\.modelContext) var modelContext
+    @AppStorage(wrappedValue: true, "MarkSelfPaid", store: defaults) var markSelfPaid: Bool
     @State var receipt: Receipt
     @State var confettiCounter: Int = 0
     @State var isSharing: Bool = false
@@ -23,7 +25,7 @@ struct ReceiptDetailView: View {
                 isSharing = true
             }
         }
-        .confettiCannon(counter: $confettiCounter, num: Int(receipt.sum()), rainHeight: 1000.0, radius: 500.0)
+        .confettiCannon(counter: $confettiCounter, num: 60, rainHeight: 1000.0, radius: 500.0)
         .sheet(isPresented: $isSharing, content: {
             PDFExporterView(receipt: receipt)
                 .presentationDragIndicator(.visible)
@@ -83,14 +85,14 @@ struct ReceiptDetailView: View {
                     HStack(alignment: .center, spacing: 16.0) {
                         Menu {
                             Button {
-                                item.person = nil
+                                reassign(item, to: nil)
                             } label: {
                                 Image("Profile.Shared.Circle")
                                 Text("Shared.Shared")
                             }
                             ForEach(receipt.participants()) { person in
                                 Button {
-                                    item.person = person
+                                    reassign(item, to: person)
                                 } label: {
                                     PersonRow(person: person)
                                 }
@@ -241,6 +243,12 @@ struct ReceiptDetailView: View {
         NSLocalizedString("Receipt.Item.SettledCount", comment: "")
             .replacingOccurrences(of: "%1", with: String(paid))
             .replacingOccurrences(of: "%2", with: String(total))
+    }
+
+    func reassign(_ item: ReceiptItem, to person: Person?) {
+        receipt.reassign(item, to: person, markSelfPaid: markSelfPaid)
+        try? modelContext.save()
+        afterSettlementChange()
     }
 
     func afterSettlementChange() {
