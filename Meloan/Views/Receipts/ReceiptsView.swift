@@ -209,7 +209,7 @@ struct ReceiptsView: View {
         if filterPayer == person {
             Image(systemName: "checkmark")
         } else {
-            if let photo = person.photo, let image = UIImage(data: photo) {
+            if let image = PersonPhotoCache.shared.image(for: person) {
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFill()

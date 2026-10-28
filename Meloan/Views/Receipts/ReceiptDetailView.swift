@@ -99,17 +99,7 @@ struct ReceiptDetailView: View {
                             }
                         } label: {
                             if let person = item.person {
-                                Group {
-                                    if let data = person.photo, let image = UIImage(data: data) {
-                                        Image(uiImage: image)
-                                            .resizable()
-                                    } else {
-                                        Image("Profile.Generic")
-                                            .resizable()
-                                    }
-                                }
-                                .frame(width: 32.0, height: 32.0)
-                                .clipShape(Circle())
+                                PersonAvatar(person: person, size: 32.0)
                             } else {
                                 Image("Profile.Shared")
                                     .resizable()
@@ -281,17 +271,7 @@ struct ReceiptDetailView: View {
                             .strikethrough(item.paid)
                         HStack(alignment: .center, spacing: 8.0) {
                             if let person = item.person {
-                                Group {
-                                    if let data = person.photo, let image = UIImage(data: data) {
-                                        Image(uiImage: image)
-                                            .resizable()
-                                    } else {
-                                        Image("Profile.Generic")
-                                            .resizable()
-                                    }
-                                }
-                                .frame(width: 16.0, height: 16.0)
-                                .clipShape(Circle())
+                                PersonAvatar(person: person, size: 16.0)
                                 Text(person.name)
                                     .foregroundStyle(.gray)
                             } else {
