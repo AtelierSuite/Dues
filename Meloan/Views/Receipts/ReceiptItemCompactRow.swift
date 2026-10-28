@@ -23,7 +23,7 @@ struct ReceiptItemCompactRow: View {
             .strikethrough(isPaid)
             // TODO: Allow selection of currency per receipt
         }
-        .font(.system(size: 14.0))
+        .font(.subheadline)
         .monospaced()
     }
 }

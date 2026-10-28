@@ -112,7 +112,7 @@ struct ReceiptDetailView: View {
                         .font(.body)
                     Spacer()
                     Text(format(receipt.sumOfItems()))
-                        .font(.system(size: 14.0))
+                        .font(.subheadline)
                         .monospaced()
                 }
                 .bold()
@@ -141,7 +141,7 @@ struct ReceiptDetailView: View {
                         .font(.body)
                     Spacer()
                     Text(receipt.taxRate(), format: .percent.precision(.fractionLength(0...2)))
-                        .font(.system(size: 14.0))
+                        .font(.subheadline)
                         .monospaced()
                 }
                 .bold()
@@ -260,7 +260,7 @@ struct ReceiptDetailView: View {
                     .bold()
                 ForEach(receipt.items()) { item in
                     VStack(alignment: .leading, spacing: 8.0) {
-                        ReceiptItemRow(name: item.name, price: item.price, priceFontSize: 16.0)
+                        ReceiptItemRow(name: item.name, price: item.price, priceFont: .system(size: 16.0))
                             .strikethrough(item.paid)
                         HStack(alignment: .center, spacing: 8.0) {
                             if let person = item.person {
@@ -284,7 +284,7 @@ struct ReceiptDetailView: View {
                     .font(.system(size: 28.0))
                     .bold()
                 ForEach(receipt.discountItems()) { item in
-                    ReceiptItemRow(name: item.name, price: item.price, priceFontSize: 16.0)
+                    ReceiptItemRow(name: item.name, price: item.price, priceFont: .system(size: 16.0))
                 }
             }
             if !receipt.taxItems().isEmpty {
@@ -293,7 +293,7 @@ struct ReceiptDetailView: View {
                     .font(.system(size: 28.0))
                     .bold()
                 ForEach(receipt.taxItems()) { item in
-                    ReceiptItemRow(name: item.name, price: item.price, priceFontSize: 16.0)
+                    ReceiptItemRow(name: item.name, price: item.price, priceFont: .system(size: 16.0))
                 }
             }
             Divider()
