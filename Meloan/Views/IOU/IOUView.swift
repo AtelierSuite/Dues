@@ -15,6 +15,8 @@ struct IOUView: View {
     @EnvironmentObject var navigationManager: NavigationManager
     @Query(sort: \Person.name) var people: [Person]
     @Query var receipts: [Receipt]
+    // Observed so shares re-render when the rounding setting changes.
+    @AppStorage(wrappedValue: 0, "ShareRounding", store: defaults) var shareRounding: Int
     @State var personWhoPaid: Person?
     @State var isInitialLoadCompleted: Bool = false
     @State var viewMode: IOUViewMode = .byPerson
@@ -88,6 +90,7 @@ struct IOUView: View {
     func summaryBanner() -> some View {
         if let personWhoPaid = personWhoPaid {
             let total = grandTotal(for: personWhoPaid)
+            let rounding = total - grandTotal(for: personWhoPaid, rounded: false)
             if total > 0 {
                 HStack(alignment: .center, spacing: 8.0) {
                     Text(viewMode == .byLender ? "IOU.Summary.TotalYouOwe" : "IOU.Summary.TotalOwedToYou")
@@ -100,20 +103,31 @@ struct IOUView: View {
                         .bold()
                 }
                 .padding(.horizontal, 20.0)
-                .padding(.bottom, 8.0)
+                .padding(.bottom, isVisibleRounding(rounding) ? 2.0 : 8.0)
+                if isVisibleRounding(rounding) {
+                    Text(NSLocalizedString("IOU.Summary.Rounding", comment: "")
+                        .replacingOccurrences(of: "%1", with: format(rounding)))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .padding(.horizontal, 20.0)
+                        .padding(.bottom, 8.0)
+                }
             }
         }
     }
 
-    func grandTotal(for selected: Person) -> Double {
+    func grandTotal(for selected: Person, rounded: Bool = true) -> Double {
         switch viewMode {
         case .byLender:
             return people.reduce(0.0) { partial, lender in
-                lender.id == selected.id ? partial : partial + selected.sumOwed(to: lender)
+                lender.id == selected.id ? partial : partial + (rounded ?
+                    selected.roundedSumOwed(to: lender) : selected.sumOwed(to: lender))
             }
         default:
             return people.reduce(0.0) { partial, borrower in
-                borrower.id == selected.id ? partial : partial + borrower.sumOwed(to: selected)
+                borrower.id == selected.id ? partial : partial + (rounded ?
+                    borrower.roundedSumOwed(to: selected) : borrower.sumOwed(to: selected))
             }
         }
     }
@@ -131,12 +145,13 @@ struct IOUView: View {
                                 HStack(alignment: .center, spacing: 4.0) {
                                     Text(receipt.name)
                                     Spacer()
-                                    Text(format(receipt.sumOwed(to: personWhoPaid, for: person)))
+                                    Text(format(receipt.roundedSumOwed(to: personWhoPaid, for: person)))
                                         .font(.system(size: 14.0))
                                         .monospaced()
                                 }
                             }
                         }
+                        RoundingRow(difference: person.roundingDifference(to: personWhoPaid))
                     } header: {
                         HStack(alignment: .center, spacing: 16.0) {
                             Group {
@@ -161,7 +176,7 @@ struct IOUView: View {
                                 .font(.body)
                             Spacer()
                             Button {
-                                UIPasteboard.general.string = format(person.sumOwed(to: personWhoPaid))
+                                UIPasteboard.general.string = format(person.roundedSumOwed(to: personWhoPaid))
                             } label: {
                                 Image(systemName: "doc.on.doc")
                                     .resizable()
@@ -169,7 +184,7 @@ struct IOUView: View {
                                     .frame(width: 20.0, height: 20.0)
                             }
                             .accessibilityLabel(Text("Shared.CopyAmount"))
-                            ShareLink(item: hey(person, youOweMe: person.sumOwed(to: personWhoPaid))) {
+                            ShareLink(item: hey(person, youOweMe: person.roundedSumOwed(to: personWhoPaid))) {
                                 Image(systemName: "square.and.arrow.up")
                                     .resizable()
                                     .scaledToFit()
@@ -183,7 +198,7 @@ struct IOUView: View {
                             Text("IOU.TotalBorrowed")
                                 .font(.body)
                             Spacer()
-                            Text(format(person.sumOwed(to: personWhoPaid)))
+                            Text(format(person.roundedSumOwed(to: personWhoPaid)))
                                 .font(.system(size: 14.0))
                                 .monospaced()
                         }
@@ -218,11 +233,12 @@ struct IOUView: View {
                                 .clipShape(Circle())
                                 Text(borrower.name)
                                 Spacer()
-                                Text(format(receipt.sumOwed(to: personWhoPaid, for: borrower)))
+                                Text(format(receipt.roundedSumOwed(to: personWhoPaid, for: borrower)))
                                     .font(.system(size: 14.0))
                                     .monospaced()
                             }
                         }
+                        RoundingRow(difference: receipt.roundingDifference())
                     } header: {
                         HStack(alignment: .center, spacing: 8.0) {
                             Text(receipt.name)
@@ -234,7 +250,9 @@ struct IOUView: View {
                         }
                         .listRowInsets(EdgeInsets(top: 16.0, leading: 0.0, bottom: 8.0, trailing: 0.0))
                     } footer: {
-                        let totalOwed = borrowers.reduce(0.0) { $0 + receipt.sumOwed(to: personWhoPaid, for: $1) }
+                        let totalOwed = borrowers.reduce(0.0) {
+                            $0 + receipt.roundedSumOwed(to: personWhoPaid, for: $1)
+                        }
                         HStack(alignment: .center, spacing: 8.0) {
                             Text("IOU.TotalBorrowed")
                                 .font(.body)
@@ -263,12 +281,13 @@ struct IOUView: View {
                                 HStack(alignment: .center, spacing: 4.0) {
                                     Text(receipt.name)
                                     Spacer()
-                                    Text(format(receipt.sumOwed(to: lender, for: selectedBorrower)))
+                                    Text(format(receipt.roundedSumOwed(to: lender, for: selectedBorrower)))
                                         .font(.system(size: 14.0))
                                         .monospaced()
                                 }
                             }
                         }
+                        RoundingRow(difference: selectedBorrower.roundingDifference(to: lender))
                     } header: {
                         HStack(alignment: .center, spacing: 16.0) {
                             Group {
@@ -299,7 +318,7 @@ struct IOUView: View {
                             Text("IOU.TotalOwed")
                                 .font(.body)
                             Spacer()
-                            Text(format(selectedBorrower.sumOwed(to: lender)))
+                            Text(format(selectedBorrower.roundedSumOwed(to: lender)))
                                 .font(.system(size: 14.0))
                                 .monospaced()
                         }
