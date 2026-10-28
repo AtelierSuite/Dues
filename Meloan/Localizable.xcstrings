@@ -3545,13 +3545,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rounding to Payer"
+            "value": "Incl. Rounding to Payer"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "支払人への端数"
+            "value": "うち支払人への端数"
           }
         }
       }

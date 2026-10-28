@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Shows the warikan rounding difference that goes to the payer, when there is one.
+/// Shows how much of the rounded shares above is rounding that goes to the payer, when there is any.
 struct RoundingRow: View {
 
     var difference: Double
@@ -10,7 +10,7 @@ struct RoundingRow: View {
             HStack(alignment: .center, spacing: 4.0) {
                 Text("Shared.Rounding")
                 Spacer()
-                Text(verbatim: "+\(format(difference))")
+                Text(format(difference))
                     .font(.system(size: 14.0))
                     .monospaced()
             }
