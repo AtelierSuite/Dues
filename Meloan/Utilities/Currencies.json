@@ -1,8 +1,10 @@
 [
     "ALL",
+    "AUD",
     "BAM",
     "BGN",
     "BND",
+    "BRL",
     "CAD",
     "CHF",
     "CZK",
@@ -11,6 +13,7 @@
     "GBP",
     "HUF",
     "IDR",
+    "INR",
     "ISK",
     "JPY",
     "KHR",

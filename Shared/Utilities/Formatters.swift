@@ -6,8 +6,10 @@ struct CurrencyGlyph {
 }
 
 let currencyGlyphs: [String: CurrencyGlyph] = [
+    "AUD": CurrencyGlyph(symbol: "$", isSuffix: false),
     "BGN": CurrencyGlyph(symbol: "лв", isSuffix: true),
     "BND": CurrencyGlyph(symbol: "$", isSuffix: false),
+    "BRL": CurrencyGlyph(symbol: "R$", isSuffix: false),
     "CAD": CurrencyGlyph(symbol: "$", isSuffix: false),
     "CZK": CurrencyGlyph(symbol: "Kč", isSuffix: true),
     "DKK": CurrencyGlyph(symbol: "kr", isSuffix: true),
@@ -15,6 +17,7 @@ let currencyGlyphs: [String: CurrencyGlyph] = [
     "GBP": CurrencyGlyph(symbol: "£", isSuffix: false),
     "HUF": CurrencyGlyph(symbol: "Ft", isSuffix: true),
     "IDR": CurrencyGlyph(symbol: "Rp", isSuffix: false),
+    "INR": CurrencyGlyph(symbol: "₹", isSuffix: false),
     "ISK": CurrencyGlyph(symbol: "kr", isSuffix: true),
     "JPY": CurrencyGlyph(symbol: "¥", isSuffix: false),
     "KHR": CurrencyGlyph(symbol: "៛", isSuffix: true),
