@@ -13,6 +13,7 @@ struct MoreView: View {
     @AppStorage(wrappedValue: "", "CurrencySymbol", store: defaults) var currencySymbol: String
     @AppStorage(wrappedValue: currencyDecimalPlaces(), "DecimalPlaces", store: defaults) var decimalPlaces: Int
     @AppStorage(wrappedValue: false, "UseCurrencyGlyph", store: defaults) var useCurrencyGlyph: Bool
+    @AppStorage(wrappedValue: 0, "ShareRounding", store: defaults) var shareRounding: Int
     @State var currencyPreview: String = format(1234.567)
 
     var body: some View {
@@ -152,8 +153,19 @@ struct MoreView: View {
                     }
                     .pickerStyle(.menu)
                     .tint(.secondary)
+                    Picker("More.Currency.Rounding", selection: $shareRounding) {
+                        Text("More.Currency.Rounding.Off").tag(0)
+                        ForEach(shareRoundingUnits, id: \.self) { unit in
+                            Text(verbatim: String(unit)).tag(unit)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    .tint(.secondary)
                 } header: {
                     Text("More.Currency")
+                } footer: {
+                    Text("More.Currency.Rounding.Footer")
+                        .font(.subheadline)
                 }
                 Section {
                     NavigationLink(value: ViewPath.moreTroubleshooting) {
@@ -194,6 +206,9 @@ struct MoreView: View {
         })
         .onChange(of: useCurrencyGlyph, { _, _ in
             currencySettingsDidChange()
+        })
+        .onChange(of: shareRounding, { _, _ in
+            DuesApp.reloadWidget()
         })
     }
 
