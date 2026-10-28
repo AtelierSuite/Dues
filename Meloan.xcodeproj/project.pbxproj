@@ -23,6 +23,13 @@
 			remoteGlobalIDString = E46082342AB9575D001CF504;
 			remoteInfo = AssistantExtension;
 		};
+		E4A7D1032F61000000ABCDEF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E44B680C2AB4ADCA00B243B0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E44B68132AB4ADCA00B243B0;
+			remoteInfo = Meloan;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -54,6 +61,7 @@
 		E46082352AB9575D001CF504 /* AssistantExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AssistantExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		E46082372AB9575D001CF504 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		E46082392AB9575D001CF504 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		E4A7D1012F61000000ABCDEF /* MeloanTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MeloanTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -85,6 +93,7 @@
 		E4980B4A2F533DF300EFFB8B /* Meloan */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (E4980B7C2F533DF300EFFB8B /* PBXFileSystemSynchronizedBuildFileExceptionSet */, E4980B7D2F533DF300EFFB8B /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Meloan; sourceTree = "<group>"; };
 		E4980B882F533DF500EFFB8B /* Shared */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Shared; sourceTree = "<group>"; };
 		E4980BAB2F533DF800EFFB8B /* Assistant */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (E4980BB92F533DF800EFFB8B /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Assistant; sourceTree = "<group>"; };
+		E4A7D1022F61000000ABCDEF /* MeloanTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = MeloanTests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +116,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E4A7D1072F61000000ABCDEF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -116,6 +132,7 @@
 				E4980B882F533DF500EFFB8B /* Shared */,
 				E4980B4A2F533DF300EFFB8B /* Meloan */,
 				E4980BAB2F533DF800EFFB8B /* Assistant */,
+				E4A7D1022F61000000ABCDEF /* MeloanTests */,
 				E46082362AB9575D001CF504 /* Frameworks */,
 				E44B68152AB4ADCA00B243B0 /* Products */,
 			);
@@ -126,6 +143,7 @@
 			children = (
 				E44B68142AB4ADCA00B243B0 /* Meloan.app */,
 				E46082352AB9575D001CF504 /* AssistantExtension.appex */,
+				E4A7D1012F61000000ABCDEF /* MeloanTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -193,6 +211,27 @@
 			productReference = E46082352AB9575D001CF504 /* AssistantExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		E4A7D1052F61000000ABCDEF /* MeloanTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E4A7D10B2F61000000ABCDEF /* Build configuration list for PBXNativeTarget "MeloanTests" */;
+			buildPhases = (
+				E4A7D1062F61000000ABCDEF /* Sources */,
+				E4A7D1072F61000000ABCDEF /* Frameworks */,
+				E4A7D1082F61000000ABCDEF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E4A7D1042F61000000ABCDEF /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				E4A7D1022F61000000ABCDEF /* MeloanTests */,
+			);
+			name = MeloanTests;
+			productName = MeloanTests;
+			productReference = E4A7D1012F61000000ABCDEF /* MeloanTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -208,6 +247,10 @@
 					};
 					E46082342AB9575D001CF504 = {
 						CreatedOnToolsVersion = 15.0;
+					};
+					E4A7D1052F61000000ABCDEF = {
+						CreatedOnToolsVersion = 26.0;
+						TestTargetID = E44B68132AB4ADCA00B243B0;
 					};
 				};
 			};
@@ -232,6 +275,7 @@
 			targets = (
 				E44B68132AB4ADCA00B243B0 /* Meloan */,
 				E46082342AB9575D001CF504 /* AssistantExtension */,
+				E4A7D1052F61000000ABCDEF /* MeloanTests */,
 			);
 		};
 /* End PBXProject section */
@@ -245,6 +289,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		E46082332AB9575D001CF504 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E4A7D1082F61000000ABCDEF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -289,6 +340,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E4A7D1062F61000000ABCDEF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -296,6 +354,11 @@
 			isa = PBXTargetDependency;
 			target = E46082342AB9575D001CF504 /* AssistantExtension */;
 			targetProxy = E46082432AB9575E001CF504 /* PBXContainerItemProxy */;
+		};
+		E4A7D1042F61000000ABCDEF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E44B68132AB4ADCA00B243B0 /* Meloan */;
+			targetProxy = E4A7D1032F61000000ABCDEF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -571,6 +634,48 @@
 			};
 			name = Release;
 		};
+		E4A7D1092F61000000ABCDEF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tsubuzaki.MeloanTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Meloan.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Meloan";
+			};
+			name = Debug;
+		};
+		E4A7D10A2F61000000ABCDEF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tsubuzaki.MeloanTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Meloan.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Meloan";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -597,6 +702,15 @@
 			buildConfigurations = (
 				E46082472AB9575E001CF504 /* Debug */,
 				E46082482AB9575E001CF504 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E4A7D10B2F61000000ABCDEF /* Build configuration list for PBXNativeTarget "MeloanTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E4A7D1092F61000000ABCDEF /* Debug */,
+				E4A7D10A2F61000000ABCDEF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
