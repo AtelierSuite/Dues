@@ -111,7 +111,8 @@ struct ReceiptEditor: View {
                     Spacer()
                     Button {
                         draft.discountItems.append(
-                            ReceiptDraft.Discount(name: "", price: 0.0, dateAdded: Date.now))
+                            ReceiptDraft.Discount(id: UUID().uuidString, name: "", price: 0.0,
+                                                  dateAdded: Date.now))
                     } label: {
                         Image(systemName: "plus.circle")
                     }
@@ -296,14 +297,32 @@ struct ReceiptEditor: View {
             }
         }
 
-        // Sync discount items (replace all)
+        // Sync discount items
+        var existingDiscounts: [String: DiscountItem] = [:]
         for existingDiscount in receipt.discountItems(sorted: false) {
+            if existingDiscounts[existingDiscount.id] == nil {
+                existingDiscounts[existingDiscount.id] = existingDiscount
+            } else {
+                // A legacy duplicate ID (see ReceiptDraft); its draft row is re-added below.
+                receipt.discountItems?.removeAll { $0 === existingDiscount }
+                modelContext.delete(existingDiscount)
+            }
+        }
+        let draftDiscountIDs = Set(draft.discountItems.map { $0.id })
+        for (id, existingDiscount) in existingDiscounts where !draftDiscountIDs.contains(id) {
+            receipt.discountItems?.removeAll { $0 === existingDiscount }
             modelContext.delete(existingDiscount)
         }
-        receipt.discountItems = []
         for draftDiscount in draft.discountItems {
-            let newDiscount = DiscountItem(name: draftDiscount.name, price: draftDiscount.price)
-            receipt.addDiscountItems(from: [newDiscount])
+            if let existingDiscount = existingDiscounts[draftDiscount.id] {
+                existingDiscount.name = draftDiscount.name
+                existingDiscount.price = draftDiscount.price
+            } else {
+                let newDiscount = DiscountItem(name: draftDiscount.name, price: draftDiscount.price)
+                newDiscount.id = draftDiscount.id
+                newDiscount.dateAdded = draftDiscount.dateAdded
+                receipt.addDiscountItems(from: [newDiscount])
+            }
         }
 
         // Sync tax items

@@ -47,6 +47,7 @@ struct MainTabView: View {
                 return
             }
             createMePerson()
+            DiscountItem.repairDuplicateIDs(in: modelContext)
             DuesApp.reloadWidget()
             try? Tips.configure([
                 .displayFrequency(.immediate),
@@ -78,7 +79,9 @@ struct MainTabView: View {
             }
             // swiftlint:enable line_length
             if event.endDate != nil && event.type == .import {
-                // @Query views refetch on CloudKit import; nothing to do here.
+                // @Query views refetch on CloudKit import, but discounts synced from older
+                // versions arrive without an ID.
+                DiscountItem.repairDuplicateIDs(in: modelContext)
             }
         }
     }
