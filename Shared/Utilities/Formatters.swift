@@ -1,64 +1,80 @@
 import Foundation
 
-struct CurrencyGlyph {
-    let symbol: String
-    let isSuffix: Bool
+func format(_ price: Double) -> String {
+    let places = currencyDecimalPlaces()
+    let amount = decimal(from: price)
+    let currencyCode = defaults.string(forKey: "CurrencySymbol") ?? ""
+    if currencyCode == "" {
+        return amount.formatted(.number
+            .precision(.fractionLength(places))
+            .rounded(rule: .toNearestOrAwayFromZero))
+    }
+    let presentation: CurrencyFormatStyleConfiguration.Presentation =
+        defaults.bool(forKey: "UseCurrencyGlyph") ? .narrow : .isoCode
+    return amount.formatted(.currency(code: currencyCode)
+        .presentation(presentation)
+        .precision(.fractionLength(places))
+        .rounded(rule: .toNearestOrAwayFromZero))
 }
 
-let currencyGlyphs: [String: CurrencyGlyph] = [
-    "BGN": CurrencyGlyph(symbol: "лв", isSuffix: true),
-    "BND": CurrencyGlyph(symbol: "$", isSuffix: false),
-    "CAD": CurrencyGlyph(symbol: "$", isSuffix: false),
-    "CZK": CurrencyGlyph(symbol: "Kč", isSuffix: true),
-    "DKK": CurrencyGlyph(symbol: "kr", isSuffix: true),
-    "EUR": CurrencyGlyph(symbol: "€", isSuffix: false),
-    "GBP": CurrencyGlyph(symbol: "£", isSuffix: false),
-    "HUF": CurrencyGlyph(symbol: "Ft", isSuffix: true),
-    "IDR": CurrencyGlyph(symbol: "Rp", isSuffix: false),
-    "ISK": CurrencyGlyph(symbol: "kr", isSuffix: true),
-    "JPY": CurrencyGlyph(symbol: "¥", isSuffix: false),
-    "KHR": CurrencyGlyph(symbol: "៛", isSuffix: true),
-    "LAK": CurrencyGlyph(symbol: "₭", isSuffix: false),
-    "MXN": CurrencyGlyph(symbol: "$", isSuffix: false),
-    "MYR": CurrencyGlyph(symbol: "RM", isSuffix: false),
-    "NOK": CurrencyGlyph(symbol: "kr", isSuffix: true),
-    "PHP": CurrencyGlyph(symbol: "₱", isSuffix: false),
-    "PLN": CurrencyGlyph(symbol: "zł", isSuffix: true),
-    "RON": CurrencyGlyph(symbol: "lei", isSuffix: true),
-    "SEK": CurrencyGlyph(symbol: "kr", isSuffix: true),
-    "SGD": CurrencyGlyph(symbol: "$", isSuffix: false),
-    "THB": CurrencyGlyph(symbol: "฿", isSuffix: false),
-    "TRY": CurrencyGlyph(symbol: "₺", isSuffix: false),
-    "UAH": CurrencyGlyph(symbol: "₴", isSuffix: false),
-    "USD": CurrencyGlyph(symbol: "$", isSuffix: false),
-    "VND": CurrencyGlyph(symbol: "₫", isSuffix: true)
-]
-
-func format(_ price: Double) -> String {
-    let currencySymbol = defaults.string(forKey: "CurrencySymbol") ?? ""
-    let amount = String(format: "%.\(currencyDecimalPlaces())f", price)
-    if currencySymbol == "" {
-        return amount
-    }
-    if defaults.bool(forKey: "UseCurrencyGlyph"), let glyph = currencyGlyphs[currencySymbol] {
-        return glyph.isSuffix ? "\(amount) \(glyph.symbol)" : "\(glyph.symbol) \(amount)"
-    }
-    return "\(currencySymbol) \(amount)"
+/// Converts via the shortest round-trip representation, so 1.005 becomes exactly 1.005.
+func decimal(from value: Double) -> Decimal {
+    return Decimal(string: "\(value)", locale: Locale(identifier: "en_US_POSIX")) ?? Decimal(value)
 }
 
 func priceFormatStyle() -> FloatingPointFormatStyle<Double> {
     return .number.precision(.fractionLength(0...currencyDecimalPlaces()))
 }
 
-func currencyDecimalPlaces() -> Int {
+/// Whether the currency has a symbol distinct from its ISO code (e.g. ¥ for JPY).
+func currencyHasSymbol(_ currencyCode: String) -> Bool {
+    let narrow = Decimal.zero.formatted(.currency(code: currencyCode).presentation(.narrow))
+    return !narrow.contains(currencyCode)
+}
+
+/// The DecimalPlaces setting: 0-3, or `automaticDecimalPlaces` to follow the currency.
+let automaticDecimalPlaces = -1
+
+func decimalPlacesSetting() -> Int {
     if defaults.object(forKey: "DecimalPlaces") != nil {
-        return min(max(defaults.integer(forKey: "DecimalPlaces"), 0), 3)
+        let places = defaults.integer(forKey: "DecimalPlaces")
+        return places < 0 ? automaticDecimalPlaces : min(places, 3)
     }
     // Fall back to the legacy show/hide decimals toggle
     if defaults.object(forKey: "ShowDecimals") != nil && !defaults.bool(forKey: "ShowDecimals") {
         return 0
     }
+    return automaticDecimalPlaces
+}
+
+func currencyDecimalPlaces() -> Int {
+    let setting = decimalPlacesSetting()
+    if setting != automaticDecimalPlaces {
+        return setting
+    }
+    let currencyCode = defaults.string(forKey: "CurrencySymbol") ?? ""
+    if currencyCode != "" {
+        return minorUnits(of: currencyCode)
+    }
+    if let localCurrencyCode = Locale.current.currency?.identifier {
+        return minorUnits(of: localCurrencyCode)
+    }
     return 2
+}
+
+private let minorUnitsCache = NSCache<NSString, NSNumber>()
+
+/// The number of decimal places the currency uses (e.g. 2 for USD, 0 for JPY).
+func minorUnits(of currencyCode: String) -> Int {
+    if let cached = minorUnitsCache.object(forKey: currencyCode as NSString) {
+        return cached.intValue
+    }
+    let formatter = NumberFormatter()
+    formatter.numberStyle = .currency
+    formatter.currencyCode = currencyCode
+    let places = min(max(formatter.maximumFractionDigits, 0), 3)
+    minorUnitsCache.setObject(NSNumber(value: places), forKey: currencyCode as NSString)
+    return places
 }
 
 func hey(_ person: Person, youOweMe price: Double) -> String {
