@@ -139,18 +139,7 @@ struct IOUView: View {
                         }
                     } header: {
                         HStack(alignment: .center, spacing: 16.0) {
-                            Group {
-                                if let photo = person.photo, let image = UIImage(data: photo) {
-                                    Image(uiImage: image)
-                                        .resizable()
-                                        .scaledToFill()
-                                } else {
-                                    Image("Profile.Generic")
-                                        .resizable()
-                                }
-                            }
-                            .frame(width: 30.0, height: 30.0)
-                            .clipShape(Circle())
+                            PersonAvatar(person: person, size: 30.0)
                             Text(verbatim: person.name)
                                 .bold()
                                 .foregroundColor(.primary)
@@ -204,18 +193,7 @@ struct IOUView: View {
                     Section {
                         ForEach(borrowers) { borrower in
                             HStack(alignment: .center, spacing: 8.0) {
-                                Group {
-                                    if let photo = borrower.photo, let image = UIImage(data: photo) {
-                                        Image(uiImage: image)
-                                            .resizable()
-                                            .scaledToFill()
-                                    } else {
-                                        Image("Profile.Generic")
-                                            .resizable()
-                                    }
-                                }
-                                .frame(width: 24.0, height: 24.0)
-                                .clipShape(Circle())
+                                PersonAvatar(person: borrower, size: 24.0)
                                 Text(borrower.name)
                                 Spacer()
                                 Text(format(receipt.sumOwed(to: personWhoPaid, for: borrower)))
@@ -271,18 +249,7 @@ struct IOUView: View {
                         }
                     } header: {
                         HStack(alignment: .center, spacing: 16.0) {
-                            Group {
-                                if let photo = lender.photo, let image = UIImage(data: photo) {
-                                    Image(uiImage: image)
-                                        .resizable()
-                                        .scaledToFill()
-                                } else {
-                                    Image("Profile.Generic")
-                                        .resizable()
-                                }
-                            }
-                            .frame(width: 30.0, height: 30.0)
-                            .clipShape(Circle())
+                            PersonAvatar(person: lender, size: 30.0)
                             Text(verbatim: lender.name)
                                 .bold()
                                 .foregroundColor(.primary)

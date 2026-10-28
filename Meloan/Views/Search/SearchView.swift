@@ -93,18 +93,7 @@ struct SearchView: View {
                             ForEach(peopleFound()) { person in
                                 NavigationLink(value: ViewPath.personDetail(person: person)) {
                                     HStack(alignment: .center, spacing: 16.0) {
-                                        Group {
-                                            if let photo = person.photo, let image = UIImage(data: photo) {
-                                                Image(uiImage: image)
-                                                    .resizable()
-                                                    .scaledToFill()
-                                            } else {
-                                                Image("Profile.Generic")
-                                                    .resizable()
-                                            }
-                                        }
-                                        .frame(width: 30.0, height: 30.0)
-                                        .clipShape(Circle())
+                                        PersonAvatar(person: person, size: 30.0)
                                         Text(person.name)
                                             .font(.body)
                                     }

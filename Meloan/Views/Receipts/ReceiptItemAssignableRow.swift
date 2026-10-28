@@ -24,27 +24,7 @@ struct ReceiptItemAssignableRow: View {
                     }
                 }
             } label: {
-                if let personWhoOrdered = item.person {
-                    Group {
-                        if let photo = personWhoOrdered.photo, let image = UIImage(data: photo) {
-                            Image(uiImage: image)
-                                .resizable()
-                                .scaledToFill()
-                        } else {
-                            Image("Profile.Generic")
-                                .resizable()
-                        }
-                    }
-                    .frame(width: 30.0, height: 30.0)
-                    .clipShape(Circle())
-                } else {
-                    HStack(alignment: .center, spacing: 16.0) {
-                        Image("Profile.Shared")
-                            .resizable()
-                            .frame(width: 30.0, height: 30.0)
-                            .clipShape(Circle())
-                    }
-                }
+                PersonAvatar(person: item.person, size: 30.0)
             }
             .fixedSize()
             .accessibilityLabel(Text("Receipt.Item.Assignee"))
