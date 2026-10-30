@@ -1086,6 +1086,23 @@
         }
       }
     },
+    "More.Currency.Decimals.Automatic": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatic"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自動"
+          }
+        }
+      }
+    },
     "More.Currency.Decimals.None": {
       "extractionState": "manual",
       "localizations": {

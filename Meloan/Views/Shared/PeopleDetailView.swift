@@ -10,19 +10,7 @@ struct PeopleDetailView: View {
             Section {
                 HStack {
                     Spacer()
-                    Group {
-                        if let photo = person.photo,
-                           let image = UIImage(data: photo) {
-                            Image(uiImage: image)
-                                .resizable()
-                                .scaledToFill()
-                        } else {
-                            Image("Profile.Generic")
-                                .resizable()
-                        }
-                    }
-                    .frame(width: 144, height: 144)
-                    .clipShape(Circle())
+                    PersonAvatar(person: person, size: 144.0, scalesWithText: false)
                     Spacer()
                 }
                 .listRowBackground(Color.clear)
