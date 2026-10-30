@@ -49,20 +49,31 @@ final class Receipt: Identifiable {
         return []
     }
 
+    /// Every receipt-level total, computed in one pass. Prefer this over calling the
+    /// individual helpers repeatedly while rendering.
+    func totals() -> ReceiptTotals {
+        ReceiptTotals(items: sumOfItems(), tax: sumOfTax(), discount: sumOfDiscount())
+    }
+
     func sum() -> Double {
-        return sumOfItems() + sumOfTax() - sumOfDiscount()
+        return totals().total
     }
 
     func sumUnpaid() -> Double {
+        return sumUnpaid(overallRate: overallRate())
+    }
+
+    func sumPaid() -> Double {
+        let totals = totals()
+        return totals.total - sumUnpaid(overallRate: totals.overallRate)
+    }
+
+    private func sumUnpaid(overallRate: Double) -> Double {
         return (receiptItems?.reduce(into: 0.0, { partialResult, item in
             if !item.paid {
                 partialResult += item.price
             }
-        }) ?? .zero) * overallRate()
-    }
-
-    func sumPaid() -> Double {
-        return sum() - sumUnpaid()
+        }) ?? .zero) * overallRate
     }
 
     func sumOfItems() -> Double {
@@ -84,17 +95,11 @@ final class Receipt: Identifiable {
     }
 
     func taxRate() -> Double {
-        if sumOfItems() > 0 {
-            return sumOfTax() / sumOfItems()
-        }
-        return .zero
+        return totals().taxRate
     }
 
     func overallRate() -> Double {
-        if sumOfItems() > 0 {
-            return max(0.0, sum() / sumOfItems())
-        }
-        return .zero
+        return totals().overallRate
     }
 
     func sumOfSharedItemCost(for person: Person) -> Double {
@@ -114,10 +119,11 @@ final class Receipt: Identifiable {
         }) ?? .zero
     }
 
-    func sumOwed(to lender: Person, for borrower: Person) -> Double {
+    /// Pass `overallRate` from `totals()` when computing this for several borrowers.
+    func sumOwed(to lender: Person, for borrower: Person, overallRate: Double? = nil) -> Double {
         if ((personWhoPaid?.id ?? "") == lender.id) && contains(participant: borrower) {
             return (sumOfItemCost(for: borrower) +
-                    sumOfSharedItemCost(for: borrower)) * overallRate()
+                    sumOfSharedItemCost(for: borrower)) * (overallRate ?? self.overallRate())
         }
         return .zero
     }
@@ -234,5 +240,23 @@ final class Receipt: Identifiable {
             item.addPersonWhoPaid(from: [person])
         }
         item.refreshSharedPaidState(participantIDs: Set(participants().map { $0.id }))
+    }
+}
+
+struct ReceiptTotals {
+    let items: Double
+    let tax: Double
+    let discount: Double
+
+    var total: Double {
+        items + tax - discount
+    }
+
+    var taxRate: Double {
+        items > 0 ? tax / items : .zero
+    }
+
+    var overallRate: Double {
+        items > 0 ? max(0.0, total / items) : .zero
     }
 }

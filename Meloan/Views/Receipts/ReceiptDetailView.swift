@@ -9,14 +9,10 @@ struct ReceiptDetailView: View {
     @State var receipt: Receipt
     @State var confettiCounter: Int = 0
     @State var isSharing: Bool = false
-    @State private var shareImage: Image = Image(systemName: "doc.richtext")
 
     var body: some View {
         List {
             receiptDetails()
-        }
-        .task(id: shareSignature) {
-            shareImage = createImageToShare()
         }
         .task {
             if ScreenshotScreen.current == .pdf {
@@ -38,11 +34,11 @@ struct ReceiptDetailView: View {
                     } label: {
                         Label("Receipt.ExportPDF", systemImage: "doc.richtext")
                     }
-                    ShareLink(item: shareImage,
-                              preview: SharePreview(receipt.name, image: shareImage)) {
+                    ShareLink(item: ReceiptImageExport(name: receipt.name, render: createImageToShare),
+                              preview: SharePreview(receipt.name, image: Image("PDF.Watermark"))) {
                         Label("Receipt.ExportImage", systemImage: "photo")
                     }
-                    .disabled(receipt.items().count + receipt.discountItems().count + receipt.taxItems().count > 45)
+                    .disabled(lineCount > 45)
                     ShareLink(item: createTextToShare()) {
                         Label("Receipt.ExportText", systemImage: "text.alignleft")
                     }
@@ -55,9 +51,19 @@ struct ReceiptDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 
+    var lineCount: Int {
+        (receipt.receiptItems?.count ?? 0) + (receipt.discountItems?.count ?? 0) + (receipt.taxItems?.count ?? 0)
+    }
+
     // swiftlint:disable function_body_length
     @ViewBuilder
     func receiptDetails() -> some View {
+        let items = receipt.items()
+        let discountItems = receipt.discountItems()
+        let taxItems = receipt.taxItems()
+        let participants = receipt.participants()
+        let participantIDs = Set(participants.map { $0.id })
+        let totals = receipt.totals()
         if let personWhoPaid = receipt.personWhoPaid {
             Section {
                 NavigationLink(value: ViewPath.personDetail(person: personWhoPaid)) {
@@ -71,7 +77,7 @@ struct ReceiptDetailView: View {
             }
         }
         Section {
-            ForEach(receipt.borrowers()) { person in
+            ForEach(participants.filter { $0.id != receipt.personWhoPaid?.id }) { person in
                 NavigationLink(value: ViewPath.personDetail(person: person)) {
                     PersonRow(person: person)
                 }
@@ -79,9 +85,9 @@ struct ReceiptDetailView: View {
         } header: {
             Text("Receipt.Participants")
         }
-        if !receipt.items().isEmpty {
+        if !items.isEmpty {
             Section {
-                ForEach(receipt.items()) { item in
+                ForEach(items) { item in
                     HStack(alignment: .center, spacing: 16.0) {
                         Menu {
                             Button {
@@ -90,7 +96,7 @@ struct ReceiptDetailView: View {
                                 Image("Profile.Shared.Circle")
                                 Text("Shared.Shared")
                             }
-                            ForEach(receipt.participants()) { person in
+                            ForEach(participants) { person in
                                 Button {
                                     reassign(item, to: person)
                                 } label: {
@@ -100,7 +106,8 @@ struct ReceiptDetailView: View {
                         } label: {
                             PersonAvatar(person: item.person, size: 32.0)
                         }
-                        settlementControl(for: item)
+                        settlementControl(for: item, participants: participants,
+                                          participantIDs: participantIDs)
                     }
                 }
             } header: {
@@ -111,7 +118,7 @@ struct ReceiptDetailView: View {
                     Text("Receipt.Total")
                         .font(.body)
                     Spacer()
-                    Text(format(receipt.sumOfItems()))
+                    Text(format(totals.items))
                         .font(.subheadline)
                         .monospaced()
                 }
@@ -119,18 +126,18 @@ struct ReceiptDetailView: View {
                 .foregroundStyle(.primary)
             }
         }
-        if !receipt.discountItems().isEmpty {
+        if !discountItems.isEmpty {
             Section {
-                ForEach(receipt.discountItems()) { item in
+                ForEach(discountItems) { item in
                     ReceiptItemRow(name: item.name, price: item.price)
                 }
             } header: {
                 Text("Receipt.Discounts")
             }
         }
-        if !receipt.taxItems().isEmpty {
+        if !taxItems.isEmpty {
             Section {
-                ForEach(receipt.taxItems()) { item in
+                ForEach(taxItems) { item in
                     ReceiptItemRow(name: item.name, price: item.price)
                 }
             } header: {
@@ -140,7 +147,7 @@ struct ReceiptDetailView: View {
                     Text("Receipt.Tax.Detail")
                         .font(.body)
                     Spacer()
-                    Text(receipt.taxRate(), format: .percent.precision(.fractionLength(0...2)))
+                    Text(totals.taxRate, format: .percent.precision(.fractionLength(0...2)))
                         .font(.subheadline)
                         .monospaced()
                 }
@@ -151,19 +158,20 @@ struct ReceiptDetailView: View {
     }
 
     @ViewBuilder
-    func settlementControl(for item: ReceiptItem) -> some View {
+    func settlementControl(for item: ReceiptItem, participants: [Person],
+                           participantIDs: Set<String>) -> some View {
         if item.person != nil {
             Button {
                 receipt.toggleSettled(item)
                 afterSettlementChange()
             } label: {
-                settlementRowLabel(for: item)
+                settlementRowLabel(for: item, participantIDs: participantIDs)
             }
             .accessibilityHint(Text("Receipt.Item.Settle.Hint"))
         } else {
             Menu {
                 Section {
-                    ForEach(receipt.participants()) { person in
+                    ForEach(participants) { person in
                         Button {
                             receipt.toggleSettled(item, for: person)
                             afterSettlementChange()
@@ -191,20 +199,20 @@ struct ReceiptDetailView: View {
                     }
                 }
             } label: {
-                settlementRowLabel(for: item)
+                settlementRowLabel(for: item, participantIDs: participantIDs)
             }
         }
     }
 
     @ViewBuilder
-    func settlementRowLabel(for item: ReceiptItem) -> some View {
+    func settlementRowLabel(for item: ReceiptItem, participantIDs: Set<String>) -> some View {
         HStack(alignment: .center, spacing: 8.0) {
             ReceiptItemRow(name: item.name, price: item.price)
                 .strikethrough(item.paid)
                 .multilineTextAlignment(.leading)
             if item.person == nil {
-                let paidCount = sharedPaidCount(for: item)
-                let total = receipt.participants().count
+                let paidCount = sharedPaidCount(for: item, participantIDs: participantIDs)
+                let total = participantIDs.count
                 if paidCount > 0 && !item.paid {
                     Text(verbatim: "\(paidCount)/\(total)")
                         .font(.caption2)
@@ -216,8 +224,7 @@ struct ReceiptDetailView: View {
         }
     }
 
-    func sharedPaidCount(for item: ReceiptItem) -> Int {
-        let participantIDs = Set(receipt.participants().map { $0.id })
+    func sharedPaidCount(for item: ReceiptItem, participantIDs: Set<String>) -> Int {
         let paidIDs = Set((item.peopleWhoPaid ?? []).map { $0.id })
         return participantIDs.intersection(paidIDs).count
     }
@@ -243,6 +250,10 @@ struct ReceiptDetailView: View {
 
     @ViewBuilder
     func receiptDetailsForExport() -> some View {
+        let items = receipt.items()
+        let discountItems = receipt.discountItems()
+        let taxItems = receipt.taxItems()
+        let totals = receipt.totals()
         VStack(alignment: .leading, spacing: 16.0) {
             HStack(alignment: .center, spacing: 16.0) {
                 Text(receipt.name)
@@ -253,12 +264,12 @@ struct ReceiptDetailView: View {
                     .resizable()
                     .frame(width: 40.0, height: 40.0)
             }
-            if !receipt.items().isEmpty {
+            if !items.isEmpty {
                 Divider()
                 Text(NSLocalizedString("Receipt.PurchasedItems", comment: ""))
                     .font(.system(size: 28.0))
                     .bold()
-                ForEach(receipt.items()) { item in
+                ForEach(items) { item in
                     VStack(alignment: .leading, spacing: 8.0) {
                         ReceiptItemRow(name: item.name, price: item.price, priceFont: .system(size: 16.0))
                             .strikethrough(item.paid)
@@ -278,21 +289,21 @@ struct ReceiptDetailView: View {
                     }
                 }
             }
-            if !receipt.discountItems().isEmpty {
+            if !discountItems.isEmpty {
                 Divider()
                 Text(NSLocalizedString("Receipt.Discounts", comment: ""))
                     .font(.system(size: 28.0))
                     .bold()
-                ForEach(receipt.discountItems()) { item in
+                ForEach(discountItems) { item in
                     ReceiptItemRow(name: item.name, price: item.price, priceFont: .system(size: 16.0))
                 }
             }
-            if !receipt.taxItems().isEmpty {
+            if !taxItems.isEmpty {
                 Divider()
                 Text(NSLocalizedString("Receipt.Taxes", comment: ""))
                     .font(.system(size: 28.0))
                     .bold()
-                ForEach(receipt.taxItems()) { item in
+                ForEach(taxItems) { item in
                     ReceiptItemRow(name: item.name, price: item.price, priceFont: .system(size: 16.0))
                 }
             }
@@ -300,13 +311,13 @@ struct ReceiptDetailView: View {
             HStack(alignment: .center, spacing: 4.0) {
                 Text(NSLocalizedString("Receipt.Total.BeforeTax", comment: ""))
                 Spacer()
-                Text(format(receipt.sumOfItems()))
+                Text(format(totals.items))
                     .monospaced()
             }
             HStack(alignment: .center, spacing: 4.0) {
                 Text(NSLocalizedString("Receipt.Total.AfterTax", comment: ""))
                 Spacer()
-                Text(format(receipt.sum()))
+                Text(format(totals.total))
                     .monospaced()
             }
             .bold()
@@ -318,20 +329,11 @@ struct ReceiptDetailView: View {
     }
     // swiftlint:enable function_body_length
 
-    var shareSignature: String {
-        let items = receipt.items().map { "\($0.id):\($0.price):\($0.paid)" }.joined(separator: ",")
-        return "\(receipt.name)|\(items)|\(receipt.discountItems().count)|\(receipt.taxItems().count)|\(receipt.sum())"
-    }
-
     @MainActor
-    func createImageToShare() -> Image {
+    func createImageToShare() -> Data? {
         let renderer = ImageRenderer(content: receiptDetailsForExport())
         renderer.scale = 3.0
-        if let image = renderer.cgImage {
-            return Image(uiImage: UIImage(cgImage: image))
-        }
-        // Degrade gracefully instead of crashing if rendering fails.
-        return Image(systemName: "doc.richtext")
+        return renderer.uiImage?.pngData()
     }
 
     func createTextToShare() -> String {
@@ -342,31 +344,35 @@ struct ReceiptDetailView: View {
             lines.append("\(NSLocalizedString("Receipt.Payer", comment: "")): \(personWhoPaid.name)")
             lines.append("")
         }
-        if !receipt.items().isEmpty {
+        let items = receipt.items()
+        let discountItems = receipt.discountItems()
+        let taxItems = receipt.taxItems()
+        let totals = receipt.totals()
+        if !items.isEmpty {
             lines.append(NSLocalizedString("Receipt.PurchasedItems", comment: ""))
-            for item in receipt.items() {
+            for item in items {
                 let assignee = item.person?.name ?? NSLocalizedString("Shared.Shared", comment: "")
                 lines.append("  \(item.name) - \(format(item.price)) [\(assignee)]")
             }
             lines.append("")
         }
-        if !receipt.discountItems().isEmpty {
+        if !discountItems.isEmpty {
             lines.append(NSLocalizedString("Receipt.Discounts", comment: ""))
-            for item in receipt.discountItems() {
+            for item in discountItems {
                 lines.append("  \(item.name) - \(format(item.price))")
             }
             lines.append("")
         }
-        if !receipt.taxItems().isEmpty {
+        if !taxItems.isEmpty {
             lines.append(NSLocalizedString("Receipt.Taxes", comment: ""))
-            for item in receipt.taxItems() {
+            for item in taxItems {
                 lines.append("  \(item.name) - \(format(item.price))")
             }
             lines.append("")
         }
         lines.append(String(repeating: "-", count: 30))
-        lines.append("\(NSLocalizedString("Receipt.Total.BeforeTax", comment: "")): \(format(receipt.sumOfItems()))")
-        lines.append("\(NSLocalizedString("Receipt.Total.AfterTax", comment: "")): \(format(receipt.sum()))")
+        lines.append("\(NSLocalizedString("Receipt.Total.BeforeTax", comment: "")): \(format(totals.items))")
+        lines.append("\(NSLocalizedString("Receipt.Total.AfterTax", comment: "")): \(format(totals.total))")
         return lines.joined(separator: "\n")
     }
 }

@@ -209,7 +209,7 @@ struct ReceiptsView: View {
         if filterPayer == person {
             Image(systemName: "checkmark")
         } else {
-            if let image = PersonPhotoCache.image(for: person) {
+            if let image = PersonPhotoCache.shared.image(for: person) {
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFill()
@@ -221,10 +221,6 @@ struct ReceiptsView: View {
     }
 
     func shouldShowReceipt(_ receipt: Receipt) -> Bool {
-        // Hide paid receipts filter
-        if hidePaid && receipt.isPaid() {
-            return false
-        }
         // Specific payer filter
         if let filterPayer = filterPayer, filterPayer != receipt.personWhoPaid {
             return false
@@ -238,7 +234,8 @@ struct ReceiptsView: View {
         if !filterShowOthersPaid && !iPaid {
             return false
         }
-        return true
+        // Hide paid receipts filter, last as it walks every item
+        return !(hidePaid && receipt.isPaid())
     }
 
     // MARK: - Deletion

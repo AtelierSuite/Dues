@@ -23,6 +23,8 @@ struct IOUView: View {
 
     var body: some View {
         NavigationStack(path: $navigationManager.iouTabPath) {
+            // What each person owes (or, by lender, is owed), computed once per update.
+            let amounts = personWhoPaid.map { owedAmounts(for: $0) } ?? [:]
             VStack(alignment: .leading, spacing: 0.0) {
                 TipView(IOUTip())
                     .padding(20.0)
@@ -36,16 +38,16 @@ struct IOUView: View {
                     .pickerStyle(.segmented)
                     .padding(.horizontal, 20.0)
                     .padding(.bottom, 8.0)
-                    summaryBanner()
+                    summaryBanner(total: amounts.values.reduce(0.0, +))
                 }
                 Group {
                     switch viewMode {
                     case .byPerson:
-                        iouByPersonView()
+                        iouByPersonView(amounts: amounts)
                     case .byReceipt:
                         iouByReceiptView()
                     case .byLender:
-                        iouByLenderView()
+                        iouByLenderView(amounts: amounts)
                     }
                 }
                 .listStyle(.sidebar)
@@ -87,9 +89,8 @@ struct IOUView: View {
     }
 
     @ViewBuilder
-    func summaryBanner() -> some View {
-        if let personWhoPaid = personWhoPaid {
-            let total = grandTotal(for: personWhoPaid)
+    func summaryBanner(total: Double) -> some View {
+        if personWhoPaid != nil {
             if total > 0 {
                 HStack(alignment: .center, spacing: 8.0) {
                     Text(viewMode == .byLender ? "IOU.Summary.TotalYouOwe" : "IOU.Summary.TotalOwedToYou")
@@ -107,24 +108,23 @@ struct IOUView: View {
         }
     }
 
-    func grandTotal(for selected: Person) -> Double {
-        switch viewMode {
-        case .byLender:
-            return people.reduce(0.0) { partial, lender in
-                lender.id == selected.id ? partial : partial + selected.sumOwed(to: lender)
-            }
-        default:
-            return people.reduce(0.0) { partial, borrower in
-                borrower.id == selected.id ? partial : partial + borrower.sumOwed(to: selected)
-            }
+    /// By lender, what the selected person owes each lender; otherwise, what each borrower
+    /// owes the selected person.
+    func owedAmounts(for selected: Person) -> [PersistentIdentifier: Double] {
+        var amounts: [PersistentIdentifier: Double] = [:]
+        for person in people where person.id != selected.id {
+            amounts[person.persistentModelID] = viewMode == .byLender ?
+                selected.sumOwed(to: person) : person.sumOwed(to: selected)
         }
+        return amounts
     }
 
     @ViewBuilder
-    func iouByPersonView() -> some View {
+    func iouByPersonView(amounts: [PersistentIdentifier: Double]) -> some View {
         List(people) { person in
+            let amountOwed = amounts[person.persistentModelID] ?? .zero
             if let personWhoPaid = self.personWhoPaid, !(personWhoPaid.receiptsPaid?.isEmpty ?? true) {
-                if person.id != personWhoPaid.id && person.sumOwed(to: personWhoPaid) != .zero {
+                if person.id != personWhoPaid.id && amountOwed != .zero {
                     Section {
                         // IMPORTANT: Do NOT refactor anything here! SwiftUI will reuse views in an unexpected
                         // manner, and cause totals to appear incorrectly (calculation is CORRECT).
@@ -152,7 +152,7 @@ struct IOUView: View {
                                 .font(.body)
                             Spacer()
                             Button {
-                                UIPasteboard.general.string = format(person.sumOwed(to: personWhoPaid))
+                                UIPasteboard.general.string = format(amountOwed)
                             } label: {
                                 Image(systemName: "doc.on.doc")
                                     .resizable()
@@ -160,7 +160,7 @@ struct IOUView: View {
                                     .frame(width: copyIconSize, height: copyIconSize)
                             }
                             .accessibilityLabel(Text("Shared.CopyAmount"))
-                            ShareLink(item: hey(person, youOweMe: person.sumOwed(to: personWhoPaid))) {
+                            ShareLink(item: hey(person, youOweMe: amountOwed)) {
                                 Image(systemName: "square.and.arrow.up")
                                     .resizable()
                                     .scaledToFit()
@@ -174,7 +174,7 @@ struct IOUView: View {
                             Text("IOU.TotalBorrowed")
                                 .font(.body)
                             Spacer()
-                            Text(format(person.sumOwed(to: personWhoPaid)))
+                            Text(format(amountOwed))
                                 .font(.subheadline)
                                 .monospaced()
                         }
@@ -190,15 +190,19 @@ struct IOUView: View {
     func iouByReceiptView() -> some View {
         List(receipts) { receipt in
             if let personWhoPaid = self.personWhoPaid, receipt.personWhoPaid == personWhoPaid {
-                let borrowers = receipt.borrowers().filter { receipt.sumOwed(to: personWhoPaid, for: $0) > 0 }
-                if !borrowers.isEmpty {
+                let overallRate = receipt.overallRate()
+                let amountsOwed = receipt.borrowers()
+                    .map { (borrower: $0, amount: receipt.sumOwed(to: personWhoPaid, for: $0,
+                                                                  overallRate: overallRate)) }
+                    .filter { $0.amount > 0 }
+                if !amountsOwed.isEmpty {
                     Section {
-                        ForEach(borrowers) { borrower in
+                        ForEach(amountsOwed, id: \.borrower.id) { borrower, amount in
                             HStack(alignment: .center, spacing: 8.0) {
                                 PersonAvatar(person: borrower, size: 24.0)
                                 Text(borrower.name)
                                 Spacer()
-                                Text(format(receipt.sumOwed(to: personWhoPaid, for: borrower)))
+                                Text(format(amount))
                                     .font(.subheadline)
                                     .monospaced()
                             }
@@ -214,7 +218,7 @@ struct IOUView: View {
                         }
                         .listRowInsets(EdgeInsets(top: 16.0, leading: 0.0, bottom: 8.0, trailing: 0.0))
                     } footer: {
-                        let totalOwed = borrowers.reduce(0.0) { $0 + receipt.sumOwed(to: personWhoPaid, for: $1) }
+                        let totalOwed = amountsOwed.reduce(0.0) { $0 + $1.amount }
                         HStack(alignment: .center, spacing: 8.0) {
                             Text("IOU.TotalBorrowed")
                                 .font(.body)
@@ -232,11 +236,12 @@ struct IOUView: View {
     }
 
     @ViewBuilder
-    func iouByLenderView() -> some View {
+    func iouByLenderView(amounts: [PersistentIdentifier: Double]) -> some View {
         // "By Lender" mode: selected person is the borrower, show what they owe to each lender
         List(people) { lender in
+            let amountOwed = amounts[lender.persistentModelID] ?? .zero
             if let selectedBorrower = self.personWhoPaid, !(lender.receiptsPaid?.isEmpty ?? true) {
-                if lender.id != selectedBorrower.id && selectedBorrower.sumOwed(to: lender) != .zero {
+                if lender.id != selectedBorrower.id && amountOwed != .zero {
                     Section {
                         ForEach(selectedBorrower.receiptsParticipated ?? []) { receipt in
                             if receipt.personWhoPaid == lender {
@@ -268,7 +273,7 @@ struct IOUView: View {
                             Text("IOU.TotalOwed")
                                 .font(.body)
                             Spacer()
-                            Text(format(selectedBorrower.sumOwed(to: lender)))
+                            Text(format(amountOwed))
                                 .font(.subheadline)
                                 .monospaced()
                         }

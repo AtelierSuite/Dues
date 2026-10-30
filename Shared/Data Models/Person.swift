@@ -6,7 +6,7 @@ import UIKit
 final class Person {
     var id: String = UUID().uuidString
     var name: String = ""
-    var photo: Data?
+    @Attribute(.externalStorage) var photo: Data?
     @Relationship(inverse: \Receipt.personWhoPaid) var receiptsPaid: [Receipt]? = []
     @Relationship(inverse: \Receipt.peopleWhoParticipated) var receiptsParticipated: [Receipt]? = []
     @Relationship(inverse: \ReceiptItem.person) var receiptItemsOwned: [ReceiptItem]? = []
@@ -62,7 +62,9 @@ final class Person {
             context.interpolationQuality = .high
             context.draw(circleCroppedImage, in: CGRect(origin: CGPoint.zero,
                                                         size: CGSize(width: length, height: length)))
-            return context.makeImage().flatMap { UIImage(cgImage: $0) }?.pngData()
+            guard let photo = context.makeImage().flatMap({ UIImage(cgImage: $0) }) else { return nil }
+            // HEIC keeps the transparent corners at a fraction of PNG's size.
+            return photo.heicData() ?? photo.pngData()
         }
         return nil
     }

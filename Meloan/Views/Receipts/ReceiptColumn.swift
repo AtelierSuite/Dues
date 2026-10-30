@@ -23,6 +23,8 @@ struct ReceiptColumn: View {
     }
 
     var body: some View {
+        let discountItems = receipt.discountItems()
+        let taxItems = receipt.taxItems()
         VStack(alignment: .center, spacing: 0.0) {
             Text(receipt.name)
                 .bold()
@@ -35,15 +37,15 @@ struct ReceiptColumn: View {
                             ReceiptItemCompactRow(name: item.name, price: item.price,
                                                   isPaid: item.paid, person: item.person)
                         }
-                        if !receipt.discountItems().isEmpty {
+                        if !discountItems.isEmpty {
                             Divider()
-                            ForEach(receipt.discountItems()) { item in
+                            ForEach(discountItems) { item in
                                 ReceiptItemCompactRow(name: item.name, price: item.price)
                             }
                         }
-                        if !receipt.taxItems().isEmpty {
+                        if !taxItems.isEmpty {
                             Divider()
-                            ForEach(receipt.taxItems()) { item in
+                            ForEach(taxItems) { item in
                                 ReceiptItemCompactRow(name: item.name, price: item.price)
                             }
                         }
