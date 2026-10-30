@@ -22,6 +22,7 @@ struct ReceiptSnapshot {
     }
 
     struct Discount {
+        let id: String
         let name: String
         let price: Double
         let dateAdded: Date
@@ -51,7 +52,7 @@ struct ReceiptSnapshot {
             Tax(id: $0.id, name: $0.name, price: $0.price, dateAdded: $0.dateAdded)
         }
         discounts = receipt.discountItems(sorted: false).map {
-            Discount(name: $0.name, price: $0.price, dateAdded: $0.dateAdded)
+            Discount(id: $0.id, name: $0.name, price: $0.price, dateAdded: $0.dateAdded)
         }
     }
 
@@ -84,6 +85,7 @@ struct ReceiptSnapshot {
         }
         for snapshot in discounts {
             let discount = DiscountItem(name: snapshot.name, price: snapshot.price)
+            discount.id = snapshot.id
             discount.dateAdded = snapshot.dateAdded
             receipt.addDiscountItems(from: [discount])
         }
