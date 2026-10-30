@@ -15,6 +15,8 @@ struct IOUView: View {
     @EnvironmentObject var navigationManager: NavigationManager
     @Query(sort: \Person.name) var people: [Person]
     @Query var receipts: [Receipt]
+    // Observed so shares re-render when the rounding setting changes.
+    @AppStorage(wrappedValue: 0, "ShareRounding", store: defaults) var shareRounding: Int
     @State var personWhoPaid: Person?
     @State var isInitialLoadCompleted: Bool = false
     @State var viewMode: IOUViewMode = .byPerson
@@ -25,6 +27,10 @@ struct IOUView: View {
         NavigationStack(path: $navigationManager.iouTabPath) {
             // What each person owes (or, by lender, is owed), computed once per update.
             let amounts = personWhoPaid.map { owedAmounts(for: $0) } ?? [:]
+            let total = amounts.values.reduce(0.0, +)
+            let unroundedTotal = personWhoPaid.map {
+                owedAmounts(for: $0, rounded: false).values.reduce(0.0, +)
+            } ?? .zero
             VStack(alignment: .leading, spacing: 0.0) {
                 TipView(IOUTip())
                     .padding(20.0)
@@ -38,7 +44,7 @@ struct IOUView: View {
                     .pickerStyle(.segmented)
                     .padding(.horizontal, 20.0)
                     .padding(.bottom, 8.0)
-                    summaryBanner(total: amounts.values.reduce(0.0, +))
+                    summaryBanner(total: total, rounding: total - unroundedTotal)
                 }
                 Group {
                     switch viewMode {
@@ -89,7 +95,7 @@ struct IOUView: View {
     }
 
     @ViewBuilder
-    func summaryBanner(total: Double) -> some View {
+    func summaryBanner(total: Double, rounding: Double) -> some View {
         if personWhoPaid != nil {
             if total > 0 {
                 HStack(alignment: .center, spacing: 8.0) {
@@ -103,18 +109,28 @@ struct IOUView: View {
                         .bold()
                 }
                 .padding(.horizontal, 20.0)
-                .padding(.bottom, 8.0)
+                .padding(.bottom, isVisibleRounding(rounding) ? 2.0 : 8.0)
+                if isVisibleRounding(rounding) {
+                    Text(NSLocalizedString("IOU.Summary.Rounding", comment: "")
+                        .replacingOccurrences(of: "%1", with: format(rounding)))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .padding(.horizontal, 20.0)
+                        .padding(.bottom, 8.0)
+                }
             }
         }
     }
 
     /// By lender, what the selected person owes each lender; otherwise, what each borrower
     /// owes the selected person.
-    func owedAmounts(for selected: Person) -> [PersistentIdentifier: Double] {
+    func owedAmounts(for selected: Person, rounded: Bool = true) -> [PersistentIdentifier: Double] {
         var amounts: [PersistentIdentifier: Double] = [:]
         for person in people where person.id != selected.id {
-            amounts[person.persistentModelID] = viewMode == .byLender ?
-                selected.sumOwed(to: person) : person.sumOwed(to: selected)
+            let (borrower, lender) = viewMode == .byLender ? (selected, person) : (person, selected)
+            amounts[person.persistentModelID] = rounded ?
+                borrower.roundedSumOwed(to: lender) : borrower.sumOwed(to: lender)
         }
         return amounts
     }
@@ -133,12 +149,13 @@ struct IOUView: View {
                                 HStack(alignment: .center, spacing: 4.0) {
                                     Text(receipt.name)
                                     Spacer()
-                                    Text(format(receipt.sumOwed(to: personWhoPaid, for: person)))
+                                    Text(format(receipt.roundedSumOwed(to: personWhoPaid, for: person)))
                                         .font(.subheadline)
                                         .monospaced()
                                 }
                             }
                         }
+                        RoundingRow(difference: person.roundingDifference(to: personWhoPaid))
                     } header: {
                         HStack(alignment: .center, spacing: 16.0) {
                             PersonAvatar(person: person, size: 30.0)
@@ -191,7 +208,7 @@ struct IOUView: View {
         List(receipts) { receipt in
             if let personWhoPaid = self.personWhoPaid, receipt.personWhoPaid == personWhoPaid {
                 let amountsOwed = receipt.borrowers()
-                    .map { (borrower: $0, amount: receipt.sumOwed(to: personWhoPaid, for: $0)) }
+                    .map { (borrower: $0, amount: receipt.roundedSumOwed(to: personWhoPaid, for: $0)) }
                     .filter { $0.amount > 0 }
                 if !amountsOwed.isEmpty {
                     Section {
@@ -205,6 +222,7 @@ struct IOUView: View {
                                     .monospaced()
                             }
                         }
+                        RoundingRow(difference: receipt.roundingDifference())
                     } header: {
                         HStack(alignment: .center, spacing: 8.0) {
                             Text(receipt.name)
@@ -246,12 +264,13 @@ struct IOUView: View {
                                 HStack(alignment: .center, spacing: 4.0) {
                                     Text(receipt.name)
                                     Spacer()
-                                    Text(format(receipt.sumOwed(to: lender, for: selectedBorrower)))
+                                    Text(format(receipt.roundedSumOwed(to: lender, for: selectedBorrower)))
                                         .font(.subheadline)
                                         .monospaced()
                                 }
                             }
                         }
+                        RoundingRow(difference: selectedBorrower.roundingDifference(to: lender))
                     } header: {
                         HStack(alignment: .center, spacing: 16.0) {
                             PersonAvatar(person: lender, size: 30.0)
