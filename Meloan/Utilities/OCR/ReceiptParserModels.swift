@@ -53,7 +53,11 @@ extension ReceiptTextParser {
             "tax", "gst", "vat", "hst", "pst", "qst", "mwst", "tva", "iva", "btw", "moms",
             "alv", "afa", "dph", "pvm", "pdv", "ppn", "sst", "pb1", "pajak", "cukai", "buwis",
             "thue", "vat 7", "消費税", "消费税", "税", "稅", "부가세", "세금", "ภาษี",
-            "impuesto", "imposta", "impot", "steuer", "tasse"
+            "impuesto", "imposta", "impot", "steuer", "tasse",
+            // Regional surcharges and tips. Lines are diacritic-folded before matching,
+            // so "taxa de serviço" must be written as "taxa de servico".
+            "surcharge", "taxa", "taxa de servico", "servico", "servicio", "propina",
+            "trinkgeld", "pourboire", "fooi"
         ]
         static let discount = [
             "discount", "coupon", "promo", "promotion", "rebate", "savings", "saved", "voucher",
