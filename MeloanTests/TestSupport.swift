@@ -8,6 +8,8 @@ struct InMemoryStore {
     let context: ModelContext
 
     init() throws {
+        // Money math rounds to the currency's minor units, so pin them for predictable results.
+        defaults.set(2, forKey: "DecimalPlaces")
         let schema = Schema([
             Receipt.self, Person.self, ReceiptItem.self, DiscountItem.self, TaxItem.self
         ])

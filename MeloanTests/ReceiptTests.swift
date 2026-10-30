@@ -17,58 +17,53 @@ struct ReceiptSumTests {
         let receipt = Receipt(name: "Empty")
         store.context.insert(receipt)
         #expect(receipt.sum() == 0.0)
-        #expect(receipt.overallRate() == 0.0)
+        #expect(receipt.sumUnpaid() == 0.0)
     }
 
-    @Test func overallRateSpreadsTaxAndDiscountOverItems() throws {
+    @Test func unpaidSumSpreadsTaxAndDiscountOverItems() throws {
         let dinner = try DinnerFixture()
-        #expect(isClose(dinner.receipt.overallRate(), 1.05))
+        #expect(isClose(dinner.receipt.sumUnpaid(), 84.0))
+        // Pasta: 20 x 1.05
+        dinner.pasta.paid = true
+        #expect(isClose(dinner.receipt.sumUnpaid(), 63.0))
+        #expect(isClose(dinner.receipt.sumPaid(), 21.0))
     }
 
-    @Test func overallRateIsZeroWithoutItems() throws {
+    @Test func nothingIsUnpaidWithoutItems() throws {
         let store = try InMemoryStore()
         let receipt = Receipt(name: "Only Tax")
         store.context.insert(receipt)
         receipt.addTaxItems(from: [TaxItem(name: "Tax", price: 5.0)])
-        #expect(receipt.overallRate() == 0.0)
+        #expect(receipt.sumUnpaid() == 0.0)
     }
 
-    @Test func overallRateNeverGoesNegative() throws {
+    @Test func unpaidSumNeverGoesNegative() throws {
         let store = try InMemoryStore()
         let receipt = Receipt(name: "Free Lunch")
         store.context.insert(receipt)
         receipt.addReceiptItems(from: [ReceiptItem(name: "Lunch", price: 10.0, amount: 1)])
         receipt.addDiscountItems(from: [DiscountItem(name: "Voucher", price: 15.0)])
         #expect(isClose(receipt.sum(), -5.0))
-        #expect(receipt.overallRate() == 0.0)
+        #expect(receipt.sumUnpaid() == 0.0)
     }
 }
 
 struct ReceiptSettlementTests {
 
-    // MARK: - sumOfSharedItemCost
+    // MARK: - Shared items
 
     @Test func sharedItemCostIsSplitEvenlyBetweenParticipants() throws {
         let dinner = try DinnerFixture()
-        #expect(isClose(dinner.receipt.sumOfSharedItemCost(for: dinner.alice), 10.0))
-        #expect(isClose(dinner.receipt.sumOfSharedItemCost(for: dinner.bob), 10.0))
+        // Bob only shares the wine: (30 / 3) x 1.05
+        #expect(isClose(dinner.receipt.sumOwed(to: dinner.mePerson, for: dinner.bob), 10.5))
     }
 
     @Test func sharedItemCostExcludesItemsThePersonHasPaid() throws {
         let dinner = try DinnerFixture()
         dinner.wine.addPersonWhoPaid(from: [dinner.alice])
-        #expect(dinner.receipt.sumOfSharedItemCost(for: dinner.alice) == 0.0)
-        #expect(isClose(dinner.receipt.sumOfSharedItemCost(for: dinner.bob), 10.0))
-    }
-
-    @Test func sharedItemCostIsZeroWithoutParticipants() throws {
-        let store = try InMemoryStore()
-        let person = Person(name: "Solo")
-        let receipt = Receipt(name: "Nobody")
-        store.context.insert(person)
-        store.context.insert(receipt)
-        receipt.addReceiptItems(from: [ReceiptItem(name: "Shared", price: 12.0, amount: 1)])
-        #expect(receipt.sumOfSharedItemCost(for: person) == 0.0)
+        // Alice now only owes her steak: 30 x 1.05
+        #expect(isClose(dinner.receipt.sumOwed(to: dinner.mePerson, for: dinner.alice), 31.5))
+        #expect(isClose(dinner.receipt.sumOwed(to: dinner.mePerson, for: dinner.bob), 10.5))
     }
 
     // MARK: - sumOwed(to:for:)
