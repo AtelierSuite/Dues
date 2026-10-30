@@ -51,6 +51,7 @@ extension ReceiptTextParser {
         static let tax = [
             "sales tax", "service charge", "svc chg", "svc", "service", "gratuity", "tip",
             "tax", "gst", "vat", "hst", "pst", "qst", "mwst", "tva", "iva", "btw", "moms",
+            "cgst", "sgst", "igst", "utgst",
             "alv", "afa", "dph", "pvm", "pdv", "ppn", "sst", "pb1", "pajak", "cukai", "buwis",
             "thue", "vat 7", "消費税", "消费税", "税", "稅", "부가세", "세금", "ภาษี",
             "impuesto", "imposta", "impot", "steuer", "tasse",
