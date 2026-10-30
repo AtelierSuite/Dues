@@ -126,8 +126,12 @@ struct ReceiptEditor: View {
                         .foregroundStyle(.secondary)
                         .listRowBackground(Color.clear)
                 } header: {
-                    ListSectionHeader(text: "Receipt.Taxes")
-                        .font(.body)
+                    HStack(alignment: .center, spacing: 4.0) {
+                        ListSectionHeader(text: "Receipt.Taxes")
+                            .font(.body)
+                        Spacer()
+                        tipMenu
+                    }
                 }
             } else {
                 Section {
@@ -143,6 +147,7 @@ struct ReceiptEditor: View {
                         ListSectionHeader(text: "Receipt.Taxes")
                             .font(.body)
                         Spacer()
+                        tipMenu
                         Button {
                             draft.taxItems.append(
                                 ReceiptDraft.Tax(id: UUID().uuidString, name: "", price: 0.0,
@@ -154,6 +159,10 @@ struct ReceiptEditor: View {
                 } footer: {
                     if draftHasManualTax && autoChargesConfigured {
                         Text("Receipt.Tax.ManualOverridesAutoHint")
+                            .font(.subheadline)
+                    } else if taxRateCountry != "" && draft.taxItems.allSatisfy({ Gratuity.isTip(id: $0.id) }) {
+                        // Only a tip so far: the automatic tax is still added on save.
+                        Text("Receipt.Tax.AutomaticallyCalculatedHint")
                             .font(.subheadline)
                     }
                 }
@@ -217,6 +226,26 @@ struct ReceiptEditor: View {
         .onChange(of: draft.taxItems) { oldValue, newValue in
             registerUndo(\.taxItems, from: oldValue, to: newValue)
         }
+    }
+
+    var tipMenu: some View {
+        ReceiptTipMenu(taxItems: $draft.taxItems,
+                       subtotal: draft.sumOfItems() - draft.sumOfDiscounts(),
+                       totalBeforeTip: totalBeforeTip)
+    }
+
+    /// What the receipt will total once saved, before any tip: items less discounts plus
+    /// the user's own tax lines, or else the automatic charges `saveEditing()` will add.
+    var totalBeforeTip: Double {
+        let manualTax = draft.taxItems
+            .filter { isManualTax(id: $0.id) }
+            .reduce(0.0) { $0 + $1.price }
+        var total = draft.sumOfItems() - draft.sumOfDiscounts() + manualTax
+        if !draftHasManualTax {
+            let autoCharges = autoCharges(sumOfItems: draft.sumOfItems(), hasManualTax: false)
+            total += (autoCharges.serviceCharge ?? 0.0) + (autoCharges.tax ?? 0.0)
+        }
+        return total
     }
 
     /// Registers an undo that restores `keyPath` to `oldValue`, unless the change
@@ -356,10 +385,9 @@ struct ReceiptEditor: View {
         for item in receipt.receiptItems ?? [] where item.person == nil {
             item.refreshSharedPaidState(participantIDs: participantIDs)
         }
-        let hasManualTax = receipt.taxItems?.contains(where: { !AutoCharges.isAutomatic(taxItemID: $0.id) }) ?? false
-        let autoCharges = AutoCharges(addServiceCharge: addTenPercent, taxRateCountry: taxRateCountry,
-                                      taxRate: taxRate, taxAboveServiceCharge: taxAboveServiceCharge,
-                                      sumOfItems: receipt.sumOfItems(), hasManualTax: hasManualTax)
+        // Auto charges are suppressed when the user supplied their own tax (no double tax).
+        let hasManualTax = receipt.taxItems?.contains(where: { isManualTax(id: $0.id) }) ?? false
+        let autoCharges = autoCharges(sumOfItems: receipt.sumOfItems(), hasManualTax: hasManualTax)
         let serviceChargeID = AutoCharges.serviceChargeID(for: receipt.id)
         if let serviceChargeAmount = autoCharges.serviceCharge {
             if let serviceChargeItem = receipt.taxItems?.first(where: { $0.id == serviceChargeID }) {
@@ -410,11 +438,26 @@ struct ReceiptEditor: View {
     }
     // swiftlint:enable function_body_length cyclomatic_complexity
 
-    /// The draft carries at least one user-supplied (non-auto) tax/charge line.
+    /// The draft carries at least one user-supplied (non-auto, non-tip) tax/charge line.
     /// When true, `saveEditing()` suppresses the automatic tax and service charge to
     /// avoid double-charging — surfaced to the user via a section footer.
     var draftHasManualTax: Bool {
-        draft.taxItems.contains { !AutoCharges.isAutomatic(taxItemID: $0.id) }
+        draft.taxItems.contains { isManualTax(id: $0.id) }
+    }
+
+    /// Whether a tax line was entered by the user. Automatic charges and tips don't count:
+    /// a tip is not tax, so it never turns the automatic charges off.
+    func isManualTax(id: String) -> Bool {
+        !AutoCharges.isAutomatic(taxItemID: id) && !Gratuity.isTip(id: id)
+    }
+
+    /// The automatic service charge and tax for items summing to `sumOfItems`, per the
+    /// user's settings. Shared by `saveEditing()` and the tip round-up preview so both
+    /// agree on the total.
+    func autoCharges(sumOfItems: Double, hasManualTax: Bool) -> AutoCharges {
+        AutoCharges(addServiceCharge: addTenPercent, taxRateCountry: taxRateCountry,
+                    taxRate: taxRate, taxAboveServiceCharge: taxAboveServiceCharge,
+                    sumOfItems: sumOfItems, hasManualTax: hasManualTax)
     }
 
     /// Whether the user has any automatic tax/service-charge setting enabled.
