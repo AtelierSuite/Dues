@@ -165,7 +165,7 @@ struct PDFExporterView: View {
         minY += max(itemNameSize.height, priceSize.height) + 10.0
         if let person = item.person {
             let personNameSize = drawLeadingSecondaryText(person.name, x: minX + 26.0, y: minY)
-            if let photo = person.photo, let photoImage = UIImage(data: photo) {
+            if let photoImage = PersonPhotoCache.shared.image(for: person) {
                 drawImage(photoImage, x: minX, y: minY + (personNameSize.height / 2) - 8.0)
             } else {
                 drawImage(UIImage(named: "Profile.Generic.Circle")!,

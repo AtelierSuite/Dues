@@ -4,14 +4,14 @@ struct ReceiptItemRow: View {
 
     var name: String
     var price: Double
-    var priceFontSize: Double = 14.0
+    var priceFont: Font = .subheadline
 
     var body: some View {
         HStack(alignment: .center, spacing: 8.0) {
             Text(name)
             Spacer()
             Text(format(price))
-                .font(.system(size: priceFontSize))
+                .font(priceFont)
                 .monospaced()
         }
         .tint(.primary)

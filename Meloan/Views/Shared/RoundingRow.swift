@@ -11,7 +11,7 @@ struct RoundingRow: View {
                 Text("Shared.Rounding")
                 Spacer()
                 Text(format(difference))
-                    .font(.system(size: 14.0))
+                    .font(.subheadline)
                     .monospaced()
             }
             .foregroundStyle(.secondary)

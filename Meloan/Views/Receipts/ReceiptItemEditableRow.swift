@@ -6,6 +6,7 @@ struct ReceiptItemEditableRow: View {
     @Binding var price: Double
     var placeholderText: String
     var isDisabled: Bool
+    @ScaledMetric(relativeTo: .subheadline) var priceFieldWidth: CGFloat = 120.0
 
     init(item: Binding<ReceiptDraft.Discount>, placeholderText: String) {
         self._name = item.name
@@ -31,8 +32,8 @@ struct ReceiptItemEditableRow: View {
                 .multilineTextAlignment(.trailing)
                 .keyboardType(.decimalPad)
                 .monospaced()
-                .font(.system(size: 14.0))
-                .frame(maxWidth: 120.0)
+                .font(.subheadline)
+                .frame(maxWidth: priceFieldWidth)
         }
         .disabled(isDisabled)
         .foregroundStyle(isDisabled ? Color.secondary : Color.primary)

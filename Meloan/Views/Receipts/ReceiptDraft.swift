@@ -13,7 +13,7 @@ class ReceiptDraft {
     }
 
     struct Discount: Identifiable, Equatable {
-        var id = UUID().uuidString
+        var id: String
         var name: String
         var price: Double
         var dateAdded: Date
@@ -42,9 +42,13 @@ class ReceiptDraft {
             Item(id: item.id, name: item.name, price: item.price,
                  person: item.person, dateAdded: item.dateAdded)
         }
+        // Discounts saved before they had IDs all share the store's default ID after migration,
+        // so give the extra copies a fresh draft ID; saving replaces just those once.
+        var discountIDs = Set<String>()
         self.discountItems = receipt.discountItems().map { item in
-            Discount(name: item.name, price: item.price,
-                     dateAdded: item.dateAdded)
+            let id = discountIDs.insert(item.id).inserted ? item.id : UUID().uuidString
+            return Discount(id: id, name: item.name, price: item.price,
+                            dateAdded: item.dateAdded)
         }
         self.taxItems = receipt.taxItems().map { item in
             Tax(id: item.id, name: item.name, price: item.price,
