@@ -153,6 +153,23 @@
         }
       }
     },
+    "Currency.AUD": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Australian Dollar (AUD)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "オーストラリアドル（AUD）"
+          }
+        }
+      }
+    },
     "Currency.BAM": {
       "extractionState": "manual",
       "localizations": {
@@ -200,6 +217,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "ブルネイドル（BND）"
+          }
+        }
+      }
+    },
+    "Currency.BRL": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Brazilian Real (BRL)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ブラジルレアル（BRL）"
           }
         }
       }
@@ -352,6 +386,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "インドネシアルピア（IDR）"
+          }
+        }
+      }
+    },
+    "Currency.INR": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indian Rupee (INR)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "インドルピー（INR）"
           }
         }
       }
