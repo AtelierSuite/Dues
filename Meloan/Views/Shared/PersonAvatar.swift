@@ -1,24 +1,42 @@
 import SwiftUI
 import UIKit
 
+/// A circular profile photo for a person, or the shared placeholder when there's no person.
+/// The size scales with Dynamic Type unless `scalesWithText` is false.
 struct PersonAvatar: View {
 
-    var person: Person
-    var size: CGFloat
-    var placeholder: String = "Profile.Generic"
+    var person: Person?
+    var placeholder: String
+    var scalesWithText: Bool
+    private var baseSize: CGFloat
+    @ScaledMetric private var scaledSize: CGFloat
+
+    init(person: Person?, size: CGFloat, placeholder: String = "Profile.Generic", scalesWithText: Bool = true) {
+        self.person = person
+        self.placeholder = placeholder
+        self.scalesWithText = scalesWithText
+        self.baseSize = size
+        self._scaledSize = ScaledMetric(wrappedValue: size, relativeTo: .body)
+    }
 
     var body: some View {
         Group {
-            if let image = PersonPhotoCache.shared.image(for: person) {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
+            if let person {
+                if let image = PersonPhotoCache.shared.image(for: person) {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                } else {
+                    Image(placeholder)
+                        .resizable()
+                }
             } else {
-                Image(placeholder)
+                Image("Profile.Shared")
                     .resizable()
             }
         }
-        .frame(width: size, height: size)
+        .frame(width: scalesWithText ? scaledSize : baseSize,
+               height: scalesWithText ? scaledSize : baseSize)
         .clipShape(Circle())
     }
 }

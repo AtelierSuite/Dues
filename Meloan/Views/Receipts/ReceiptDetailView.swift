@@ -104,14 +104,7 @@ struct ReceiptDetailView: View {
                                 }
                             }
                         } label: {
-                            if let person = item.person {
-                                PersonAvatar(person: person, size: 32.0)
-                            } else {
-                                Image("Profile.Shared")
-                                    .resizable()
-                                    .frame(width: 32.0, height: 32.0)
-                                    .clipShape(Circle())
-                            }
+                            PersonAvatar(person: item.person, size: 32.0)
                         }
                         settlementControl(for: item, participants: participants,
                                           participantIDs: participantIDs)
@@ -126,7 +119,7 @@ struct ReceiptDetailView: View {
                         .font(.body)
                     Spacer()
                     Text(format(totals.items))
-                        .font(.system(size: 14.0))
+                        .font(.subheadline)
                         .monospaced()
                 }
                 .bold()
@@ -155,7 +148,7 @@ struct ReceiptDetailView: View {
                         .font(.body)
                     Spacer()
                     Text(totals.taxRate, format: .percent.precision(.fractionLength(0...2)))
-                        .font(.system(size: 14.0))
+                        .font(.subheadline)
                         .monospaced()
                 }
                 .bold()
@@ -278,11 +271,11 @@ struct ReceiptDetailView: View {
                     .bold()
                 ForEach(items) { item in
                     VStack(alignment: .leading, spacing: 8.0) {
-                        ReceiptItemRow(name: item.name, price: item.price, priceFontSize: 16.0)
+                        ReceiptItemRow(name: item.name, price: item.price, priceFont: .system(size: 16.0))
                             .strikethrough(item.paid)
                         HStack(alignment: .center, spacing: 8.0) {
                             if let person = item.person {
-                                PersonAvatar(person: person, size: 16.0)
+                                PersonAvatar(person: person, size: 16.0, scalesWithText: false)
                                 Text(person.name)
                                     .foregroundStyle(.gray)
                             } else {
@@ -302,7 +295,7 @@ struct ReceiptDetailView: View {
                     .font(.system(size: 28.0))
                     .bold()
                 ForEach(discountItems) { item in
-                    ReceiptItemRow(name: item.name, price: item.price, priceFontSize: 16.0)
+                    ReceiptItemRow(name: item.name, price: item.price, priceFont: .system(size: 16.0))
                 }
             }
             if !taxItems.isEmpty {
@@ -311,7 +304,7 @@ struct ReceiptDetailView: View {
                     .font(.system(size: 28.0))
                     .bold()
                 ForEach(taxItems) { item in
-                    ReceiptItemRow(name: item.name, price: item.price, priceFontSize: 16.0)
+                    ReceiptItemRow(name: item.name, price: item.price, priceFont: .system(size: 16.0))
                 }
             }
             Divider()

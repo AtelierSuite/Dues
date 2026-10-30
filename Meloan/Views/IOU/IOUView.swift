@@ -18,6 +18,8 @@ struct IOUView: View {
     @State var personWhoPaid: Person?
     @State var isInitialLoadCompleted: Bool = false
     @State var viewMode: IOUViewMode = .byPerson
+    @ScaledMetric var copyIconSize: CGFloat = 20.0
+    @ScaledMetric var shareIconSize: CGFloat = 24.0
 
     var body: some View {
         NavigationStack(path: $navigationManager.iouTabPath) {
@@ -132,7 +134,7 @@ struct IOUView: View {
                                     Text(receipt.name)
                                     Spacer()
                                     Text(format(receipt.sumOwed(to: personWhoPaid, for: person)))
-                                        .font(.system(size: 14.0))
+                                        .font(.subheadline)
                                         .monospaced()
                                 }
                             }
@@ -155,14 +157,14 @@ struct IOUView: View {
                                 Image(systemName: "doc.on.doc")
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(width: 20.0, height: 20.0)
+                                    .frame(width: copyIconSize, height: copyIconSize)
                             }
                             .accessibilityLabel(Text("Shared.CopyAmount"))
                             ShareLink(item: hey(person, youOweMe: amountOwed)) {
                                 Image(systemName: "square.and.arrow.up")
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(width: 24.0, height: 24.0)
+                                    .frame(width: shareIconSize, height: shareIconSize)
                             }
                             .accessibilityLabel(Text("Shared.SendReminder"))
                         }
@@ -173,7 +175,7 @@ struct IOUView: View {
                                 .font(.body)
                             Spacer()
                             Text(format(amountOwed))
-                                .font(.system(size: 14.0))
+                                .font(.subheadline)
                                 .monospaced()
                         }
                         .bold()
@@ -201,7 +203,7 @@ struct IOUView: View {
                                 Text(borrower.name)
                                 Spacer()
                                 Text(format(amount))
-                                    .font(.system(size: 14.0))
+                                    .font(.subheadline)
                                     .monospaced()
                             }
                         }
@@ -222,7 +224,7 @@ struct IOUView: View {
                                 .font(.body)
                             Spacer()
                             Text(format(totalOwed))
-                                .font(.system(size: 14.0))
+                                .font(.subheadline)
                                 .monospaced()
                         }
                         .bold()
@@ -247,7 +249,7 @@ struct IOUView: View {
                                     Text(receipt.name)
                                     Spacer()
                                     Text(format(receipt.sumOwed(to: lender, for: selectedBorrower)))
-                                        .font(.system(size: 14.0))
+                                        .font(.subheadline)
                                         .monospaced()
                                 }
                             }
@@ -272,7 +274,7 @@ struct IOUView: View {
                                 .font(.body)
                             Spacer()
                             Text(format(amountOwed))
-                                .font(.system(size: 14.0))
+                                .font(.subheadline)
                                 .monospaced()
                         }
                         .bold()

@@ -10,7 +10,7 @@ struct PeopleDetailView: View {
             Section {
                 HStack {
                     Spacer()
-                    PersonAvatar(person: person, size: 144.0)
+                    PersonAvatar(person: person, size: 144.0, scalesWithText: false)
                     Spacer()
                 }
                 .listRowBackground(Color.clear)

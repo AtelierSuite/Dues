@@ -6,6 +6,7 @@ struct ReceiptItemAssignableRow: View {
     @Binding var item: ReceiptDraft.Item
     var peopleWhoParticipated: [Person]
     var placeholderText: String
+    @ScaledMetric(relativeTo: .subheadline) var priceFieldWidth: CGFloat = 120.0
 
     var body: some View {
         HStack(alignment: .center, spacing: 16.0) {
@@ -24,16 +25,7 @@ struct ReceiptItemAssignableRow: View {
                     }
                 }
             } label: {
-                if let personWhoOrdered = item.person {
-                    PersonAvatar(person: personWhoOrdered, size: 30.0)
-                } else {
-                    HStack(alignment: .center, spacing: 16.0) {
-                        Image("Profile.Shared")
-                            .resizable()
-                            .frame(width: 30.0, height: 30.0)
-                            .clipShape(Circle())
-                    }
-                }
+                PersonAvatar(person: item.person, size: 30.0)
             }
             .fixedSize()
             .accessibilityLabel(Text("Receipt.Item.Assignee"))
@@ -44,9 +36,9 @@ struct ReceiptItemAssignableRow: View {
             TextField("Receipt.Price", value: $item.price, format: priceFormatStyle())
                 .multilineTextAlignment(.trailing)
                 .keyboardType(.decimalPad)
-                .font(.system(size: 14.0))
+                .font(.subheadline)
                 .monospaced()
-                .frame(maxWidth: 120.0)
+                .frame(maxWidth: priceFieldWidth)
         }
         .onChange(of: peopleWhoParticipated, initial: false) { _, _ in
             if let personWhoOrdered = item.person {
