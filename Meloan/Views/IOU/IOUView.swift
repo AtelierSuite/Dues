@@ -190,10 +190,8 @@ struct IOUView: View {
     func iouByReceiptView() -> some View {
         List(receipts) { receipt in
             if let personWhoPaid = self.personWhoPaid, receipt.personWhoPaid == personWhoPaid {
-                let overallRate = receipt.overallRate()
                 let amountsOwed = receipt.borrowers()
-                    .map { (borrower: $0, amount: receipt.sumOwed(to: personWhoPaid, for: $0,
-                                                                  overallRate: overallRate)) }
+                    .map { (borrower: $0, amount: receipt.sumOwed(to: personWhoPaid, for: $0)) }
                     .filter { $0.amount > 0 }
                 if !amountsOwed.isEmpty {
                     Section {
