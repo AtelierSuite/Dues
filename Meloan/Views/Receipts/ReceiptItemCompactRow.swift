@@ -13,23 +13,8 @@ struct ReceiptItemCompactRow: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 8.0) {
-            Group {
-                if let person = person {
-                    if let data = person.photo, let image = UIImage(data: data) {
-                        Image(uiImage: image)
-                            .resizable()
-                    } else {
-                        Image("Profile.Generic")
-                            .resizable()
-                    }
-                } else {
-                    Image("Profile.Shared")
-                        .resizable()
-                }
-            }
-            .frame(width: 16.0, height: 16.0)
-            .clipShape(Circle())
-            .opacity(hidesPhoto ? 0 : 1)
+            PersonAvatar(person: person, size: 16.0)
+                .opacity(hidesPhoto ? 0 : 1)
             Group {
                 Text(name)
                 Spacer()
@@ -38,7 +23,7 @@ struct ReceiptItemCompactRow: View {
             .strikethrough(isPaid)
             // TODO: Allow selection of currency per receipt
         }
-        .font(.system(size: 14.0))
+        .font(.subheadline)
         .monospaced()
     }
 }

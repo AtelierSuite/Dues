@@ -9,6 +9,11 @@
         "rate": 0.2,
         "type": "vat"
     },
+    "AU": {
+        "currency": "AUD",
+        "rate": 0.0,
+        "type": "none"
+    },
     "BA": {
         "currency": "BAM",
         "rate": 0.17,
@@ -16,6 +21,11 @@
     },
     "BN": {
         "currency": "BND",
+        "rate": 0.0,
+        "type": "none"
+    },
+    "BR": {
+        "currency": "BRL",
         "rate": 0.0,
         "type": "none"
     },
@@ -247,6 +257,11 @@
         "currency": "IDR",
         "rate": 0.11,
         "type": "vat"
+    },
+    "IN": {
+        "currency": "INR",
+        "rate": 0.0,
+        "type": "none"
     },
     "IS": {
         "currency": "ISK",

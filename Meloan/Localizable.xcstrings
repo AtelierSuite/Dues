@@ -153,6 +153,23 @@
         }
       }
     },
+    "Currency.AUD": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Australian Dollar (AUD)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "オーストラリアドル（AUD）"
+          }
+        }
+      }
+    },
     "Currency.BAM": {
       "extractionState": "manual",
       "localizations": {
@@ -200,6 +217,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "ブルネイドル（BND）"
+          }
+        }
+      }
+    },
+    "Currency.BRL": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Brazilian Real (BRL)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ブラジルレアル（BRL）"
           }
         }
       }
@@ -352,6 +386,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "インドネシアルピア（IDR）"
+          }
+        }
+      }
+    },
+    "Currency.INR": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indian Rupee (INR)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "インドルピー（INR）"
           }
         }
       }
@@ -798,6 +849,23 @@
         }
       }
     },
+    "IOU.Summary.Rounding": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Includes %1 rounding to the payer"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "支払人への端数 %1 を含む"
+          }
+        }
+      }
+    },
     "IOU.Summary.TotalOwedToYou": {
       "extractionState": "manual",
       "localizations": {
@@ -1035,6 +1103,23 @@
         }
       }
     },
+    "More.Currency.Decimals.Automatic": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatic"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自動"
+          }
+        }
+      }
+    },
     "More.Currency.Decimals.None": {
       "extractionState": "manual",
       "localizations": {
@@ -1048,6 +1133,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "なし"
+          }
+        }
+      }
+    },
+    "More.Currency.Rounding": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Round Shares Up"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "割り勘の端数切り上げ"
+          }
+        }
+      }
+    },
+    "More.Currency.Rounding.Footer": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rounds each person's share of a receipt up to the chosen amount, warikan-style. The difference goes to the person who paid. Saved amounts are not changed."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "各レシートの一人あたりの金額を、選択した単位に切り上げて表示します（割り勘）。差額は支払人のものになります。保存されている金額は変更されません。"
+          }
+        }
+      }
+    },
+    "More.Currency.Rounding.Off": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Off"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "しない"
           }
         }
       }
@@ -3603,6 +3739,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "プレビュー"
+          }
+        }
+      }
+    },
+    "Shared.Rounding": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Incl. Rounding to Payer"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "うち支払人への端数"
           }
         }
       }

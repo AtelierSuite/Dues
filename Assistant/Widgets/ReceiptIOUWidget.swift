@@ -51,7 +51,7 @@ struct ReceiptIOUWidgetView: View {
                             ForEach(receipt.borrowers().prefix(7)) { person in
                                 ReceiptIOUPersonRowView(photoData: person.photo,
                                                         name: person.name,
-                                                        amount: receipt.sumOwed(to: personWhoPaid, for: person))
+                                                        amount: receipt.roundedSumOwed(to: personWhoPaid, for: person))
                             }
                         }
                     }
@@ -92,7 +92,7 @@ struct ReceiptIOUWidgetView: View {
                             ForEach(receipt.borrowers().prefix(4)) { person in
                                 ReceiptIOUPersonView(photoData: person.photo,
                                                      name: person.name,
-                                                     amount: receipt.sumOwed(to: personWhoPaid, for: person))
+                                                     amount: receipt.roundedSumOwed(to: personWhoPaid, for: person))
                                 if person != receipt.borrowers().prefix(4).last {
                                     Divider()
                                 }

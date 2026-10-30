@@ -49,16 +49,21 @@ final class Receipt: Identifiable {
         return []
     }
 
+    /// Every receipt-level total, computed in one pass. Prefer this over calling the
+    /// individual helpers repeatedly while rendering.
+    func totals() -> ReceiptTotals {
+        ReceiptTotals(items: sumOfItems(), tax: sumOfTax(), discount: sumOfDiscount())
+    }
+
     func sum() -> Double {
-        return sumOfItems() + sumOfTax() - sumOfDiscount()
+        return Money.amount(totalMinorUnits())
     }
 
     func sumUnpaid() -> Double {
-        return (receiptItems?.reduce(into: 0.0, { partialResult, item in
-            if !item.paid {
-                partialResult += item.price
-            }
-        }) ?? .zero) * overallRate()
+        let places = currencyDecimalPlaces()
+        return Money.amount(itemCosts(places: places)
+            .filter { !$0.item.paid }
+            .reduce(0) { $0 + $1.cost }, places: places)
     }
 
     func sumPaid() -> Double {
@@ -66,60 +71,73 @@ final class Receipt: Identifiable {
     }
 
     func sumOfItems() -> Double {
-        return receiptItems?.reduce(into: 0.0, { partialResult, item in
-            partialResult += item.price
-        }) ?? .zero
+        return Money.amount(minorUnits(of: (receiptItems ?? []).map { $0.price }))
     }
 
     func sumOfTax() -> Double {
-        return taxItems?.reduce(into: 0.0, { partialResult, item in
-            partialResult += item.price
-        }) ?? .zero
+        return Money.amount(minorUnits(of: (taxItems ?? []).map { $0.price }))
     }
 
     func sumOfDiscount() -> Double {
-        return discountItems?.reduce(into: 0.0, { partialResult, item in
-            partialResult += item.price
-        }) ?? .zero
+        return Money.amount(minorUnits(of: (discountItems ?? []).map { $0.price }))
     }
 
     func taxRate() -> Double {
-        if sumOfItems() > 0 {
-            return sumOfTax() / sumOfItems()
-        }
-        return .zero
-    }
-
-    func overallRate() -> Double {
-        if sumOfItems() > 0 {
-            return max(0.0, sum() / sumOfItems())
-        }
-        return .zero
-    }
-
-    func sumOfSharedItemCost(for person: Person) -> Double {
-        guard let participantCount = peopleWhoParticipated?.count, participantCount > 0 else { return .zero }
-        return receiptItems?.reduce(into: 0.0, {partialResult, item in
-            if item.person == nil, !item.personHasPaid(person) {
-                partialResult += item.price / Double(participantCount)
-            }
-        }) ?? .zero
-    }
-
-    func sumOfItemCost(for person: Person) -> Double {
-        return receiptItems?.reduce(into: 0.0, { partialResult, item in
-            if let itemPerson = item.person, itemPerson.id == person.id, !item.paid {
-                partialResult += item.price
-            }
-        }) ?? .zero
+        return totals().taxRate
     }
 
     func sumOwed(to lender: Person, for borrower: Person) -> Double {
-        if ((personWhoPaid?.id ?? "") == lender.id) && contains(participant: borrower) {
-            return (sumOfItemCost(for: borrower) +
-                    sumOfSharedItemCost(for: borrower)) * overallRate()
+        let places = currencyDecimalPlaces()
+        return Money.amount(minorUnitsOwed(to: lender, for: borrower, places: places), places: places)
+    }
+
+    func minorUnitsOwed(to lender: Person, for borrower: Person,
+                        places: Int = currencyDecimalPlaces()) -> Int64 {
+        guard (personWhoPaid?.id ?? "") == lender.id && contains(participant: borrower) else { return .zero }
+        let splitters = splitOrder()
+        let borrowerIndex = splitters.firstIndex(where: { $0.id == borrower.id })
+        return itemCosts(places: places).reduce(into: Int64.zero) { partialResult, entry in
+            if let itemPerson = entry.item.person {
+                if itemPerson.id == borrower.id, !entry.item.paid {
+                    partialResult += entry.cost
+                }
+            } else if let borrowerIndex, !entry.item.personHasPaid(borrower) {
+                partialResult += Money.split(entry.cost, into: splitters.count)[borrowerIndex]
+            }
         }
-        return .zero
+    }
+
+    private func minorUnits(of prices: [Double], places: Int = currencyDecimalPlaces()) -> Int64 {
+        return prices.reduce(0) { $0 + Money.minorUnits($1, places: places) }
+    }
+
+    private func totalMinorUnits(places: Int = currencyDecimalPlaces()) -> Int64 {
+        return minorUnits(of: (receiptItems ?? []).map { $0.price }, places: places) +
+            minorUnits(of: (taxItems ?? []).map { $0.price }, places: places) -
+            minorUnits(of: (discountItems ?? []).map { $0.price }, places: places)
+    }
+
+    /// Each item's share of the receipt total (with tax and discounts applied), in minor units.
+    /// The shares add up to exactly the total.
+    private func itemCosts(places: Int) -> [(item: ReceiptItem, cost: Int64)] {
+        let items = (receiptItems ?? []).sorted { $0.dateAdded != $1.dateAdded ?
+            $0.dateAdded < $1.dateAdded : $0.id < $1.id }
+        let prices = items.map { Money.minorUnits($0.price, places: places) }
+        let itemsTotal = prices.reduce(0, +)
+        let total = itemsTotal > 0 ? max(0, totalMinorUnits(places: places)) : 0
+        return Array(zip(items, Money.allocate(total, by: prices)))
+    }
+
+    /// The order shared items are split in. The person who paid comes first, so they absorb
+    /// any leftover minor units instead of the borrowers.
+    private func splitOrder() -> [Person] {
+        let participants = participants()
+        guard let payerIndex = participants.firstIndex(where: { $0.id == personWhoPaid?.id }) else {
+            return participants
+        }
+        var ordered = participants
+        ordered.insert(ordered.remove(at: payerIndex), at: 0)
+        return ordered
     }
 
     func contains(participant person: Person) -> Bool {
@@ -134,7 +152,7 @@ final class Receipt: Identifiable {
             }
             let remainingPeopleSorted = peopleWhoParticipated
                 .filter({ $0.id != "ME" })
-                .sorted(by: { $0.name < $1.name })
+                .sorted(by: { $0.name != $1.name ? $0.name < $1.name : $0.id < $1.id })
             participants.append(contentsOf: remainingPeopleSorted)
             return participants
         }
@@ -234,5 +252,19 @@ final class Receipt: Identifiable {
             item.addPersonWhoPaid(from: [person])
         }
         item.refreshSharedPaidState(participantIDs: Set(participants().map { $0.id }))
+    }
+}
+
+struct ReceiptTotals {
+    let items: Double
+    let tax: Double
+    let discount: Double
+
+    var total: Double {
+        items + tax - discount
+    }
+
+    var taxRate: Double {
+        items > 0 ? tax / items : .zero
     }
 }

@@ -129,15 +129,15 @@ struct PDFExporterView: View {
                 let iouSubtitleSize = drawSubtitle(NSLocalizedString("Receipt.IOUSummary", comment: ""),
                                                     x: margin, y: minY)
                 minY += iouSubtitleSize.height + 10.0
-                for borrower in receipt.borrowers() {
-                    let owedAmount = receipt.sumOwed(to: personWhoPaid, for: borrower)
-                    if owedAmount > 0 {
-                        startNewPageIfNextItemWillOverflowPage(context, estimatedHeight: 36.0, minY: &minY)
-                        let priceSize = drawPriceText(owedAmount, x: margin, y: minY)
-                        let nameSize = drawLeadingText(borrower.name, x: margin, y: minY,
-                                                        maxWidth: 567.6 - priceSize.width)
-                        minY += max(nameSize.height, priceSize.height) + 10.0
-                    }
+                let iouRows = receipt.borrowers().map {
+                    (name: $0.name, amount: receipt.roundedSumOwed(to: personWhoPaid, for: $0))
+                } + [(name: NSLocalizedString("Shared.Rounding", comment: ""), amount: receipt.roundingDifference())]
+                for row in iouRows where isVisibleRounding(row.amount) {
+                    startNewPageIfNextItemWillOverflowPage(context, estimatedHeight: 36.0, minY: &minY)
+                    let priceSize = drawPriceText(row.amount, x: margin, y: minY)
+                    let nameSize = drawLeadingText(row.name, x: margin, y: minY,
+                                                    maxWidth: 567.6 - priceSize.width)
+                    minY += max(nameSize.height, priceSize.height) + 10.0
                 }
                 drawDivider(x: margin, y: minY)
             }
@@ -165,7 +165,7 @@ struct PDFExporterView: View {
         minY += max(itemNameSize.height, priceSize.height) + 10.0
         if let person = item.person {
             let personNameSize = drawLeadingSecondaryText(person.name, x: minX + 26.0, y: minY)
-            if let photo = person.photo, let photoImage = UIImage(data: photo) {
+            if let photoImage = PersonPhotoCache.shared.image(for: person) {
                 drawImage(photoImage, x: minX, y: minY + (personNameSize.height / 2) - 8.0)
             } else {
                 drawImage(UIImage(named: "Profile.Generic.Circle")!,

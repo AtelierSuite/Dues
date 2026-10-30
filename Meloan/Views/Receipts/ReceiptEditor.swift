@@ -30,6 +30,7 @@ struct ReceiptEditor: View {
     }
 
     var body: some View {
+        let participants = draft.participants()
         List {
             Section {
                 TextField("Receipt.Name", text: $draft.name)
@@ -45,7 +46,7 @@ struct ReceiptEditor: View {
                             .tint(.primary)
                         Spacer()
                         Text(NSLocalizedString("Receipt.Participants.Label", comment: "")
-                            .replacingOccurrences(of: "%1", with: String(draft.participants().count)))
+                            .replacingOccurrences(of: "%1", with: String(participants.count)))
                         .lineLimit(1)
                         .truncationMode(.head)
                     }
@@ -60,7 +61,7 @@ struct ReceiptEditor: View {
                 Picker(selection: $draft.personWhoPaid) {
                     Text("Shared.NoSelection")
                         .tag(nil as Person?)
-                    ForEach(draft.participants()) { person in
+                    ForEach(participants) { person in
                         PersonRow(person: person)
                             .tag(person as Person?)
                     }
@@ -76,7 +77,7 @@ struct ReceiptEditor: View {
             Section {
                 ForEach($draft.receiptItems) { $item in
                     ReceiptItemAssignableRow(item: $item,
-                                             peopleWhoParticipated: draft.participants(),
+                                             peopleWhoParticipated: participants,
                                              placeholderText: "Receipt.ProductName")
                 }
                 .onDelete { indexSet in
@@ -111,7 +112,8 @@ struct ReceiptEditor: View {
                     Spacer()
                     Button {
                         draft.discountItems.append(
-                            ReceiptDraft.Discount(name: "", price: 0.0, dateAdded: Date.now))
+                            ReceiptDraft.Discount(id: UUID().uuidString, name: "", price: 0.0,
+                                                  dateAdded: Date.now))
                     } label: {
                         Image(systemName: "plus.circle")
                     }
@@ -240,8 +242,8 @@ struct ReceiptEditor: View {
             .reduce(0.0) { $0 + $1.price }
         var total = draft.sumOfItems() - draft.sumOfDiscounts() + manualTax
         if !draftHasManualTax {
-            let automaticCharges = automaticCharges(sumOfItems: draft.sumOfItems())
-            total += automaticCharges.serviceCharge + automaticCharges.tax
+            let autoCharges = autoCharges(sumOfItems: draft.sumOfItems(), hasManualTax: false)
+            total += (autoCharges.serviceCharge ?? 0.0) + (autoCharges.tax ?? 0.0)
         }
         return total
     }
@@ -325,14 +327,32 @@ struct ReceiptEditor: View {
             }
         }
 
-        // Sync discount items (replace all)
+        // Sync discount items
+        var existingDiscounts: [String: DiscountItem] = [:]
         for existingDiscount in receipt.discountItems(sorted: false) {
+            if existingDiscounts[existingDiscount.id] == nil {
+                existingDiscounts[existingDiscount.id] = existingDiscount
+            } else {
+                // A legacy duplicate ID (see ReceiptDraft); its draft row is re-added below.
+                receipt.discountItems?.removeAll { $0 === existingDiscount }
+                modelContext.delete(existingDiscount)
+            }
+        }
+        let draftDiscountIDs = Set(draft.discountItems.map { $0.id })
+        for (id, existingDiscount) in existingDiscounts where !draftDiscountIDs.contains(id) {
+            receipt.discountItems?.removeAll { $0 === existingDiscount }
             modelContext.delete(existingDiscount)
         }
-        receipt.discountItems = []
         for draftDiscount in draft.discountItems {
-            let newDiscount = DiscountItem(name: draftDiscount.name, price: draftDiscount.price)
-            receipt.addDiscountItems(from: [newDiscount])
+            if let existingDiscount = existingDiscounts[draftDiscount.id] {
+                existingDiscount.name = draftDiscount.name
+                existingDiscount.price = draftDiscount.price
+            } else {
+                let newDiscount = DiscountItem(name: draftDiscount.name, price: draftDiscount.price)
+                newDiscount.id = draftDiscount.id
+                newDiscount.dateAdded = draftDiscount.dateAdded
+                receipt.addDiscountItems(from: [newDiscount])
+            }
         }
 
         // Sync tax items
@@ -366,30 +386,29 @@ struct ReceiptEditor: View {
             item.refreshSharedPaidState(participantIDs: participantIDs)
         }
         // Auto charges are suppressed when the user supplied their own tax (no double tax).
-        // A tip is not tax, so it never turns them off.
         let hasManualTax = receipt.taxItems?.contains(where: { isManualTax(id: $0.id) }) ?? false
-        let automaticCharges = automaticCharges(sumOfItems: receipt.sumOfItems())
-        if addTenPercent && !hasManualTax {
-            let serviceChargeAmount = automaticCharges.serviceCharge
-            if let serviceChargeItem = receipt.taxItems?.first(where: { $0.id == "AUTOTEN-\(receipt.id)" }) {
+        let autoCharges = autoCharges(sumOfItems: receipt.sumOfItems(), hasManualTax: hasManualTax)
+        let serviceChargeID = AutoCharges.serviceChargeID(for: receipt.id)
+        if let serviceChargeAmount = autoCharges.serviceCharge {
+            if let serviceChargeItem = receipt.taxItems?.first(where: { $0.id == serviceChargeID }) {
                 serviceChargeItem.price = serviceChargeAmount
             } else {
                 let automaticServiceCharge = TaxItem(name: NSLocalizedString("Receipt.ServiceCharge", comment: ""),
                                                      price: serviceChargeAmount)
-                automaticServiceCharge.id = "AUTOTEN-\(receipt.id)"
+                automaticServiceCharge.id = serviceChargeID
                 receipt.addTaxItems(from: [automaticServiceCharge])
             }
         } else {
             // Service charge off, or the user supplied their own — remove any stale auto item.
-            removeAutoTaxItem(withID: "AUTOTEN-\(receipt.id)")
+            removeAutoTaxItem(withID: serviceChargeID)
         }
-        if taxRateCountry != "" && !hasManualTax {
-            if let taxItem = receipt.taxItems?.first(where: { $0.id == "AUTOTAX-\(receipt.id)" }) {
-                taxItem.price = automaticCharges.tax
+        let taxID = AutoCharges.taxID(for: receipt.id)
+        if let taxAmount = autoCharges.tax {
+            if let taxItem = receipt.taxItems?.first(where: { $0.id == taxID }) {
+                taxItem.price = taxAmount
             } else {
-                let automaticTaxItem = TaxItem(name: "",
-                                               price: automaticCharges.tax)
-                automaticTaxItem.id = "AUTOTAX-\(receipt.id)"
+                let automaticTaxItem = TaxItem(name: "", price: taxAmount)
+                automaticTaxItem.id = taxID
                 switch taxRateType {
                 case "gst":
                     automaticTaxItem.name = NSLocalizedString("Receipt.Tax.GST", comment: "")
@@ -402,7 +421,7 @@ struct ReceiptEditor: View {
             }
         } else {
             // Tax region cleared, or the user provided their own tax — drop the auto item.
-            removeAutoTaxItem(withID: "AUTOTAX-\(receipt.id)")
+            removeAutoTaxItem(withID: taxID)
         }
         do {
             try modelContext.save()
@@ -426,18 +445,19 @@ struct ReceiptEditor: View {
         draft.taxItems.contains { isManualTax(id: $0.id) }
     }
 
+    /// Whether a tax line was entered by the user. Automatic charges and tips don't count:
+    /// a tip is not tax, so it never turns the automatic charges off.
     func isManualTax(id: String) -> Bool {
-        !id.hasPrefix("AUTOTAX-") && !id.hasPrefix("AUTOTEN-") && !Gratuity.isTip(id: id)
+        !AutoCharges.isAutomatic(taxItemID: id) && !Gratuity.isTip(id: id)
     }
 
     /// The automatic service charge and tax for items summing to `sumOfItems`, per the
-    /// user's settings. Each is zero when its setting is off. Shared by `saveEditing()`
-    /// and the tip round-up preview so both agree on the total.
-    func automaticCharges(sumOfItems: Double) -> (serviceCharge: Double, tax: Double) {
-        let serviceCharge = addTenPercent ? sumOfItems * 0.1 : 0.0
-        guard taxRateCountry != "" else { return (serviceCharge, 0.0) }
-        let taxBase = taxAboveServiceCharge ? sumOfItems + serviceCharge : sumOfItems
-        return (serviceCharge, taxBase * taxRate)
+    /// user's settings. Shared by `saveEditing()` and the tip round-up preview so both
+    /// agree on the total.
+    func autoCharges(sumOfItems: Double, hasManualTax: Bool) -> AutoCharges {
+        AutoCharges(addServiceCharge: addTenPercent, taxRateCountry: taxRateCountry,
+                    taxRate: taxRate, taxAboveServiceCharge: taxAboveServiceCharge,
+                    sumOfItems: sumOfItems, hasManualTax: hasManualTax)
     }
 
     /// Whether the user has any automatic tax/service-charge setting enabled.
