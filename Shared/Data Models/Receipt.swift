@@ -49,6 +49,12 @@ final class Receipt: Identifiable {
         return []
     }
 
+    /// Every receipt-level total, computed in one pass. Prefer this over calling the
+    /// individual helpers repeatedly while rendering.
+    func totals() -> ReceiptTotals {
+        ReceiptTotals(items: sumOfItems(), tax: sumOfTax(), discount: sumOfDiscount())
+    }
+
     func sum() -> Double {
         return Money.amount(totalMinorUnits())
     }
@@ -77,10 +83,7 @@ final class Receipt: Identifiable {
     }
 
     func taxRate() -> Double {
-        if sumOfItems() > 0 {
-            return sumOfTax() / sumOfItems()
-        }
-        return .zero
+        return totals().taxRate
     }
 
     func sumOwed(to lender: Person, for borrower: Person) -> Double {
@@ -249,5 +252,19 @@ final class Receipt: Identifiable {
             item.addPersonWhoPaid(from: [person])
         }
         item.refreshSharedPaidState(participantIDs: Set(participants().map { $0.id }))
+    }
+}
+
+struct ReceiptTotals {
+    let items: Double
+    let tax: Double
+    let discount: Double
+
+    var total: Double {
+        items + tax - discount
+    }
+
+    var taxRate: Double {
+        items > 0 ? tax / items : .zero
     }
 }
