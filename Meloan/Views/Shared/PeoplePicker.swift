@@ -32,12 +32,8 @@ struct PeoplePicker: View {
             }
         }
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    dismiss()
-                } label: {
-                    Text("Shared.Done")
-                }
+            ToolbarItem(placement: .confirmationAction) {
+                doneButton
             }
         }
         .sheet(isPresented: $isAddingPerson) {
@@ -46,6 +42,18 @@ struct PeoplePicker: View {
             }
         }
         .navigationTitle(LocalizedStringKey(title))
+    }
+
+    @ViewBuilder var doneButton: some View {
+        if #available(iOS 26.0, *) {
+            Button(role: .confirm) {
+                dismiss()
+            }
+        } else {
+            Button("Shared.Done") {
+                dismiss()
+            }
+        }
     }
 
     func personToggleRow(_ person: Person) -> some View {
