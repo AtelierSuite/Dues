@@ -30,11 +30,11 @@ struct MainTabView: View {
             Tab("TabTitle.People", systemImage: "person.2", value: TabType.people) {
                 PeopleView()
             }
-            Tab("TabTitle.Search", systemImage: "magnifyingglass", value: TabType.search) {
-                SearchView()
-            }
             Tab("TabTitle.More", systemImage: "gearshape", value: TabType.more) {
                 MoreView()
+            }
+            Tab("TabTitle.Search", systemImage: "magnifyingglass", value: TabType.search, role: .search) {
+                SearchView()
             }
         }
         .undoToast()
