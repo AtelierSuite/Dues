@@ -33,7 +33,7 @@ struct MainTabView: View {
             Tab("TabTitle.More", systemImage: "gearshape", value: TabType.more) {
                 MoreView()
             }
-            Tab("TabTitle.Search", systemImage: "magnifyingglass", value: TabType.search, role: .search) {
+            Tab("TabTitle.Search", systemImage: "magnifyingglass", value: TabType.search, role: searchTabRole) {
                 SearchView()
             }
         }
@@ -84,6 +84,15 @@ struct MainTabView: View {
                 DiscountItem.repairDuplicateIDs(in: modelContext)
             }
         }
+    }
+
+    /// iOS 27 sets the search tab apart from the tab bar with the prominent role;
+    /// iOS 26 only does so for the search role.
+    var searchTabRole: TabRole {
+        if #available(iOS 27.0, *) {
+            return .prominent
+        }
+        return .search
     }
 
     func createMePerson() {
