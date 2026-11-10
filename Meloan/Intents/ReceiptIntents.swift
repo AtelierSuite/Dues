@@ -131,7 +131,8 @@ struct MarkReceiptItemPaidIntent: AppIntent {
                displayName: Bool.IntentDisplayName(true: "paid", false: "unpaid"))
     var paid: Bool
 
-    @Parameter(title: "Person", description: "Whose share of a shared item to settle. Leave empty to settle it for everyone.")
+    @Parameter(title: "Person",
+               description: "Whose share of a shared item to settle. Leave empty to settle it for everyone.")
     var person: PersonEntity?
 
     static var parameterSummary: some ParameterSummary {
@@ -172,7 +173,8 @@ struct MarkReceiptPaidIntent: AppIntent {
                displayName: Bool.IntentDisplayName(true: "paid", false: "unpaid"))
     var paid: Bool
 
-    @Parameter(title: "Person", description: "Settle only what this person owes. Leave empty to settle the whole receipt.")
+    @Parameter(title: "Person",
+               description: "Settle only what this person owes. Leave empty to settle the whole receipt.")
     var person: PersonEntity?
 
     static var parameterSummary: some ParameterSummary {
@@ -224,6 +226,6 @@ struct AddPersonIntent: AppIntent {
         let person = Person(name: trimmedName)
         IntentStore.context.insert(person)
         try IntentStore.save()
-        return .result(value: PersonEntity(from: person), dialog: "Added \(trimmedName).")
+        return .result(value: PersonEntity.make(from: [person])[0], dialog: "Added \(trimmedName).")
     }
 }

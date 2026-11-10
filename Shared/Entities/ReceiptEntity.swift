@@ -26,6 +26,9 @@ struct ReceiptEntity: AppEntity {
     @Property(title: "Date Added")
     var dateAdded: Date
 
+    @Property(title: "Items")
+    var items: [ReceiptItemEntity]
+
     static var typeDisplayRepresentation = TypeDisplayRepresentation(name: "Receipt")
     static var defaultQuery = ReceiptQuery()
 
@@ -42,6 +45,7 @@ struct ReceiptEntity: AppEntity {
         self.payerName = nil
         self.participantNames = []
         self.dateAdded = .now
+        self.items = []
     }
 
     init(from receipt: Receipt) {
@@ -53,6 +57,7 @@ struct ReceiptEntity: AppEntity {
         self.payerName = receipt.personWhoPaid?.name
         self.participantNames = receipt.participants().map { $0.name }
         self.dateAdded = receipt.dateAdded
+        self.items = receipt.items().map { ReceiptItemEntity(from: $0) }
     }
 }
 
