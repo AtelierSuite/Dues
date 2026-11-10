@@ -5821,6 +5821,624 @@
           }
         }
       }
+    },
+    "Name": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "名前"
+          }
+        }
+      }
+    },
+    "Total": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "合計"
+          }
+        }
+      }
+    },
+    "Unpaid Amount": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未払い額"
+          }
+        }
+      }
+    },
+    "Fully Paid": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完済"
+          }
+        }
+      }
+    },
+    "Paid By": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "支払人"
+          }
+        }
+      }
+    },
+    "Participants": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "参加者"
+          }
+        }
+      }
+    },
+    "Date Added": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "追加日"
+          }
+        }
+      }
+    },
+    "Receipt": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシート"
+          }
+        }
+      }
+    },
+    "Is Me": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自分"
+          }
+        }
+      }
+    },
+    "Person": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "人"
+          }
+        }
+      }
+    },
+    "Price": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "値段"
+          }
+        }
+      }
+    },
+    "Quantity": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "数量"
+          }
+        }
+      }
+    },
+    "Paid": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "支払済"
+          }
+        }
+      }
+    },
+    "Belongs To": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "担当者"
+          }
+        }
+      }
+    },
+    "Receipt Item": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシートの項目"
+          }
+        }
+      }
+    },
+    "Create Receipt": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシートを作成"
+          }
+        }
+      }
+    },
+    "Creates a new receipt to split. Add items to it afterwards with Add Item to Receipt.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "割り勘する新しいレシートを作成します。項目は「レシートに項目を追加」で追加できます。"
+          }
+        }
+      }
+    },
+    "Receipts": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシート"
+          }
+        }
+      }
+    },
+    "What should the receipt be called?": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシートの名前は何にしますか？"
+          }
+        }
+      }
+    },
+    "The person who paid the bill.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "会計を支払った人です。"
+          }
+        }
+      }
+    },
+    "Everyone splitting the receipt, besides the person who paid.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "支払人以外で、このレシートを割り勘する人たちです。"
+          }
+        }
+      }
+    },
+    "Created the receipt %@.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシート「%@」を作成しました。"
+          }
+        }
+      }
+    },
+    "Add Item to Receipt": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシートに項目を追加"
+          }
+        }
+      }
+    },
+    "Adds an item to a receipt, either for one person or shared by everyone on it.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシートに項目を追加します。一人に割り当てるか、全員で割り勘にできます。"
+          }
+        }
+      }
+    },
+    "Item Name": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "項目名"
+          }
+        }
+      }
+    },
+    "What's the item called?": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "項目の名前は何ですか？"
+          }
+        }
+      }
+    },
+    "The total price for the item, for all of the quantity.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "数量分をすべて含めた、この項目の合計金額です。"
+          }
+        }
+      }
+    },
+    "How much was it?": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "いくらでしたか？"
+          }
+        }
+      }
+    },
+    "For": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "担当者"
+          }
+        }
+      }
+    },
+    "Who the item is for. Leave empty to share it with everyone on the receipt.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この項目の担当者です。空欄にすると、レシートの全員で割り勘します。"
+          }
+        }
+      }
+    },
+    "Added %@ to %@.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「%1$@」を「%2$@」に追加しました。"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Added %1$@ to %2$@."
+          }
+        }
+      }
+    },
+    "Mark Item as Paid": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "項目を支払済とする"
+          }
+        }
+      }
+    },
+    "Marks an item on a receipt as paid or unpaid, for everyone or for one person's share.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシートの項目を、全員分または一人分だけ、支払済または未払いにします。"
+          }
+        }
+      }
+    },
+    "Item": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "項目"
+          }
+        }
+      }
+    },
+    "Status": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "状態"
+          }
+        }
+      }
+    },
+    "paid": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "支払済"
+          }
+        }
+      }
+    },
+    "unpaid": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未払い"
+          }
+        }
+      }
+    },
+    "Whose share of a shared item to settle. Leave empty to settle it for everyone.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "割り勘の項目で、誰の分を精算するかです。空欄にすると全員分を精算します。"
+          }
+        }
+      }
+    },
+    "Marked %@ as paid.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「%@」を支払済にしました。"
+          }
+        }
+      }
+    },
+    "Marked %@ as unpaid.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「%@」を未払いにしました。"
+          }
+        }
+      }
+    },
+    "Mark Receipt as Paid": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシートを支払済とする"
+          }
+        }
+      }
+    },
+    "Marks every item on a receipt as paid or unpaid, or just the items one person owes.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシートのすべての項目、または一人が支払うべき項目だけを、支払済または未払いにします。"
+          }
+        }
+      }
+    },
+    "Settle only what this person owes. Leave empty to settle the whole receipt.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この人が支払うべき分だけを精算します。空欄にするとレシート全体を精算します。"
+          }
+        }
+      }
+    },
+    "Marked %@'s items on %@ as paid.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「%2$@」の%1$@さんの項目を支払済にしました。"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marked %1$@'s items on %2$@ as paid."
+          }
+        }
+      }
+    },
+    "Marked %@'s items on %@ as unpaid.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「%2$@」の%1$@さんの項目を未払いにしました。"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marked %1$@'s items on %2$@ as unpaid."
+          }
+        }
+      }
+    },
+    "Add Person": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "人を追加"
+          }
+        }
+      }
+    },
+    "Adds a person to split receipts with.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシートを割り勘する相手を追加します。"
+          }
+        }
+      }
+    },
+    "People": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "人"
+          }
+        }
+      }
+    },
+    "What's their name?": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "その人の名前は何ですか？"
+          }
+        }
+      }
+    },
+    "Added %@.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@さんを追加しました。"
+          }
+        }
+      }
+    },
+    "That receipt couldn't be found.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "そのレシートが見つかりませんでした。"
+          }
+        }
+      }
+    },
+    "That person couldn't be found.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "その人が見つかりませんでした。"
+          }
+        }
+      }
+    },
+    "That item couldn't be found.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "その項目が見つかりませんでした。"
+          }
+        }
+      }
+    },
+    "That item isn't on a receipt.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "その項目はどのレシートにもありません。"
+          }
+        }
+      }
+    },
+    "That person isn't on this receipt.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "その人はこのレシートの参加者ではありません。"
+          }
+        }
+      }
+    },
+    "The name can't be empty.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "名前を入力してください。"
+          }
+        }
+      }
+    },
+    "The price can't be negative.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "値段にマイナスは指定できません。"
+          }
+        }
+      }
+    },
+    "Add Item": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "項目を追加"
+          }
+        }
+      }
+    },
+    "Mark Item Paid": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "項目を支払済に"
+          }
+        }
+      }
+    },
+    "Mark Receipt Paid": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシートを支払済に"
+          }
+        }
+      }
     }
   },
   "version": "1.0"
