@@ -241,6 +241,44 @@ final class Receipt: Identifiable {
         item.refreshSharedPaidState(participantIDs: participantIDs)
     }
 
+    /// Marks an item paid or unpaid, without toggling, so repeating the request is harmless.
+    /// For a shared item, `person` settles just their share; without one, every participant's
+    /// share is settled, or, when marking unpaid, cleared except for the payer's.
+    func setSettled(_ item: ReceiptItem, paid: Bool, for person: Person? = nil) {
+        if item.person != nil {
+            if person == nil || person?.id == item.person?.id {
+                item.paid = paid
+            }
+            return
+        }
+        if let person {
+            if paid {
+                item.addPersonWhoPaid(from: [person])
+            } else {
+                item.removePersonWhoPaid(withID: person.id)
+            }
+        } else if paid {
+            item.addPersonWhoPaid(from: participants())
+        } else {
+            item.peopleWhoPaid?.removeAll()
+            if let personWhoPaid {
+                item.addPersonWhoPaid(from: [personWhoPaid])
+            }
+        }
+        item.refreshSharedPaidState(participantIDs: Set(participants().map { $0.id }))
+    }
+
+    /// Settles every item on the receipt, or only what `person` owes on it.
+    func setSettled(paid: Bool, for person: Person? = nil) {
+        for item in receiptItems ?? [] {
+            if let person {
+                if let itemPerson = item.person, itemPerson.id != person.id { continue }
+                if item.person == nil && !contains(participant: person) { continue }
+            }
+            setSettled(item, paid: paid, for: person)
+        }
+    }
+
     func toggleSettled(_ item: ReceiptItem, for person: Person) {
         if item.person != nil {
             item.paid.toggle()

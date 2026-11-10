@@ -224,3 +224,77 @@ struct ReceiptSettlementTests {
         #expect(!dinner.wine.paid)
     }
 }
+
+struct ReceiptSetSettledTests {
+
+    @Test func setSettledMarksAnOwnedItemAndIsRepeatable() throws {
+        let dinner = try DinnerFixture()
+        dinner.receipt.setSettled(dinner.steak, paid: true)
+        dinner.receipt.setSettled(dinner.steak, paid: true)
+        #expect(dinner.steak.paid)
+        dinner.receipt.setSettled(dinner.steak, paid: false)
+        #expect(!dinner.steak.paid)
+    }
+
+    @Test func setSettledForSomeoneElseLeavesAnOwnedItemAlone() throws {
+        let dinner = try DinnerFixture()
+        dinner.receipt.setSettled(dinner.steak, paid: true, for: dinner.bob)
+        #expect(!dinner.steak.paid)
+        dinner.receipt.setSettled(dinner.steak, paid: true, for: dinner.alice)
+        #expect(dinner.steak.paid)
+    }
+
+    @Test func setSettledSettlesASharedItemForEveryone() throws {
+        let dinner = try DinnerFixture()
+        dinner.receipt.setSettled(dinner.wine, paid: true)
+        dinner.receipt.setSettled(dinner.wine, paid: true)
+        #expect(dinner.wine.paid)
+        #expect(dinner.wine.peopleWhoPaid?.count == 3)
+    }
+
+    @Test func setSettledUnpaidKeepsThePayersShare() throws {
+        let dinner = try DinnerFixture()
+        dinner.receipt.setSettled(dinner.wine, paid: true)
+        dinner.receipt.setSettled(dinner.wine, paid: false)
+        #expect(!dinner.wine.paid)
+        #expect(dinner.wine.personHasPaid(dinner.mePerson))
+        #expect(!dinner.wine.personHasPaid(dinner.alice))
+    }
+
+    @Test func setSettledForPersonSettlesOnlyTheirShare() throws {
+        let dinner = try DinnerFixture()
+        dinner.receipt.setSettled(dinner.wine, paid: true, for: dinner.alice)
+        #expect(dinner.wine.personHasPaid(dinner.alice))
+        #expect(!dinner.wine.paid)
+        dinner.receipt.setSettled(dinner.wine, paid: true, for: dinner.bob)
+        dinner.receipt.setSettled(dinner.wine, paid: true, for: dinner.mePerson)
+        #expect(dinner.wine.paid)
+    }
+
+    @Test func setSettledReceiptMarksEveryItem() throws {
+        let dinner = try DinnerFixture()
+        dinner.receipt.setSettled(paid: true)
+        #expect(dinner.receipt.isPaid())
+        #expect(dinner.receipt.sumUnpaid() == 0.0)
+        dinner.receipt.setSettled(paid: false)
+        #expect(!dinner.steak.paid && !dinner.pasta.paid && !dinner.wine.paid)
+    }
+
+    @Test func setSettledReceiptForPersonClearsWhatTheyOwe() throws {
+        let dinner = try DinnerFixture()
+        dinner.receipt.setSettled(paid: true, for: dinner.alice)
+        #expect(dinner.steak.paid)
+        #expect(!dinner.pasta.paid)
+        #expect(dinner.wine.personHasPaid(dinner.alice))
+        #expect(dinner.receipt.sumOwed(to: dinner.mePerson, for: dinner.alice) == 0.0)
+        #expect(dinner.receipt.sumOwed(to: dinner.mePerson, for: dinner.bob) > 0.0)
+    }
+
+    @Test func setSettledReceiptIgnoresSharedItemsForNonParticipants() throws {
+        let dinner = try DinnerFixture()
+        let carol = Person(name: "Carol")
+        dinner.store.context.insert(carol)
+        dinner.receipt.setSettled(paid: true, for: carol)
+        #expect(!dinner.wine.personHasPaid(carol))
+    }
+}
