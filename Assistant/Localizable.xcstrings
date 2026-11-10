@@ -509,6 +509,36 @@
           }
         }
       }
+    },
+    "Owes You" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "あなたへの貸し"
+          }
+        }
+      }
+    },
+    "You Owe" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "あなたの借り"
+          }
+        }
+      }
+    },
+    "Items" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "項目"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

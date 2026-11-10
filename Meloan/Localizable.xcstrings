@@ -6439,6 +6439,324 @@
           }
         }
       }
+    },
+    "Owes You": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなたへの貸し"
+          }
+        }
+      }
+    },
+    "You Owe": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなたの借り"
+          }
+        }
+      }
+    },
+    "Items": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "項目"
+          }
+        }
+      }
+    },
+    "Get Person": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "人を取得"
+          }
+        }
+      }
+    },
+    "Gets a person and how much they owe you and you owe them.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "人と、その人があなたに支払うべき金額、あなたがその人に支払うべき金額を取得します。"
+          }
+        }
+      }
+    },
+    "Everyone's settled up with you.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "全員との精算が済んでいます。"
+          }
+        }
+      }
+    },
+    "People owe you %@ in total, and you owe %@.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなたへの貸しは合計%1$@、あなたの借りは%2$@です。"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "People owe you %1$@ in total, and you owe %2$@."
+          }
+        }
+      }
+    },
+    "You and %@ are settled up.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@さんとの精算は済んでいます。"
+          }
+        }
+      }
+    },
+    "You owe %@ %@.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなたは%1$@さんに%2$@を支払う必要があります。"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You owe %1$@ %2$@."
+          }
+        }
+      }
+    },
+    "%@ owes you %@.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@さんはあなたに%2$@を支払う必要があります。"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ owes you %2$@."
+          }
+        }
+      }
+    },
+    "%@ owes you %@, and you owe them %@.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@さんはあなたに%2$@、あなたは%1$@さんに%3$@を支払う必要があります。"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ owes you %2$@, and you owe them %3$@."
+          }
+        }
+      }
+    },
+    "Search People": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "人を検索"
+          }
+        }
+      }
+    },
+    "Finds people by name, optionally only those you still have money to settle with.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "名前で人を検索します。まだ精算が済んでいない人だけに絞り込むこともできます。"
+          }
+        }
+      }
+    },
+    "Leave empty to include everyone.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "空欄にすると全員が対象になります。"
+          }
+        }
+      }
+    },
+    "Only Unsettled": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未精算のみ"
+          }
+        }
+      }
+    },
+    "Only include people who owe you or whom you owe.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなたと貸し借りが残っている人だけを含めます。"
+          }
+        }
+      }
+    },
+    "No one matches.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "該当する人はいません。"
+          }
+        }
+      }
+    },
+    "Found %@.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@さんが見つかりました。"
+          }
+        }
+      }
+    },
+    "Found %lld people.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld人が見つかりました。"
+          }
+        }
+      }
+    },
+    "Get Receipt": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシートを取得"
+          }
+        }
+      }
+    },
+    "Gets a receipt with its total, what's still unpaid, who's splitting it and its items.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシートの合計、未払い額、参加者、項目を取得します。"
+          }
+        }
+      }
+    },
+    "%@ comes to %@, with %@ still unpaid.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「%1$@」の合計は%2$@で、%3$@が未払いです。"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ comes to %2$@, with %3$@ still unpaid."
+          }
+        }
+      }
+    },
+    "%@ comes to %@ and is fully paid.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「%1$@」の合計は%2$@で、すべて支払済です。"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ comes to %2$@ and is fully paid."
+          }
+        }
+      }
+    },
+    "Get Item": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "項目を取得"
+          }
+        }
+      }
+    },
+    "Gets an item on a receipt, with its price, who it's for and whether it's paid.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシートの項目を、値段、担当者、支払い状況とともに取得します。"
+          }
+        }
+      }
+    },
+    "%@ on %@ is %@ and paid.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「%2$@」の「%1$@」は%3$@で、支払済です。"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ on %2$@ is %3$@ and paid."
+          }
+        }
+      }
+    },
+    "%@ on %@ is %@ and not paid yet.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「%2$@」の「%1$@」は%3$@で、まだ支払われていません。"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ on %2$@ is %3$@ and not paid yet."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

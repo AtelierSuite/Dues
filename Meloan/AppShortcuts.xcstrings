@@ -90,6 +90,46 @@
           }
         }
       }
+    },
+    "How much does ${person} owe me in ${applicationName}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${applicationName}で${person}の貸し借りを確認"
+          }
+        }
+      }
+    },
+    "Check what I owe in ${applicationName}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${applicationName}で貸し借りを確認"
+          }
+        }
+      }
+    },
+    "Show ${receipt} in ${applicationName}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${applicationName}で${receipt}を表示"
+          }
+        }
+      }
+    },
+    "Get a receipt in ${applicationName}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${applicationName}でレシートを取得"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
