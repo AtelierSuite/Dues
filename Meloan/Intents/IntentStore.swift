@@ -72,6 +72,7 @@ enum IntentError: Error, CustomLocalizedStringResourceConvertible {
     case negativePrice
     case noTipToAdd
     case nothingToChange
+    case nothingOwed(String)
 
     var localizedStringResource: LocalizedStringResource {
         switch self {
@@ -84,6 +85,7 @@ enum IntentError: Error, CustomLocalizedStringResourceConvertible {
         case .negativePrice: "The price can't be negative."
         case .noTipToAdd: "There's no tip to add. The total may already be at that amount."
         case .nothingToChange: "There's nothing to change."
+        case .nothingOwed(let name): "\(name) doesn't owe you anything."
         }
     }
 }
