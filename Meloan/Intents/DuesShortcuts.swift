@@ -45,11 +45,19 @@ struct DuesShortcuts: AppShortcutsProvider {
         AppShortcut(
             intent: GetPersonIntent(),
             phrases: [
-                "How much does \(\.$person) owe me in \(.applicationName)",
-                "Check what I owe in \(.applicationName)"
+                "How much does \(\.$person) owe me in \(.applicationName)"
             ],
             shortTitle: "Get Person",
             systemImageName: "person.crop.circle"
+        )
+        AppShortcut(
+            intent: GetIOUSummaryIntent(),
+            phrases: [
+                "Who owes me in \(.applicationName)",
+                "Check what I owe in \(.applicationName)"
+            ],
+            shortTitle: "IOU Summary",
+            systemImageName: "person.2"
         )
         AppShortcut(
             intent: GetReceiptIntent(),
