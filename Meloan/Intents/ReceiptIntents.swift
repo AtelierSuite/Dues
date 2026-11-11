@@ -109,6 +109,8 @@ struct AddReceiptItemIntent: AppIntent {
         for sharedItem in receipt.receiptItems ?? [] where sharedItem.person == nil {
             sharedItem.refreshSharedPaidState(participantIDs: participantIDs)
         }
+        // Match what saving in the receipt editor does.
+        receipt.applyAutoCharges(in: IntentStore.context)
         try IntentStore.save()
 
         return .result(value: ReceiptItemEntity(from: item),
