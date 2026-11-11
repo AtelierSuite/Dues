@@ -70,6 +70,7 @@ enum IntentError: Error, CustomLocalizedStringResourceConvertible {
     case personNotOnReceipt
     case emptyName
     case negativePrice
+    case noTipToAdd
 
     var localizedStringResource: LocalizedStringResource {
         switch self {
@@ -80,6 +81,7 @@ enum IntentError: Error, CustomLocalizedStringResourceConvertible {
         case .personNotOnReceipt: "That person isn't on this receipt."
         case .emptyName: "The name can't be empty."
         case .negativePrice: "The price can't be negative."
+        case .noTipToAdd: "There's no tip to add. The total may already be at that amount."
         }
     }
 }
