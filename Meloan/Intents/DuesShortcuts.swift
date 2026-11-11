@@ -68,5 +68,14 @@ struct DuesShortcuts: AppShortcutsProvider {
             shortTitle: "Get Receipt",
             systemImageName: "doc.text"
         )
+        AppShortcut(
+            intent: ExportReceiptIntent(),
+            phrases: [
+                "Export \(\.$receipt) from \(.applicationName)",
+                "Export a receipt from \(.applicationName)"
+            ],
+            shortTitle: "Export Receipt",
+            systemImageName: "square.and.arrow.up"
+        )
     }
 }
