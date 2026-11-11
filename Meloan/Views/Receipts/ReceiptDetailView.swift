@@ -42,7 +42,7 @@ struct ReceiptDetailView: View {
                         Label("Receipt.ExportImage", systemImage: "photo")
                     }
                     .disabled(!ReceiptExportView.fitsInImage(receipt))
-                    ShareLink(item: createTextToShare()) {
+                    ShareLink(item: receipt.shareText()) {
                         Label("Receipt.ExportText", systemImage: "text.alignleft")
                     }
                 } label: {
@@ -260,46 +260,6 @@ struct ReceiptDetailView: View {
     @MainActor
     func createImageToShare() -> Data? {
         ReceiptExportView.renderPNG(of: receipt)
-    }
-
-    func createTextToShare() -> String {
-        var lines: [String] = []
-        lines.append(receipt.name)
-        lines.append(String(repeating: "-", count: 30))
-        if let personWhoPaid = receipt.personWhoPaid {
-            lines.append("\(NSLocalizedString("Receipt.Payer", comment: "")): \(personWhoPaid.name)")
-            lines.append("")
-        }
-        let items = receipt.items()
-        let discountItems = receipt.discountItems()
-        let taxItems = receipt.taxItems()
-        let totals = receipt.totals()
-        if !items.isEmpty {
-            lines.append(NSLocalizedString("Receipt.PurchasedItems", comment: ""))
-            for item in items {
-                let assignee = item.person?.name ?? NSLocalizedString("Shared.Shared", comment: "")
-                lines.append("  \(item.name) - \(format(item.price)) [\(assignee)]")
-            }
-            lines.append("")
-        }
-        if !discountItems.isEmpty {
-            lines.append(NSLocalizedString("Receipt.Discounts", comment: ""))
-            for item in discountItems {
-                lines.append("  \(item.name) - \(format(item.price))")
-            }
-            lines.append("")
-        }
-        if !taxItems.isEmpty {
-            lines.append(NSLocalizedString("Receipt.Taxes", comment: ""))
-            for item in taxItems {
-                lines.append("  \(item.name) - \(format(item.price))")
-            }
-            lines.append("")
-        }
-        lines.append(String(repeating: "-", count: 30))
-        lines.append("\(NSLocalizedString("Receipt.Total.BeforeTax", comment: "")): \(format(totals.items))")
-        lines.append("\(NSLocalizedString("Receipt.Total.AfterTax", comment: "")): \(format(totals.total))")
-        return lines.joined(separator: "\n")
     }
 }
 // swiftlint:enable type_body_length
