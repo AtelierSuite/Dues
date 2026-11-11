@@ -6757,6 +6757,862 @@
           }
         }
       }
+    },
+    "Add Discount": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "割引を追加"
+          }
+        }
+      }
+    },
+    "Adds a discount, such as a coupon, to a receipt. It's shared across the items by price.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "クーポンなどの割引をレシートに追加します。割引は各項目の値段に応じて按分されます。"
+          }
+        }
+      }
+    },
+    "Value": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "値"
+          }
+        }
+      }
+    },
+    "How much is the discount?": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "割引はいくらですか？"
+          }
+        }
+      }
+    },
+    "Calculation": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "計算方法"
+          }
+        }
+      }
+    },
+    "Leave empty to call it Discount.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "空欄にすると「割引」という名前になります。"
+          }
+        }
+      }
+    },
+    "Discount": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "割引"
+          }
+        }
+      }
+    },
+    "Added %@ off for %@. %@ now comes to %@.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「%2$@」で%1$@を割り引きました。「%3$@」の合計は%4$@になりました。"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Added %1$@ off for %2$@. %3$@ now comes to %4$@."
+          }
+        }
+      }
+    },
+    "Amount": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "金額"
+          }
+        }
+      }
+    },
+    "Percentage": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "割合（%）"
+          }
+        }
+      }
+    },
+    "Add Tax": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "税金を追加"
+          }
+        }
+      }
+    },
+    "Adds a tax or charge line to a receipt. Your own tax replaces the automatic tax and service charge.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシートに税金や手数料の項目を追加します。追加した税金は、自動税率とサービス料の代わりに使われます。"
+          }
+        }
+      }
+    },
+    "How much is the tax?": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "税金はいくらですか？"
+          }
+        }
+      }
+    },
+    "Leave empty to call it Tax.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "空欄にすると「税金」という名前になります。"
+          }
+        }
+      }
+    },
+    "Tax": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "税金"
+          }
+        }
+      }
+    },
+    "Added %@ of %@. %@ now comes to %@.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$@として%1$@を追加しました。「%3$@」の合計は%4$@になりました。"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Added %1$@ of %2$@. %3$@ now comes to %4$@."
+          }
+        }
+      }
+    },
+    "Tip Method": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "チップの計算方法"
+          }
+        }
+      }
+    },
+    "Round Up": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "切り上げ"
+          }
+        }
+      }
+    },
+    "Add Tip": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "チップを追加"
+          }
+        }
+      }
+    },
+    "Adds a tip by percentage or by rounding the total up, replacing any tip already there.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "割合または合計の切り上げでチップを追加します。すでにチップがある場合は置き換えます。"
+          }
+        }
+      }
+    },
+    "Method": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "計算方法"
+          }
+        }
+      }
+    },
+    "The tip as a percentage of the items, less discounts.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "割引後の項目合計に対するチップの割合です。"
+          }
+        }
+      }
+    },
+    "Round Up To": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "切り上げ後の合計"
+          }
+        }
+      }
+    },
+    "The total to round up to. Leave empty to round up to the next whole amount.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "切り上げ後の合計金額です。空欄にすると、次のきりのいい金額に切り上げます。"
+          }
+        }
+      }
+    },
+    "Added a %@ tip. %@ now comes to %@.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@のチップを追加しました。「%2$@」の合計は%3$@になりました。"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Added a %1$@ tip. %2$@ now comes to %3$@."
+          }
+        }
+      }
+    },
+    "Delete Receipt": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシートを削除"
+          }
+        }
+      }
+    },
+    "Deletes receipts, with their items, taxes and discounts. Asks before deleting.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシートを、その項目・税金・割引とともに削除します。削除する前に確認します。"
+          }
+        }
+      }
+    },
+    "Delete %@? This can't be undone.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@を削除しますか？この操作は取り消せません。"
+          }
+        }
+      }
+    },
+    "Deleted %@.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@を削除しました。"
+          }
+        }
+      }
+    },
+    "Delete Item": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "項目を削除"
+          }
+        }
+      }
+    },
+    "Deletes items from their receipts. Asks before deleting.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシートから項目を削除します。削除する前に確認します。"
+          }
+        }
+      }
+    },
+    "IOU Summary": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "貸し借りの概要"
+          }
+        }
+      }
+    },
+    "Export Receipt": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシートを書き出す"
+          }
+        }
+      }
+    },
+    "Edit Item": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "項目を編集"
+          }
+        }
+      }
+    },
+    "Changes an item's name, price or quantity, or who it's for. Leave anything you don't want to change empty.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "項目の名前、値段、数量、担当者を変更します。変更しないものは空欄のままにしてください。"
+          }
+        }
+      }
+    },
+    "New Name": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新しい名前"
+          }
+        }
+      }
+    },
+    "New Price": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新しい値段"
+          }
+        }
+      }
+    },
+    "New Quantity": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新しい数量"
+          }
+        }
+      }
+    },
+    "Who the item is for now.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この項目の新しい担当者です。"
+          }
+        }
+      }
+    },
+    "Share with Everyone": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "全員で割り勘"
+          }
+        }
+      }
+    },
+    "Split the item between everyone on the receipt.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この項目をレシートの全員で割り勘にします。"
+          }
+        }
+      }
+    },
+    "Updated %@ on %@.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「%2$@」の「%1$@」を更新しました。"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Updated %1$@ on %2$@."
+          }
+        }
+      }
+    },
+    "Export Format": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "書き出し形式"
+          }
+        }
+      }
+    },
+    "Image": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "画像"
+          }
+        }
+      }
+    },
+    "PDF": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF"
+          }
+        }
+      }
+    },
+    "Exports a receipt as an image or a PDF, to send or save. Long receipts are always exported as a PDF.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシートを画像またはPDFとして書き出し、送信や保存ができるようにします。長いレシートは常にPDFで書き出します。"
+          }
+        }
+      }
+    },
+    "Sharing": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "共有"
+          }
+        }
+      }
+    },
+    "Format": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "形式"
+          }
+        }
+      }
+    },
+    "Get IOU Summary": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "貸し借りの概要を取得"
+          }
+        }
+      }
+    },
+    "Gets everyone you still have money to settle with: who owes you and whom you owe.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "まだ精算が済んでいない全員を取得します。あなたに借りがある人と、あなたが借りている人です。"
+          }
+        }
+      }
+    },
+    "%@ owes you %@": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@さんはあなたに%2$@の借り"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ owes you %2$@"
+          }
+        }
+      }
+    },
+    "you owe %@ %@": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなたは%1$@さんに%2$@の借り"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "you owe %1$@ %2$@"
+          }
+        }
+      }
+    },
+    "%@.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@。"
+          }
+        }
+      }
+    },
+    "Get Receipt Text": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシートのテキストを取得"
+          }
+        }
+      }
+    },
+    "Gets a receipt as plain text, with its items, discounts, taxes and totals, ready to paste into a message.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシートを、項目・割引・税金・合計を含むテキストとして取得します。メッセージにそのまま貼り付けられます。"
+          }
+        }
+      }
+    },
+    "Get Reminder Message": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "催促メッセージを取得"
+          }
+        }
+      }
+    },
+    "Gets a friendly message reminding someone what they owe you, the same one the IOU tab shares.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなたへの借りを知らせる、やさしい催促メッセージを取得します。貸し借りタブで共有するものと同じです。"
+          }
+        }
+      }
+    },
+    "There's no tip to add. The total may already be at that amount.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "追加するチップがありません。合計がすでにその金額になっている可能性があります。"
+          }
+        }
+      }
+    },
+    "There's nothing to change.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "変更する内容がありません。"
+          }
+        }
+      }
+    },
+    "%@ doesn't owe you anything.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@さんはあなたに借りがありません。"
+          }
+        }
+      }
+    },
+    "Open Receipt": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシートを開く"
+          }
+        }
+      }
+    },
+    "Opens a receipt in the app.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "アプリでレシートを開きます。"
+          }
+        }
+      }
+    },
+    "Add a discount of ${value} to ${receipt}": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${receipt}に${value}の割引を追加"
+          }
+        }
+      }
+    },
+    "Add tax of ${value} to ${receipt}": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${receipt}に${value}の税金を追加"
+          }
+        }
+      }
+    },
+    "Add a tip to ${receipt} by ${method}": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${method}で${receipt}にチップを追加"
+          }
+        }
+      }
+    },
+    "Add a ${percentage}% tip to ${receipt}": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${receipt}に${percentage}%のチップを追加"
+          }
+        }
+      }
+    },
+    "Delete ${entities}": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${entities}を削除"
+          }
+        }
+      }
+    },
+    "Edit ${item}": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${item}を編集"
+          }
+        }
+      }
+    },
+    "Export ${receipt} as ${format}": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${receipt}を${format}で書き出す"
+          }
+        }
+      }
+    },
+    "Get the IOU summary": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "貸し借りの概要を取得"
+          }
+        }
+      }
+    },
+    "Get ${receipt} as text": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${receipt}をテキストで取得"
+          }
+        }
+      }
+    },
+    "Get a reminder message for ${person}": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${person}への催促メッセージを取得"
+          }
+        }
+      }
+    },
+    "Get ${person}": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${person}を取得"
+          }
+        }
+      }
+    },
+    "Search people named ${name}": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${name}という名前の人を検索"
+          }
+        }
+      }
+    },
+    "Get ${receipt}": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${receipt}を取得"
+          }
+        }
+      }
+    },
+    "Get ${item}": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${item}を取得"
+          }
+        }
+      }
+    },
+    "Open ${target}": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${target}を開く"
+          }
+        }
+      }
+    },
+    "Create a receipt named ${name}": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${name}という名前のレシートを作成"
+          }
+        }
+      }
+    },
+    "Add ${name} for ${price} to ${receipt}": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${receipt}に${price}の${name}を追加"
+          }
+        }
+      }
+    },
+    "Mark ${item} as ${paid}": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${item}を${paid}にする"
+          }
+        }
+      }
+    },
+    "Mark ${receipt} as ${paid}": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${receipt}を${paid}にする"
+          }
+        }
+      }
+    },
+    "Add ${name} to people": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${name}を人に追加"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

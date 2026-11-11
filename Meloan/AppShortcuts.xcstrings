@@ -130,6 +130,36 @@
           }
         }
       }
+    },
+    "Who owes me in ${applicationName}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${applicationName}で誰が借りているか確認"
+          }
+        }
+      }
+    },
+    "Export ${receipt} from ${applicationName}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${applicationName}から${receipt}を書き出す"
+          }
+        }
+      }
+    },
+    "Export a receipt from ${applicationName}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${applicationName}からレシートを書き出す"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
