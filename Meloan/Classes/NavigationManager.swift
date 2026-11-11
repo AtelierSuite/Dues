@@ -1,6 +1,7 @@
 import Foundation
 
-class NavigationManager: ObservableObject {
+@MainActor
+final class NavigationManager: ObservableObject {
 
     @Published var receiptsTabPath: [ViewPath] = []
     @Published var iouTabPath: [ViewPath] = []
