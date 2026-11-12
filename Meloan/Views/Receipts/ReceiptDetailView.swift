@@ -41,8 +41,8 @@ struct ReceiptDetailView: View {
                               preview: SharePreview(receipt.name, image: Image("PDF.Watermark"))) {
                         Label("Receipt.ExportImage", systemImage: "photo")
                     }
-                    .disabled(lineCount > 45)
-                    ShareLink(item: createTextToShare()) {
+                    .disabled(!ReceiptExportView.fitsInImage(receipt))
+                    ShareLink(item: receipt.shareText()) {
                         Label("Receipt.ExportText", systemImage: "text.alignleft")
                     }
                 } label: {
@@ -52,10 +52,6 @@ struct ReceiptDetailView: View {
         }
         .navigationTitle(receipt.name)
         .navigationBarTitleDisplayMode(.inline)
-    }
-
-    var lineCount: Int {
-        (receipt.receiptItems?.count ?? 0) + (receipt.discountItems?.count ?? 0) + (receipt.taxItems?.count ?? 0)
     }
 
     // swiftlint:disable function_body_length
@@ -259,132 +255,11 @@ struct ReceiptDetailView: View {
         }
     }
 
-    @ViewBuilder
-    func receiptDetailsForExport() -> some View {
-        let items = receipt.items()
-        let discountItems = receipt.discountItems()
-        let taxItems = receipt.taxItems()
-        let totals = receipt.totals()
-        VStack(alignment: .leading, spacing: 16.0) {
-            HStack(alignment: .center, spacing: 16.0) {
-                Text(receipt.name)
-                    .font(.system(size: 36.0))
-                    .bold()
-                Spacer()
-                Image("PDF.Watermark")
-                    .resizable()
-                    .frame(width: 40.0, height: 40.0)
-            }
-            if !items.isEmpty {
-                Divider()
-                Text(NSLocalizedString("Receipt.PurchasedItems", comment: ""))
-                    .font(.system(size: 28.0))
-                    .bold()
-                ForEach(items) { item in
-                    VStack(alignment: .leading, spacing: 8.0) {
-                        ReceiptItemRow(name: item.name, price: item.price, priceFont: .system(size: 16.0))
-                            .strikethrough(item.paid)
-                        HStack(alignment: .center, spacing: 8.0) {
-                            if let person = item.person {
-                                PersonAvatar(person: person, size: 16.0, scalesWithText: false)
-                                Text(person.name)
-                                    .foregroundStyle(.gray)
-                            } else {
-                                Image("Profile.Shared.Circle")
-                                    .resizable()
-                                    .frame(width: 16.0, height: 16.0)
-                                Text(NSLocalizedString("Shared.Shared", comment: ""))
-                                    .foregroundStyle(.gray)
-                            }
-                        }
-                    }
-                }
-            }
-            if !discountItems.isEmpty {
-                Divider()
-                Text(NSLocalizedString("Receipt.Discounts", comment: ""))
-                    .font(.system(size: 28.0))
-                    .bold()
-                ForEach(discountItems) { item in
-                    ReceiptItemRow(name: item.name, price: item.price, priceFont: .system(size: 16.0))
-                }
-            }
-            if !taxItems.isEmpty {
-                Divider()
-                Text(NSLocalizedString("Receipt.Taxes", comment: ""))
-                    .font(.system(size: 28.0))
-                    .bold()
-                ForEach(taxItems) { item in
-                    ReceiptItemRow(name: item.name, price: item.price, priceFont: .system(size: 16.0))
-                }
-            }
-            Divider()
-            HStack(alignment: .center, spacing: 4.0) {
-                Text(NSLocalizedString("Receipt.Total.BeforeTax", comment: ""))
-                Spacer()
-                Text(format(totals.items))
-                    .monospaced()
-            }
-            HStack(alignment: .center, spacing: 4.0) {
-                Text(NSLocalizedString("Receipt.Total.AfterTax", comment: ""))
-                Spacer()
-                Text(format(totals.total))
-                    .monospaced()
-            }
-            .bold()
-        }
-        .font(.system(size: 16.0))
-        .padding()
-        .foregroundStyle(.primary)
-        .background(.background)
-    }
     // swiftlint:enable function_body_length
 
     @MainActor
     func createImageToShare() -> Data? {
-        let renderer = ImageRenderer(content: receiptDetailsForExport())
-        renderer.scale = 3.0
-        return renderer.uiImage?.pngData()
-    }
-
-    func createTextToShare() -> String {
-        var lines: [String] = []
-        lines.append(receipt.name)
-        lines.append(String(repeating: "-", count: 30))
-        if let personWhoPaid = receipt.personWhoPaid {
-            lines.append("\(NSLocalizedString("Receipt.Payer", comment: "")): \(personWhoPaid.name)")
-            lines.append("")
-        }
-        let items = receipt.items()
-        let discountItems = receipt.discountItems()
-        let taxItems = receipt.taxItems()
-        let totals = receipt.totals()
-        if !items.isEmpty {
-            lines.append(NSLocalizedString("Receipt.PurchasedItems", comment: ""))
-            for item in items {
-                let assignee = item.person?.name ?? NSLocalizedString("Shared.Shared", comment: "")
-                lines.append("  \(item.name) - \(format(item.price)) [\(assignee)]")
-            }
-            lines.append("")
-        }
-        if !discountItems.isEmpty {
-            lines.append(NSLocalizedString("Receipt.Discounts", comment: ""))
-            for item in discountItems {
-                lines.append("  \(item.name) - \(format(item.price))")
-            }
-            lines.append("")
-        }
-        if !taxItems.isEmpty {
-            lines.append(NSLocalizedString("Receipt.Taxes", comment: ""))
-            for item in taxItems {
-                lines.append("  \(item.name) - \(format(item.price))")
-            }
-            lines.append("")
-        }
-        lines.append(String(repeating: "-", count: 30))
-        lines.append("\(NSLocalizedString("Receipt.Total.BeforeTax", comment: "")): \(format(totals.items))")
-        lines.append("\(NSLocalizedString("Receipt.Total.AfterTax", comment: "")): \(format(totals.total))")
-        return lines.joined(separator: "\n")
+        ReceiptExportView.renderPNG(of: receipt)
     }
 }
 // swiftlint:enable type_body_length

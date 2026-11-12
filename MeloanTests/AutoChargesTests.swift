@@ -70,3 +70,61 @@ struct AutoChargesTests {
         #expect(!AutoCharges.isAutomatic(taxItemID: "8F3C2A10-0000-0000-0000-000000000000"))
     }
 }
+
+struct ApplyAutoChargesTests {
+
+    private func settings(serviceCharge: Bool = false, country: String = "", rate: Double = 0.0,
+                          type: String = "") -> AutoCharges.Settings {
+        AutoCharges.Settings(addServiceCharge: serviceCharge, taxRateCountry: country, taxRate: rate,
+                             taxRateType: type, taxAboveServiceCharge: false)
+    }
+
+    private func lunch() throws -> (InMemoryStore, Receipt) {
+        let store = try InMemoryStore()
+        let receipt = Receipt(name: "Lunch")
+        store.context.insert(receipt)
+        receipt.addReceiptItems(from: [ReceiptItem(name: "Ramen", price: 100.0, amount: 1)])
+        return (store, receipt)
+    }
+
+    @Test func addsServiceChargeAndTaxLines() throws {
+        let (store, receipt) = try lunch()
+        receipt.applyAutoCharges(settings(serviceCharge: true, country: "SG", rate: 0.09, type: "gst"),
+                                 in: store.context)
+        let serviceCharge = receipt.taxItems?.first { $0.id == AutoCharges.serviceChargeID(for: receipt.id) }
+        let tax = receipt.taxItems?.first { $0.id == AutoCharges.taxID(for: receipt.id) }
+        #expect(isClose(serviceCharge?.price, 10.0))
+        #expect(isClose(tax?.price, 9.0))
+    }
+
+    @Test func updatesLinesInPlaceWhenItemsChange() throws {
+        let (store, receipt) = try lunch()
+        let taxSettings = settings(country: "SG", rate: 0.09)
+        receipt.applyAutoCharges(taxSettings, in: store.context)
+        receipt.addReceiptItems(from: [ReceiptItem(name: "Gyoza", price: 100.0, amount: 1)])
+        receipt.applyAutoCharges(taxSettings, in: store.context)
+        #expect(receipt.taxItems?.count == 1)
+        #expect(isClose(receipt.sumOfTax(), 18.0))
+    }
+
+    @Test func manualTaxRemovesAutomaticLines() throws {
+        let (store, receipt) = try lunch()
+        let taxSettings = settings(serviceCharge: true, country: "SG", rate: 0.09)
+        receipt.applyAutoCharges(taxSettings, in: store.context)
+        receipt.addTaxItems(from: [TaxItem(name: "Tax", price: 5.0)])
+        #expect(receipt.hasManualTax)
+        receipt.applyAutoCharges(taxSettings, in: store.context)
+        #expect(receipt.taxItems?.count == 1)
+        #expect(isClose(receipt.sumOfTax(), 5.0))
+    }
+
+    @Test func tipDoesNotCountAsManualTax() throws {
+        let (store, receipt) = try lunch()
+        let tip = TaxItem(name: "Tip", price: 5.0)
+        tip.id = Gratuity.idPrefix + "1"
+        receipt.addTaxItems(from: [tip])
+        #expect(!receipt.hasManualTax)
+        receipt.applyAutoCharges(settings(country: "SG", rate: 0.09), in: store.context)
+        #expect(isClose(receipt.sumOfTax(), 14.0))
+    }
+}

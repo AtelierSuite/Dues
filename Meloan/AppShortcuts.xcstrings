@@ -1,0 +1,166 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Create a receipt in ${applicationName}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${applicationName}でレシートを作成"
+          }
+        }
+      }
+    },
+    "New receipt in ${applicationName}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${applicationName}で新しいレシート"
+          }
+        }
+      }
+    },
+    "Split a bill with ${applicationName}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${applicationName}で割り勘"
+          }
+        }
+      }
+    },
+    "Add an item to ${receipt} in ${applicationName}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${applicationName}で${receipt}に項目を追加"
+          }
+        }
+      }
+    },
+    "Add an item to a receipt in ${applicationName}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${applicationName}でレシートに項目を追加"
+          }
+        }
+      }
+    },
+    "Mark ${item} as paid in ${applicationName}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${applicationName}で${item}を支払済にする"
+          }
+        }
+      }
+    },
+    "Mark an item as paid in ${applicationName}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${applicationName}で項目を支払済にする"
+          }
+        }
+      }
+    },
+    "Mark ${receipt} as paid in ${applicationName}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${applicationName}で${receipt}を支払済にする"
+          }
+        }
+      }
+    },
+    "Settle a receipt in ${applicationName}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${applicationName}でレシートを精算"
+          }
+        }
+      }
+    },
+    "How much does ${person} owe me in ${applicationName}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${applicationName}で${person}の貸し借りを確認"
+          }
+        }
+      }
+    },
+    "Check what I owe in ${applicationName}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${applicationName}で貸し借りを確認"
+          }
+        }
+      }
+    },
+    "Show ${receipt} in ${applicationName}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${applicationName}で${receipt}を表示"
+          }
+        }
+      }
+    },
+    "Get a receipt in ${applicationName}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${applicationName}でレシートを取得"
+          }
+        }
+      }
+    },
+    "Who owes me in ${applicationName}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${applicationName}で誰が借りているか確認"
+          }
+        }
+      }
+    },
+    "Export ${receipt} from ${applicationName}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${applicationName}から${receipt}を書き出す"
+          }
+        }
+      }
+    },
+    "Export a receipt from ${applicationName}" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "${applicationName}からレシートを書き出す"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

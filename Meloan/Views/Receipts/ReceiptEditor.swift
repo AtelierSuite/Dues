@@ -385,44 +385,7 @@ struct ReceiptEditor: View {
         for item in receipt.receiptItems ?? [] where item.person == nil {
             item.refreshSharedPaidState(participantIDs: participantIDs)
         }
-        // Auto charges are suppressed when the user supplied their own tax (no double tax).
-        let hasManualTax = receipt.taxItems?.contains(where: { isManualTax(id: $0.id) }) ?? false
-        let autoCharges = autoCharges(sumOfItems: receipt.sumOfItems(), hasManualTax: hasManualTax)
-        let serviceChargeID = AutoCharges.serviceChargeID(for: receipt.id)
-        if let serviceChargeAmount = autoCharges.serviceCharge {
-            if let serviceChargeItem = receipt.taxItems?.first(where: { $0.id == serviceChargeID }) {
-                serviceChargeItem.price = serviceChargeAmount
-            } else {
-                let automaticServiceCharge = TaxItem(name: NSLocalizedString("Receipt.ServiceCharge", comment: ""),
-                                                     price: serviceChargeAmount)
-                automaticServiceCharge.id = serviceChargeID
-                receipt.addTaxItems(from: [automaticServiceCharge])
-            }
-        } else {
-            // Service charge off, or the user supplied their own — remove any stale auto item.
-            removeAutoTaxItem(withID: serviceChargeID)
-        }
-        let taxID = AutoCharges.taxID(for: receipt.id)
-        if let taxAmount = autoCharges.tax {
-            if let taxItem = receipt.taxItems?.first(where: { $0.id == taxID }) {
-                taxItem.price = taxAmount
-            } else {
-                let automaticTaxItem = TaxItem(name: "", price: taxAmount)
-                automaticTaxItem.id = taxID
-                switch taxRateType {
-                case "gst":
-                    automaticTaxItem.name = NSLocalizedString("Receipt.Tax.GST", comment: "")
-                case "vat":
-                    automaticTaxItem.name = NSLocalizedString("Receipt.Tax.VAT", comment: "")
-                default:
-                    automaticTaxItem.name = ""
-                }
-                receipt.addTaxItems(from: [automaticTaxItem])
-            }
-        } else {
-            // Tax region cleared, or the user provided their own tax — drop the auto item.
-            removeAutoTaxItem(withID: taxID)
-        }
+        receipt.applyAutoCharges(autoChargeSettings, in: modelContext)
         do {
             try modelContext.save()
         } catch {
@@ -448,27 +411,25 @@ struct ReceiptEditor: View {
     /// Whether a tax line was entered by the user. Automatic charges and tips don't count:
     /// a tip is not tax, so it never turns the automatic charges off.
     func isManualTax(id: String) -> Bool {
-        !AutoCharges.isAutomatic(taxItemID: id) && !Gratuity.isTip(id: id)
+        AutoCharges.isManual(taxItemID: id)
     }
 
     /// The automatic service charge and tax for items summing to `sumOfItems`, per the
     /// user's settings. Shared by `saveEditing()` and the tip round-up preview so both
     /// agree on the total.
     func autoCharges(sumOfItems: Double, hasManualTax: Bool) -> AutoCharges {
-        AutoCharges(addServiceCharge: addTenPercent, taxRateCountry: taxRateCountry,
-                    taxRate: taxRate, taxAboveServiceCharge: taxAboveServiceCharge,
-                    sumOfItems: sumOfItems, hasManualTax: hasManualTax)
+        AutoCharges(settings: autoChargeSettings, sumOfItems: sumOfItems, hasManualTax: hasManualTax)
+    }
+
+    var autoChargeSettings: AutoCharges.Settings {
+        AutoCharges.Settings(addServiceCharge: addTenPercent, taxRateCountry: taxRateCountry,
+                             taxRate: taxRate, taxRateType: taxRateType,
+                             taxAboveServiceCharge: taxAboveServiceCharge)
     }
 
     /// Whether the user has any automatic tax/service-charge setting enabled.
     var autoChargesConfigured: Bool {
-        addTenPercent || taxRateCountry != ""
-    }
-
-    func removeAutoTaxItem(withID id: String) {
-        guard let item = receipt.taxItems?.first(where: { $0.id == id }) else { return }
-        receipt.taxItems?.removeAll { $0.id == id }
-        modelContext.delete(item)
+        autoChargeSettings.isConfigured
     }
 }
 // swiftlint:enable type_body_length
