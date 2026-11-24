@@ -498,6 +498,10 @@
                 "rate": 0.06,
                 "type": "vat"
             },
+            "PR": {
+                "rate": 0.115,
+                "type": "vat"
+            },
             "RI": {
                 "rate": 0.07,
                 "type": "vat"
