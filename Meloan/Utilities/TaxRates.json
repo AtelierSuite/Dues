@@ -147,7 +147,7 @@
             },
             "EE": {
                 "currency": "EUR",
-                "rate": 0.2,
+                "rate": 0.24,
                 "type": "vat"
             },
             "ES": {
@@ -157,7 +157,7 @@
             },
             "FI": {
                 "currency": "EUR",
-                "rate": 0.24,
+                "rate": 0.255,
                 "type": "vat"
             },
             "FR": {
@@ -232,7 +232,7 @@
             },
             "RO": {
                 "currency": "RON",
-                "rate": 0.19,
+                "rate": 0.21,
                 "type": "vat"
             },
             "SE": {
@@ -247,7 +247,7 @@
             },
             "SK": {
                 "currency": "EUR",
-                "rate": 0.2,
+                "rate": 0.23,
                 "type": "vat"
             }
         },
@@ -367,15 +367,15 @@
                 "type": "vat"
             },
             "AR": {
-                "rate": 0.06,
+                "rate": 0.065,
                 "type": "vat"
             },
             "AZ": {
-                "rate": 0.066,
+                "rate": 0.056,
                 "type": "vat"
             },
             "CA": {
-                "rate": 0.0825,
+                "rate": 0.0725,
                 "type": "vat"
             },
             "CO": {
@@ -383,7 +383,7 @@
                 "type": "vat"
             },
             "CT": {
-                "rate": 0.06,
+                "rate": 0.0635,
                 "type": "vat"
             },
             "DC": {
@@ -419,7 +419,7 @@
                 "type": "vat"
             },
             "KS": {
-                "rate": 0.063,
+                "rate": 0.065,
                 "type": "vat"
             },
             "KY": {
@@ -427,7 +427,7 @@
                 "type": "vat"
             },
             "LA": {
-                "rate": 0.04,
+                "rate": 0.05,
                 "type": "vat"
             },
             "MA": {
@@ -439,7 +439,7 @@
                 "type": "vat"
             },
             "ME": {
-                "rate": 0.05,
+                "rate": 0.055,
                 "type": "vat"
             },
             "MI": {
@@ -459,7 +459,7 @@
                 "type": "vat"
             },
             "NC": {
-                "rate": 0.0575,
+                "rate": 0.0475,
                 "type": "vat"
             },
             "ND": {
@@ -471,11 +471,11 @@
                 "type": "vat"
             },
             "NJ": {
-                "rate": 0.07,
+                "rate": 0.06625,
                 "type": "vat"
             },
             "NM": {
-                "rate": 0.05,
+                "rate": 0.04875,
                 "type": "vat"
             },
             "NV": {
@@ -487,7 +487,7 @@
                 "type": "vat"
             },
             "OH": {
-                "rate": 0.055,
+                "rate": 0.0575,
                 "type": "vat"
             },
             "OK": {
@@ -511,7 +511,7 @@
                 "type": "vat"
             },
             "SD": {
-                "rate": 0.04,
+                "rate": 0.042,
                 "type": "vat"
             },
             "TN": {
@@ -523,11 +523,11 @@
                 "type": "vat"
             },
             "UT": {
-                "rate": 0.0595,
+                "rate": 0.061,
                 "type": "vat"
             },
             "VA": {
-                "rate": 0.05,
+                "rate": 0.053,
                 "type": "vat"
             },
             "VT": {
